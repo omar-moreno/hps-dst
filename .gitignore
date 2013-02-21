@@ -1,0 +1,14 @@
+
+#--- Compiled Sources ---#
+bin/
+.obj/
+*.o
+*.so
+
+#--- LCIO files ---#
+*.lcio
+*.slcio
+
+#--- Other ---#
+*~
+*.swp 
