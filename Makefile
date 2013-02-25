@@ -27,3 +27,4 @@ $(BIN)/%: $(ROOT_DIR)/%.cxx
 # Clean
 clean:
 	rm -rf $(OBJ)
+	rm -rf $(BIN)
