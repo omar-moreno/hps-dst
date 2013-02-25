@@ -98,6 +98,14 @@ int main(int argc, char **argv)
     vector< double > trk_chi2;		// Chi^2 of the track fit
     vector< int >    trk_ndf;		// Number of degrees of freedom of the track fit
 
+    vector< vector< double > >  hit_layer;  // 
+    vector< vector< double > >  hit_x;      //
+    vector< vector< double > >  hit_y;      //
+    vector< vector< double > >  hit_z;      //
+    vector< vector< double > >  hit_x_err;  //
+    vector< vector< double > >  hit_y_err;  //
+    vector< vector< double > >  hit_z_err;  //
+
     vector< double > cluster_e;     // Ecal cluster energy
     vector< double > cluster_x;     // Ecal cluster x position
     vector< double > cluster_y;     // Ecal cluster y position
@@ -111,21 +119,21 @@ int main(int argc, char **argv)
     tree->Branch("run_number",		&run_number,	"run_number/I"		);
     tree->Branch("n_tracks",		&n_tracks,		"n_tracks/I"		);
     tree->Branch("n_clusters",		&n_clusters,	"n_clusters/I"		);
-    tree->Branch("d0",				&d0				);
-    tree->Branch("phi",				&phi			);
-    tree->Branch("omega",			&omega			);
-    tree->Branch("tan_lambda",		&tan_lambda		);
-    tree->Branch("z0",				&z0				);
-    tree->Branch("px",				&px				);	
-    tree->Branch("py",				&py				);	
-    tree->Branch("pz",				&pz				);	
-    tree->Branch("trk_chi2",		&trk_chi2		);
-    tree->Branch("trk_ndf",			&trk_ndf		);
-    tree->Branch("cluster_e",       &cluster_e      );
-    tree->Branch("cluster_x",       &cluster_x      );
-    tree->Branch("cluster_y",       &cluster_y      );
-    tree->Branch("cluster_z",       &cluster_z      );
-    tree->Branch("cluster_nhits",   &cluster_nhits  );
+    tree->Branch("d0",				"vector<double>",   &d0				);
+    tree->Branch("phi",				"vector<double>",   &phi			);
+    tree->Branch("omega",			"vector<double>",   &omega			);
+    tree->Branch("tan_lambda",		"vector<double>",   &tan_lambda		);
+    tree->Branch("z0",				"vector<double>",   &z0				);
+    tree->Branch("px",				"vector<double>",   &px				);	
+    tree->Branch("py",				"vector<double>",   &py				);	
+    tree->Branch("pz",				"vector<double>",   &pz				);	
+    tree->Branch("trk_chi2",		"vector<double>",   &trk_chi2		);
+    tree->Branch("trk_ndf",			"vector<int>",      &trk_ndf		);
+    tree->Branch("cluster_e",       "vector<double>",   &cluster_e      );
+    tree->Branch("cluster_x",       "vector<double>",   &cluster_x      );
+    tree->Branch("cluster_y",       "vector<double>",   &cluster_y      );
+    tree->Branch("cluster_z",       "vector<double>",   &cluster_z      );
+    tree->Branch("cluster_nhits",   "vector<int>",      &cluster_nhits  );
 
     // Create the LCIO reader
     IO::LCReader *lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader();
@@ -136,6 +144,7 @@ int main(int argc, char **argv)
     EVENT::LCEvent* event;
     IMPL::ClusterImpl* cluster;
     IMPL::LCCollectionVec* clusters;
+    EVENT::TrackerHitVec hits;
 
     while( (event = lc_reader->readNextEvent()) != 0 ){
 
