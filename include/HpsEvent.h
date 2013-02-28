@@ -6,37 +6,50 @@
 #include <iostream>
 
 //-- ROOT ---//
-#include "TObject.h"
-#include "TClonesArray.h"
+#include <TObject.h>
+#include <TClonesArray.h>
+#include <TObjArray.h>
 
-//--- LCIO ---//
-#include "EVENT/LCEvent.h"
-#include "IMPL/TrackImpl.h"
+//---//
+#include <Track.h>
+#include <SvtHit.h>
+#include <EcalCluster.h> 
 
 using namespace std; 
 
 class HpsEvent : public TObject { 
-	
-	private:
-		TClonesArray *tracks; //->	
-		
-		int event_number;
-		int run_number;
-		int n_tracks;
-		int n_clusters;
 
-	public:
-		HpsEvent();	// Default Ctor
-		~HpsEvent();
-		IMPL::TrackImpl* AddTrack();
+    public:
+        HpsEvent();	            
+        virtual ~HpsEvent();    
+        
+        void Clear(Option_t *option="");
 
-		//--- methods ---//
-		void setEventNumber(int events){ event_number = events; };
-		void setRunNumber(int run){ run_number = run; };
-		void setNumberOfTracks(int tracks){ n_tracks = tracks; };
-		void setNumberOfClusters(int clusters){ n_clusters = clusters; };	
+        Track* addTrack();
+        SvtHit* addSvtHit();
+        EcalCluster* addEcalCluster(); 
 
-	ClassDef(HpsEvent, 1);	
+        void setEventNumber(int events){ event_number = events; };
+        void setRunNumber(int run){ run_number = run; };
+        void setNumberOfTracks(int tracks){ n_tracks = tracks; };
+        void setNumberOfClusters(int clusters){ n_clusters = clusters; };	
+
+        int getNumberOfTracks(){ return n_tracks; };
+        int getNumberOfClusters(){ return n_clusters; }; 
+
+        ClassDef(HpsEvent, 1);	
+
+    private:
+
+        TClonesArray *tracks;        //->	
+        TClonesArray *svt_hits;      //-> 
+        TClonesArray *ecal_clusters; //->  
+
+        int event_number;
+        int run_number;
+        int n_tracks;
+        int n_hits; 
+        int n_clusters;
 };
 
 #endif
