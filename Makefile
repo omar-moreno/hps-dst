@@ -28,10 +28,7 @@ ROOT_SRC	:= $(wildcard $(ROOT_DIR)/*.cxx)
 ROOT_BIN	:= $(patsubst $(ROOT_DIR)/%.cxx, $(BIN)/%, $(ROOT_SRC))
 
 # Default
-all: dirs print $(HPS_EVENT_OBJ) $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_SO) $(ROOT_BIN) 
-
-print: 
-	echo $(HPS_EVENT_SRC)
+all: dirs $(HPS_EVENT_OBJ) $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_SO) $(ROOT_BIN) 
 
 # Clean
 clean:

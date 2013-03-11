@@ -1,9 +1,20 @@
+/**
+ *
+ * @author: 	Omar Moreno <omoreno1@ucsc.edu>
+ * @section institution
+ * 				Santa Cruz Institute for Particle Physics
+ * 				University of California, Santa Cruz
+ * @version:    v 0.1
+ * @date:       February 19, 2013
+ */
 
 #include <SvtHit.h>
 
 ClassImp(SvtHit)
 
-SvtHit::SvtHit(){}
+SvtHit::SvtHit()
+	: TObject(), hit_layer(0), x(0), y(0), z(0), x_err(0), y_err(0), z_err(0)
+{}
 
 SvtHit::~SvtHit()
 {
@@ -13,11 +24,6 @@ SvtHit::~SvtHit()
 void SvtHit::Clear(Option_t* /* options */)
 {
     TObject::Clear();  
-}
-
-void SvtHit::setLayer(int layer)
-{
-    hit_layer = layer; 
 }
 
 void SvtHit::setHitPosition(const double* position)

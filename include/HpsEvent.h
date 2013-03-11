@@ -1,3 +1,12 @@
+/**
+ *
+ * @author: 	Omar Moreno <omoreno1@ucsc.edu>
+ * @section institution
+ * 				Santa Cruz Institute for Particle Physics
+ * 				University of California, Santa Cruz
+ * @version:    v 0.1
+ * @date:       February 19, 2013
+ */
 
 #ifndef _HPS_EVENT_H_
 #define	_HPS_EVENT_H_
@@ -8,39 +17,39 @@
 //-- ROOT ---//
 #include <TObject.h>
 #include <TClonesArray.h>
-#include <TObjArray.h>
 
 //---//
-#include <Track.h>
+#include <SvtTrack.h>
 #include <SvtHit.h>
 #include <EcalCluster.h> 
-
-using namespace std; 
 
 class HpsEvent : public TObject { 
 
     public:
-        HpsEvent();	            
+        HpsEvent();
+        HpsEvent(const HpsEvent &hpsEventoObj);
         virtual ~HpsEvent();    
-        
-        void Clear(Option_t *option="");
+        HpsEvent &operator=(const HpsEvent &hpsEventObj);
 
-        Track* addTrack();
+        void Clear(Option_t *option="");
+        SvtTrack* addTrack();
         SvtHit* addSvtHit();
         EcalCluster* addEcalCluster(); 
 
-        void setEventNumber(int events){ event_number = events; };
-        void setRunNumber(int run){ run_number = run; };
-        void setNumberOfTracks(int tracks){ n_tracks = tracks; };
-        void setNumberOfClusters(int clusters){ n_clusters = clusters; };	
+        void setEventNumber(int event_number){ this->event_number = event_number; };
+        void setRunNumber(int run_number){ this->run_number = run_number; };
+        void setNumberOfTracks(int n_tracks){ this->n_tracks = n_tracks; };
+        void setNumberOfClusters(int n_clusters){ this->n_clusters = n_clusters; };	
 
-        int getNumberOfTracks(){ return n_tracks; };
-        int getNumberOfClusters(){ return n_clusters; }; 
+        int getEventNumber()        const { return event_number; };
+        int getRunNumber()          const { return run_number; }; 
+        int getNumberOfTracks()     const { return n_tracks; };
+        int getNumberOfClusters()   const { return n_clusters; };
+        int getNumberOfHits()       const { return n_hits; };
 
         ClassDef(HpsEvent, 1);	
 
     private:
-
         TClonesArray *tracks;        //->	
         TClonesArray *svt_hits;      //-> 
         TClonesArray *ecal_clusters; //->  

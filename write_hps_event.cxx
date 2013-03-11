@@ -1,12 +1,13 @@
-/*
- *  write_hps_tree.cxx
- *      author: Omar Moreno <omoreno1@ucsc.edu>
+/**
+ * 	@section purpose:
+ *		Writes a ROOT tree using the HpsEvent class.
+ *
+ *  @author: 	Omar Moreno <omoreno1@ucsc.edu>
  *              Santa Cruz Institute for Particle Physics
  *              University of California, Santa Cruz
- *     created: February 19, 2013
- *	   purpose:
- *				Write a simple ROOT Tree which contains information
- *				about tracks, hit and Ecal clusters.
+ *  @date: February 19, 2013
+ *  @version: v0.1
+
  */				
 
 //--- C++ ---//
@@ -30,7 +31,7 @@
 
 //---//
 #include <HpsEvent.h>
-#include <Track.h>
+#include <SvtTrack.h>
 #include <SvtHit.h>
 
 using namespace std; 
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
     TFile *root_file = new TFile(root_file_name.c_str(), "RECREATE");
 
     HpsEvent *hps_event = new HpsEvent(); 
-    Track *hps_track = NULL;  
+    SvtTrack *hps_track = NULL;
     SvtHit *svt_hit = NULL; 
 
     // Create a ROOT tree 
@@ -144,7 +145,7 @@ int main(int argc, char **argv)
             hits = track->getTrackerHits();
 
             cout << "Track contains " << hits.size() << " hits" << endl;
-            for(int hit_n = 0; hit_n < hits.size(); ++hit_n){
+            for(int hit_n = 0; hit_n < (int) hits.size(); ++hit_n){
 
                 
                    svt_hit = hps_event->addSvtHit(); 
