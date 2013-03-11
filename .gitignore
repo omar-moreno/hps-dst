@@ -13,3 +13,4 @@ bin/
 #--- Other ---#
 *~
 .*.swp 
+.project

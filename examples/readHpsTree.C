@@ -33,6 +33,4 @@ void readHpsTree(string root_file)
     single_trk_p->GetXaxis()->SetTitleSize(0.03);
     single_trk_p->GetXaxis()->SetLabelSize(0.03);
     single_trk_p->Draw(""); 
-
-
 }

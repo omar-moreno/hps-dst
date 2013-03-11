@@ -1,3 +1,12 @@
+/**
+ *
+ * @author: 	Omar Moreno <omoreno1@ucsc.edu>
+ * @section institution
+ * 				Santa Cruz Institute for Particle Physics
+ * 				University of California, Santa Cruz
+ * @version:    v 0.1
+ * @date:       February 19, 2013
+ */
 
 #ifndef _ECAL_CLUSTER_H_
 #define _ECAL_CLUSTER_H_
@@ -9,22 +18,23 @@
 #include <TObject.h>
 #include <TClonesArray.h>
 
-using namespace std; 
-
-class EcalCluster : public TObject { 
+class EcalCluster : public TObject {
 
     public: 
-        EcalCluster(); 
-        ~EcalCluster();
-
-        //--- Setters ---//
-        //---------------//
+        EcalCluster();
+        virtual ~EcalCluster();
         
         void Clear(Option_t *option="");
         
         void setClusterPosition(double*);
-        void setClusterEnergy(double);
-        void setNumberOfEcalHits(int);  
+        void setClusterEnergy(double energy) { this->energy = energy; };
+        void setNumberOfEcalHits(int n_hits) { this->n_ecal_hits = n_hits; };
+
+        double getNumberOfEcalHits() const { return n_ecal_hits; }
+        double getXposition()		 const { return x; };
+        double getYPosition()		 const { return y; };
+        double getZPosition()		 const { return z; };
+        double getClusterEnergy()	 const { return energy; };
 
         ClassDef(EcalCluster, 1);	
     
@@ -36,6 +46,6 @@ class EcalCluster : public TObject {
         double z;
         double energy; 
 
-};
+}; // EcalCluster
 
-#endif
+#endif // _ECAL_CLUSTER_H_
