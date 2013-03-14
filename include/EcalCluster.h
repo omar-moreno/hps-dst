@@ -23,9 +23,9 @@ class EcalCluster : public TObject {
     public: 
         EcalCluster();
         virtual ~EcalCluster();
-        
+
         void Clear(Option_t *option="");
-        
+
         void setClusterPosition(double*);
         void setClusterEnergy(double energy) { this->energy = energy; };
         void setNumberOfEcalHits(int n_hits) { this->n_ecal_hits = n_hits; };
@@ -37,7 +37,7 @@ class EcalCluster : public TObject {
         double getClusterEnergy()	 const { return energy; };
 
         ClassDef(EcalCluster, 1);	
-    
+
     private:
         int n_ecal_hits; 
 
