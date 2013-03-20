@@ -99,3 +99,18 @@ EcalCluster* HpsEvent::addEcalCluster()
 {
     return (EcalCluster*) ecal_clusters->ConstructedAt(n_clusters++);  
 }
+
+SvtTrack* HpsEvent::getTrack(int track_n)
+{
+	return (SvtTrack*) tracks->At(track_n);
+}
+
+EcalCluster* HpsEvent::getEcalCluster(int cluster_n)
+{
+	return (EcalCluster*) ecal_clusters->At(cluster_n);
+}
+
+SvtHit* HpsEvent::getSvtHit(int hit_n)
+{
+	return (SvtHit*) svt_hits->At(hit_n);
+}
