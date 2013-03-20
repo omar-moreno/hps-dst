@@ -41,11 +41,15 @@ class HpsEvent : public TObject {
         void setNumberOfTracks(int n_tracks){ this->n_tracks = n_tracks; };
         void setNumberOfClusters(int n_clusters){ this->n_clusters = n_clusters; };	
 
-        int getEventNumber()        const { return event_number; };
-        int getRunNumber()          const { return run_number; }; 
+        int getEventNumber()        const  { return event_number; };
+        int getRunNumber()          const  { return run_number; };
         int getNumberOfTracks()     const { return n_tracks; };
         int getNumberOfClusters()   const { return n_clusters; };
-        int getNumberOfHits()       const { return n_hits; };
+        int getNumberOfHits()       const  { return n_hits; };
+
+        SvtTrack*     getTrack(int track_n);
+        EcalCluster*  getEcalCluster(int cluster_n);
+        SvtHit*       getSvtHit(int hit_n);
 
         ClassDef(HpsEvent, 1);	
 

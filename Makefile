@@ -35,8 +35,13 @@ ROOT_DIR	:= $(PWD)
 ROOT_SRC	:= $(wildcard $(ROOT_DIR)/*.cxx)
 ROOT_BIN	:= $(patsubst $(ROOT_DIR)/%.cxx, $(BIN)/%, $(ROOT_SRC))
 
+# Example Sources
+EXAMPLES_DIR := $(PWD)/examples
+EXAMPLES_SRC := $(wildcard $(EXAMPLES_DIR)/*.cxx)
+EXAMPLES_BIN := $(patsubst $(EXAMPLES_DIR)/%.cxx, $(BIN)/%, $(EXAMPLES_SRC))
+
 # Default
-all: dirs $(HPS_EVENT_OBJ) $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_SO) $(ROOT_BIN) 
+all: dirs $(HPS_EVENT_OBJ) $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_SO) $(ROOT_BIN) $(EXAMPLES_BIN)
 	@echo "HPS Event is done!"
 	
 # Clean
@@ -78,4 +83,8 @@ $(HPS_EVENT_DIC_OBJ): $(HPS_EVENT_DIC_SRC) $(HPS_EVENT_DIC_DIR)/HpsEventDic.h
 $(HPS_EVENT_SO): $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_OBJ)
 	@echo "Creating shared library $@ ..."
 	$(CC) $(SOFLAGS) $^ -o $@
+	
+# Compile ROOT sources
+$(BIN)/%: $(EXAMPLES_DIR)/%.cxx  
+	$(CC) $(CFLAGS) $(LFLAGS) $(OBJ)/* -o $@ $<
 
