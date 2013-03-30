@@ -36,8 +36,6 @@ void runTwoTrackAnalysis(std::string root_file_name,
  	    canvas->SetFrameBorderMode(0);
 
  	    // Create histograms and set its characteristics
- 		TH1F *h_pt  = new TH1F("h_pt", "Transverse Momentum - All Tracks", 100, 0, 5.5);
- 		setup1DHistogram(h_pt, "Transverse Momentum [GeV]");
  		TH1F *h_p   = new TH1F("h_p",  "Momentum - All Tracks", 100, 0, 5.5);
  		setup1DHistogram(h_p, "Momentum [GeV]");
  		TH1F *h_px  = new TH1F("h_px", "p_{x} - All Tracks", 100, 0, 5.5);
@@ -92,13 +90,9 @@ void runTwoTrackAnalysis(std::string root_file_name,
         	px = track->getPx();
         	py = track->getPy();
         	pz = track->getPz();
-			std::cout << "Track px: " << px << " Track py: " << py
-				 << " Track pz: " << pz << std::endl;
-
 			p = sqrt(px*px + py*py + pz*pz);
-			cout << "Track momentum: " << p << endl;
-
-        	// Fill the plots
+        	
+            // Fill the plots
 			h_p->Fill(p);
 			h_px->Fill(px);
 			h_py->Fill(py);
@@ -107,8 +101,6 @@ void runTwoTrackAnalysis(std::string root_file_name,
     }
 
 	// Save all plots to a single pdf file
-	h_pt->Draw("");
-	canvas->Print( (pdf_file_name + "(").c_str());
 	h_p->Draw("");
 	canvas->Print( (pdf_file_name + "(").c_str());
 	h_px->Draw("");
