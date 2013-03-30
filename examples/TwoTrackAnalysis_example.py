@@ -1,5 +1,16 @@
 #!/usr/bin/python2.7
 
+##
+# @section purpose:
+#		Script to look at events with two tracks and create some simple plots
+#
+# @author:		Omar Moreno <omoreno1@ucsc.edu>
+#				Santa Cruz Institute for Particle Physics
+#				University of California, Santa Cruz
+# @date: March 29, 2013
+# @version v1.0
+#
+
 #--- imports ---#
 import sys
 import math

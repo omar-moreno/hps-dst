@@ -8,5 +8,6 @@
 #pragma link C++ class EcalCluster+;
 #pragma link C++ class SvtTrack+;
 #pragma link C++ class SvtHit+;
+#pragma link C++ class HpsReconstructedParticle; 
 
 #endif
