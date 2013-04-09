@@ -40,12 +40,14 @@ class HpsEvent : public TObject {
         void setRunNumber(int run_number){ this->run_number = run_number; };
         void setNumberOfTracks(int n_tracks){ this->n_tracks = n_tracks; };
         void setNumberOfClusters(int n_clusters){ this->n_clusters = n_clusters; };	
+        void setTriggerBitInfo(std::vector<int> trigger_bits){ this->trigger_bits = trigger_bits; };
 
-        int getEventNumber()        const  { return event_number; };
-        int getRunNumber()          const  { return run_number; };
-        int getNumberOfTracks()     const { return n_tracks; };
+        int getEventNumber()       const  { return event_number; };
+        int getRunNumber()         const { return run_number; };
+        int getNumberOfTracks()    const { return n_tracks; };
         int getNumberOfClusters()   const { return n_clusters; };
         int getNumberOfHits()       const  { return n_hits; };
+        std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
         SvtTrack*     getTrack(int track_n);
         EcalCluster*  getEcalCluster(int cluster_n);
@@ -63,6 +65,8 @@ class HpsEvent : public TObject {
         int n_tracks;
         int n_hits; 
         int n_clusters;
+
+        std::vector<int> trigger_bits;
 };
 
 #endif

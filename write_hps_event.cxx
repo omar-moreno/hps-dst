@@ -27,6 +27,7 @@
 #include <IMPL/TrackImpl.h>
 #include <IMPL/ClusterImpl.h>
 #include <IMPL/LCCollectionVec.h>
+#include <IMPL/LCGenericObjectImpl.h>
 #include <UTIL/LCTOOLS.h>
 
 //---//
@@ -41,6 +42,10 @@ int getHitLayer(const double *position);
 
 int main(int argc, char **argv)
 {
+	// Collection Names
+	const string trackCollectionName = "MatchedTracks";
+	const string trigDataCollectionName = "TriggerBank";
+
     string root_file_name;
     string lcio_file_name;
     float b_field = -0.491; 
@@ -73,15 +78,15 @@ int main(int argc, char **argv)
     double pt; 
     const double param = 2.99792458e-04; 
 
+    // If an LCIO file is not specified, exit the program
     if(lcio_file_name.length() == 0){ 
         cout << "Please specify a LCIO file to process.\n Use the -h flag for usage" << endl;
         exit(1);
     } else if(root_file_name.length() == 0){
+    	// If not specified, the default DST file name is set to "default.root"
         root_file_name = "default.root";
     }
-
     cout << "Output will be written to " << root_file_name << endl;
-
 
     // Create a ROOT file	
     TFile *root_file = new TFile(root_file_name.c_str(), "RECREATE");
@@ -90,22 +95,28 @@ int main(int argc, char **argv)
     SvtTrack *hps_track = NULL;
     SvtHit *svt_hit = NULL; 
 
-    // Create a ROOT tree 
+    // Create a ROOT tree along with the HPS Event branch which
+    // will encapsulate all event information
     TTree *tree = new TTree("HPS_Event", "HPS event tree"); 
     tree->Branch("Event", "HpsEvent", &hps_event, 32000, 3); 
 
-    // Create the LCIO reader
+    // Create the LCIO file reader
     IO::LCReader *lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader();
     lc_reader->open(lcio_file_name.c_str());
 
     IMPL::TrackImpl* track;
     IMPL::LCCollectionVec* tracks;
-    EVENT::LCEvent* event;
     IMPL::ClusterImpl* cluster;
     IMPL::LCCollectionVec* clusters;
+    IMPL::LCCollectionVec* triggerData;
+    IMPL::LCGenericObjectImpl *triggerDatum;
+    EVENT::LCEvent* event;
     EVENT::TrackerHitVec hits;
+    vector<int> trigger_bits;
+    // Loop over all events in the LCIO file
     while( (event = lc_reader->readNextEvent()) != 0 ){
 
+    	// Clear the event of any previous data
         hps_event->Clear(); 
 
         if(dump_event){
@@ -113,15 +124,27 @@ int main(int argc, char **argv)
             exit(0);
         }
 
-        cout << "Processing event: " << event->getEventNumber() << endl;
+        // Print the event number every 500 events
+        if(event->getEventNumber()%500 == 0){
+        	cout << "Processing event: " << event->getEventNumber() << endl;
+        }
 
+        // Set the event number and run number
         hps_event->setEventNumber(event->getEventNumber()); 
         hps_event->setRunNumber(event->getRunNumber());
 
-        // Get the collection of tracks from the event	
-        tracks = (IMPL::LCCollectionVec*) event->getCollection("MatchedTracks");
+        // Get the trigger data from the event and fill the trigger bit
+        // information
+        triggerData = (IMPL::LCCollectionVec*) event->getCollection(trigDataCollectionName);
+        triggerDatum = (IMPL::LCGenericObjectImpl*) triggerData->getElementAt(0);
+        for(int trig_n = 0; trig_n < triggerDatum->getNInt(); ++trig_n){
+        	trigger_bits.push_back(triggerDatum->getIntVal(trig_n));
+        }
+        hps_event->setTriggerBitInfo(trigger_bits);
 
-        cout << "Event contains " << tracks->getNumberOfElements() << " track" << endl;
+        // Get the collection of tracks from the event	
+        tracks = (IMPL::LCCollectionVec*) event->getCollection(trackCollectionName);
+
         // Loop over the tracks and fill the event
         for(int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n){ 
 
