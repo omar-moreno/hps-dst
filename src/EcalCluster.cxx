@@ -33,3 +33,9 @@ void EcalCluster::setClusterPosition(double *position)
     z = position[2];
 }
 
+void EcalCluster::setHighestEnergyHitPosition(double x_high_energy, double y_high_energy)
+{
+	this->x_high_energy = x_high_energy;
+	this->y_high_energy = y_high_energy;
+}
+

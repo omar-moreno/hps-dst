@@ -35,6 +35,8 @@ class SvtTrack : public TObject {
 
         void setTrackParameters(double, double, double, double, double);
         void setMomentum(double, double, double);
+        void setTrackChi2(double);
+        void setCharge(double);
 
         double getPx()  	  const { return px; };
         double getPy()  	  const { return py; };
@@ -44,6 +46,8 @@ class SvtTrack : public TObject {
         double getOmega() 	  const { return omega; };
         double getTanLambda() const { return tan_lambda; };
         double getZ0() 		  const { return z0; };
+        double getChi2() const {return chi_squared; };
+        double getCharge() const {return charge; };
 
         ClassDef(SvtTrack, 1);
 
@@ -60,6 +64,9 @@ class SvtTrack : public TObject {
         double omega;  
         double tan_lambda; 
         double z0;  
+        double chi_squared;
+        double charge;
+
 }; // SvtTrack
 
 #endif // _SVT_TRACK_H_

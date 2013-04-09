@@ -30,6 +30,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_tracks     = hpsEventObj.n_tracks; 
     this->n_hits       = hpsEventObj.n_hits; 
     this->n_clusters   = hpsEventObj.n_clusters;
+    this->trigger_bits = hpsEventObj.trigger_bits;
+
 
     *tracks    = *hpsEventObj.tracks;
     *svt_hits  = *hpsEventObj.svt_hits;  
@@ -55,12 +57,14 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     delete tracks; 
     delete ecal_clusters; 
     delete svt_hits; 
+    this->trigger_bits.clear();
 
     this->event_number = hpsEventObj.event_number; 
     this->run_number   = hpsEventObj.run_number; 
     this->n_tracks     = hpsEventObj.n_tracks; 
     this->n_hits       = hpsEventObj.n_hits; 
     this->n_clusters   = hpsEventObj.n_clusters;
+    this->trigger_bits = hpsEventObj.trigger_bits;
 
     tracks = new TClonesArray("SvtTrack", 1000);
     ecal_clusters = new TClonesArray("EcalCluster", 1000); 
