@@ -27,19 +27,29 @@ class HpsReconstructedParticle : public TObject {
 
 	public: 
 		HpsReconstructedParticle(); 
-		HpsReconstructedParticle(const HpsReconstructedParticle &recoParticleObj);
+		HpsReconstructedParticle(const HpsReconstructedParticle &reconParticleObj);
 		virtual ~HpsReconstructedParticle();
-		HpsReconstructedParticle &operator=(const HpsReconstructedParticle &recoParticleObj);
+		HpsReconstructedParticle &operator=(const HpsReconstructedParticle &reconParticleObj);
 
 		void Clear(Option_t *option="");
 		void addTrack(SvtTrack*); 
 		void addCluster(EcalCluster*); 	
 		
+		void setVertexPosition(double*);
+
+		double getVertexXPosition() const { return vtx_x; };
+		double getVertexYPosition() const { return vtx_y; };
+		double getVertexZPosition() const { return vtx_z; };
+
 		ClassDef(HpsReconstructedParticle, 1);
 
 	private:
 		TRefArray *tracks; 
-		TRefArray *ecal_clusters; 
+		TRefArray *ecal_clusters;
+
+		double vtx_x;
+		double vtx_y;
+		double vtx_z;
 
 };	// HpsReconstructedParticle
 
