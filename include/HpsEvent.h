@@ -22,6 +22,7 @@
 #include <SvtTrack.h>
 #include <SvtHit.h>
 #include <EcalCluster.h> 
+#include <MuonCluster.h>
 
 class HpsEvent : public TObject { 
 
@@ -34,24 +35,28 @@ class HpsEvent : public TObject {
         void Clear(Option_t *option="");
         SvtTrack* addTrack();
         SvtHit* addSvtHit();
-        EcalCluster* addEcalCluster(); 
+        EcalCluster* addEcalCluster();
+        MuonCluster* addMuonCluster();
 
         void setEventNumber(int event_number){ this->event_number = event_number; };
         void setRunNumber(int run_number){ this->run_number = run_number; };
         void setNumberOfTracks(int n_tracks){ this->n_tracks = n_tracks; };
-        void setNumberOfClusters(int n_clusters){ this->n_clusters = n_clusters; };	
+        void setNumberOfEcalClusters(int n_ecal_clusters){ this->n_ecal_clusters = n_ecal_clusters; };
+        void setNumberOfMuonClusters(int n_muon_clusters){ this->n_muon_clusters = n_muon_clusters; };
         void setTriggerBitInfo(std::vector<int> trigger_bits){ this->trigger_bits = trigger_bits; };
 
         int getEventNumber()       const  { return event_number; };
-        int getRunNumber()         const { return run_number; };
+        int getRunNumber()         const  { return run_number; };
         int getNumberOfTracks()    const { return n_tracks; };
-        int getNumberOfClusters()   const { return n_clusters; };
-        int getNumberOfHits()       const  { return n_hits; };
+        int getNumberOfHits()      const  { return n_hits; };
+        int getNumberOfEcalClusters()  const { return n_ecal_clusters; };
+        int getNumberOfMuonClusters()  const { return n_muon_clusters; };
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
-        SvtTrack*     getTrack(int track_n);
-        EcalCluster*  getEcalCluster(int cluster_n);
-        SvtHit*       getSvtHit(int hit_n);
+        SvtTrack*     getTrack(int);
+        EcalCluster*  getEcalCluster(int);
+        SvtHit*       getSvtHit(int);
+        MuonCluster*  getMuonCluster(int);
 
         ClassDef(HpsEvent, 1);	
 
@@ -59,12 +64,14 @@ class HpsEvent : public TObject {
         TClonesArray *tracks;        //->	
         TClonesArray *svt_hits;      //-> 
         TClonesArray *ecal_clusters; //->  
+        TClonesArray *muon_clusters; //->
 
         int event_number;
         int run_number;
         int n_tracks;
         int n_hits; 
-        int n_clusters;
+        int n_ecal_clusters;
+        int n_muon_clusters;
 
         std::vector<int> trigger_bits;
 };

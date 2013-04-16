@@ -13,15 +13,18 @@
 ClassImp(HpsReconstructedParticle)
 
 HpsReconstructedParticle::HpsReconstructedParticle()
-	:	TObject(),	tracks(new TRefArray()), ecal_clusters(new TRefArray())
+	:	TObject(),	tracks(new TRefArray()), ecal_clusters(new TRefArray()),
+	 	vtx_x(0), vtx_y(0), vtx_z(0)
 {}
 
 HpsReconstructedParticle::HpsReconstructedParticle(
-		const HpsReconstructedParticle &recoParticleObj) 
-	: TObject(), tracks(new TRefArray()), ecal_clusters(new TRefArray()) 
+		const HpsReconstructedParticle &reconParticleObj)
+	: TObject(), tracks(new TRefArray()), ecal_clusters(new TRefArray()),
+	  vtx_x(reconParticleObj.vtx_x), vtx_y(reconParticleObj.vtx_y),
+	  vtx_z(reconParticleObj.vtx_z)
 {
-	*tracks = *recoParticleObj.tracks; 
-	*ecal_clusters = *recoParticleObj.ecal_clusters;
+	*tracks = *reconParticleObj.tracks;
+	*ecal_clusters = *reconParticleObj.ecal_clusters;
 }
 
 HpsReconstructedParticle::~HpsReconstructedParticle()
@@ -32,20 +35,24 @@ HpsReconstructedParticle::~HpsReconstructedParticle()
 }
 
 HpsReconstructedParticle &HpsReconstructedParticle::operator=(
-		const HpsReconstructedParticle &recoParticleObj)
+		const HpsReconstructedParticle &reconParticleObj)
 {
 	// Check for self-assignment
-	if(this == &recoParticleObj) return *this; 
+	if(this == &reconParticleObj) return *this;
 
-	TObject::operator=(recoParticleObj);
+	TObject::operator=(reconParticleObj);
 	Clear(); 
 	delete tracks; 
 	delete ecal_clusters; 
 
+	this->vtx_x = reconParticleObj.vtx_x;
+	this->vtx_y = reconParticleObj.vtx_y;
+	this->vtx_z = reconParticleObj.vtx_z;
+
 	tracks = new TRefArray(); 
-	*tracks = *recoParticleObj.tracks; 
+	*tracks = *reconParticleObj.tracks;
 	ecal_clusters = new TRefArray(); 
-	*ecal_clusters = *recoParticleObj.ecal_clusters; 
+	*ecal_clusters = *reconParticleObj.ecal_clusters;
 
 	return *this; 
 }
@@ -67,4 +74,10 @@ void HpsReconstructedParticle::addCluster(EcalCluster* ecal_cluster)
 	ecal_clusters->Add(ecal_cluster);
 }
 
+void HpsReconstructedParticle::setVertexPosition(double *vtx_pos)
+{
+	vtx_x = vtx_pos[0];
+	vtx_y = vtx_pos[1];
+	vtx_z = vtx_pos[2];
+}
 

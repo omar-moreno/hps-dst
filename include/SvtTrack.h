@@ -35,8 +35,8 @@ class SvtTrack : public TObject {
 
         void setTrackParameters(double, double, double, double, double);
         void setMomentum(double, double, double);
-        void setTrackChi2(double);
-        void setCharge(double);
+        void setTrackChi2(double chi_squared){ this->chi_squared = chi_squared; };
+        void setCharge(double charge){ this->charge = charge; };
 
         double getPx()  	  const { return px; };
         double getPy()  	  const { return py; };

@@ -22,7 +22,9 @@ class EcalCluster : public TObject {
 
     public: 
         EcalCluster();
+        EcalCluster(const EcalCluster &ecalClusterObj);
         virtual ~EcalCluster();
+        EcalCluster &operator=(const EcalCluster &ecalClusterObj);
 
         void Clear(Option_t *option="");
 
