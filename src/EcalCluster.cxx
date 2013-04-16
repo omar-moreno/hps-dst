@@ -57,16 +57,17 @@ void EcalCluster::Clear(Option_t* /*option*/)
     TObject::Clear();
 }
 
-void EcalCluster::setClusterPosition(double *position)
+void EcalCluster::setClusterPosition(double* position)
 {
-    x = position[0]; 
-    y = position[1]; 
-    z = position[2];
+    this->x = position[0];
+    this->y = position[1];
+    this->z = position[2];
 }
 
-void EcalCluster::setHighestEnergyHitPosition(double x_high_energy, double y_high_energy)
+void EcalCluster::setHighestEnergyHitPosition(double* position)
 {
-	this->x_high_energy = x_high_energy;
-	this->y_high_energy = y_high_energy;
+	this->x_high_energy = position[0];
+	this->y_high_energy = position[1];
+	this->z_high_energy = position[2];
 }
 
