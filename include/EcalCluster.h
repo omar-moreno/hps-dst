@@ -33,7 +33,7 @@ class EcalCluster : public TObject {
         void setNumberOfEcalHits(int n_hits)    { this->n_ecal_hits = n_hits; };
         void setClusterHitTime(double hit_time) { this->hit_time = hit_time; };
         void setHighestEnergyHit(double high_energy) { this->high_energy = high_energy; };
-        void setHighestEnergyHitPosition(double, double);
+        void setHighestEnergyHitPosition(double*);
 
         double getNumberOfEcalHits() const { return n_ecal_hits; }
         double getXposition()		  const { return x; };
@@ -57,6 +57,7 @@ class EcalCluster : public TObject {
         double high_energy;
         double x_high_energy;
         double y_high_energy;
+        double z_high_energy;
 
 }; // EcalCluster
 
