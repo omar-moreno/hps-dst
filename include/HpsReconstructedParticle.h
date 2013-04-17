@@ -17,7 +17,7 @@
 //--- ROOT ---//
 #include <TObject.h>
 #include <TClonesArray.h>
-#include <TRefArray.h>
+#include <TRef.h>
 
 //---//
 #include <SvtTrack.h>
@@ -32,11 +32,13 @@ class HpsReconstructedParticle : public TObject {
 		HpsReconstructedParticle &operator=(const HpsReconstructedParticle &reconParticleObj);
 
 		void Clear(Option_t *option="");
-		void addTrack(SvtTrack*); 
-		void addCluster(EcalCluster*); 	
+		void setTrack(SvtTrack*);
+		void setEcalCluster(EcalCluster*);
 		
 		void setVertexPosition(double*);
 
+		SvtTrack* getTrack();
+		EcalCluster* getEcalCluster();
 		double getVertexXPosition() const { return vtx_x; };
 		double getVertexYPosition() const { return vtx_y; };
 		double getVertexZPosition() const { return vtx_z; };
@@ -44,8 +46,8 @@ class HpsReconstructedParticle : public TObject {
 		ClassDef(HpsReconstructedParticle, 1);
 
 	private:
-		TRefArray *tracks; 
-		TRefArray *ecal_clusters;
+		TRef track;
+		TRef ecal_cluster;
 
 		double vtx_x;
 		double vtx_y;

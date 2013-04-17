@@ -15,6 +15,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cmath>
+#include <time.h>
 
 //--- ROOT ---//
 #include <TFile.h>
@@ -30,6 +31,7 @@
 #include <IMPL/LCGenericObjectImpl.h>
 #include <IMPL/ReconstructedParticleImpl.h>
 #include <UTIL/LCTOOLS.h>
+#include <Exceptions.h>
 
 //---//
 #include <HpsEvent.h>
@@ -44,6 +46,8 @@ int getHitLayer(const double *position);
 
 int main(int argc, char **argv)
 {
+	clock_t init_time = clock();
+
 	// Collection Names
 	const string trackCollectionName            = "MatchedTracks";
 	const string trigDataCollectionName         = "TriggerBank";
@@ -131,6 +135,7 @@ int main(int argc, char **argv)
 
     	// Clear the event of any previous data
         hps_event->Clear(); 
+        trigger_bits.clear();
 
         if(dump_event){
             UTIL::LCTOOLS::dumpEvent(event);
@@ -143,7 +148,7 @@ int main(int argc, char **argv)
         }
 
         // Set the event number and run number
-        hps_event->setEventNumber(event->getEventNumber()); 
+        hps_event->setEventNumber(event->getEventNumber());
         hps_event->setRunNumber(event->getRunNumber());
 
         // Get the trigger data from the event and fill the trigger bit
@@ -157,6 +162,7 @@ int main(int argc, char **argv)
 
         // Get the collection of tracks from the event	
         tracks = (IMPL::LCCollectionVec*) event->getCollection(trackCollectionName);
+
 
         // Loop over the tracks and fill the event
         for(int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n){ 
@@ -198,7 +204,7 @@ int main(int argc, char **argv)
                    sqrt(hits[hit_n]->getCovMatrix()[5]));      
                    
             }
-        } 
+        }
 
         // Get the collection of Ecal clusters from the event
         ecal_clusters = (IMPL::LCCollectionVec*) event->getCollection(ecalClusterCollectionName);
@@ -242,9 +248,13 @@ int main(int argc, char **argv)
         }
 
         // Get the collection of of final state ReconstructedParticles
-        recon_particles
-        	= (IMPL::LCCollectionVec*) event->getCollection(finalStateReconParticleColName);
-
+        try{
+        	recon_particles
+        		= (IMPL::LCCollectionVec*) event->getCollection(finalStateReconParticleColName);
+        } catch(EVENT::DataNotAvailableException &exception) {
+ //       	cout << "Collection " << finalStateReconParticleColName << " was not found." << endl;
+        	continue;
+        }
         // Loop over all final state ReconstructedParticles and fill the event
         for(int recon_n = 0; recon_n < recon_particles->getNumberOfElements(); ++recon_n){
 
@@ -255,17 +265,24 @@ int main(int argc, char **argv)
         	hps_recon_particle = hps_event->addReconParticle(fs_type);
 
         	// Add a cluster to the collection of final state recon particles
-        	for(int cluster_n = 0; cluster_n < ecal_clusters->getNumberOfElements(); ++cluster_n){
+        	if(recon_particle->getClusters().size() > 0){
+        		for(int cluster_n = 0; cluster_n < hps_event->getNumberOfEcalClusters(); ++cluster_n){
 
-        		// Get an Ecal cluster from the LCIO collection
-        		ecal_cluster = (IMPL::ClusterImpl*) ecal_clusters->getElementAt(cluster_n);
+        			if(recon_particle->getClusters()[0]->getEnergy() == hps_event->getEcalCluster(cluster_n)->getClusterEnergy()){
+        				hps_recon_particle->setEcalCluster(hps_event->getEcalCluster(cluster_n));
+        			}
+        		}
+        	}
 
-        		if(recon_particle->getClusters()[0] == ecal_cluster){
-        			cout << "Matching clusters have been found!" << endl;
+        	// Add a track to the collection of final state recon particles
+        	if(recon_particle->getTracks().size() > 0){
+        		for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n){
+        			if(recon_particle->getTracks()[0]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
+        				hps_recon_particle->setTrack(hps_event->getTrack(track_n));
+        			}
         		}
         	}
         }
-
 
         tree->Fill();
         pt = 0; 
@@ -276,6 +293,9 @@ int main(int argc, char **argv)
     root_file->Close();
 
     cout << "Finished writing ROOT Tree!" << endl;
+
+    clock_t end_time = clock();
+    cout << "Time elapsed: " << (end_time - init_time)*1000/CLOCKS_PER_SEC << " seconds" << endl;
 
     return 0; 
 }

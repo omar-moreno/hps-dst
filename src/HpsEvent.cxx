@@ -57,6 +57,8 @@ HpsEvent::~HpsEvent()
     delete ecal_clusters; 
     delete svt_hits; 
     delete muon_clusters;
+    delete fs_recon_particles;
+    delete vtx_recon_particles;
 }
 
 HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
@@ -104,10 +106,15 @@ void HpsEvent::Clear(Option_t * /*option*/)
     svt_hits->Clear("C");
     ecal_clusters->Clear("C");
     muon_clusters->Clear("C");
+    fs_recon_particles->Clear("C");
+    vtx_recon_particles->Clear("C");
     n_ecal_clusters = 0;
     n_muon_clusters = 0;
     n_tracks = 0;  
     n_hits = 0; 
+    n_fs_recon_particles = 0;
+    n_vtx_recon_particles = 0;
+    trigger_bits.clear();
 }
 
 
