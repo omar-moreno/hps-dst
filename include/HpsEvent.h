@@ -13,6 +13,7 @@
 
 //--- C++ ---//
 #include <iostream>
+#include <assert.h>
 
 //-- ROOT ---//
 #include <TObject.h>
@@ -23,6 +24,7 @@
 #include <SvtHit.h>
 #include <EcalCluster.h> 
 #include <MuonCluster.h>
+#include <HpsReconstructedParticle.h>
 
 class HpsEvent : public TObject { 
 
@@ -37,6 +39,7 @@ class HpsEvent : public TObject {
         SvtHit* addSvtHit();
         EcalCluster* addEcalCluster();
         MuonCluster* addMuonCluster();
+        HpsReconstructedParticle* addReconParticle(int);
 
         void setEventNumber(int event_number){ this->event_number = event_number; };
         void setRunNumber(int run_number){ this->run_number = run_number; };
@@ -61,10 +64,12 @@ class HpsEvent : public TObject {
         ClassDef(HpsEvent, 1);	
 
     private:
-        TClonesArray *tracks;        //->	
-        TClonesArray *svt_hits;      //-> 
-        TClonesArray *ecal_clusters; //->  
-        TClonesArray *muon_clusters; //->
+        TClonesArray *tracks;              //->
+        TClonesArray *svt_hits;            //->
+        TClonesArray *ecal_clusters;       //->
+        TClonesArray *muon_clusters;       //->
+        TClonesArray *fs_recon_particles;  //->
+        TClonesArray *vtx_recon_particles; //->
 
         int event_number;
         int run_number;
@@ -72,6 +77,11 @@ class HpsEvent : public TObject {
         int n_hits; 
         int n_ecal_clusters;
         int n_muon_clusters;
+        int n_fs_recon_particles;
+        int n_vtx_recon_particles;
+
+        static const int fs_type;
+        static const int vtx_type;
 
         std::vector<int> trigger_bits;
 };

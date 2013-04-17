@@ -28,12 +28,14 @@
 #include <IMPL/ClusterImpl.h>
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/LCGenericObjectImpl.h>
+#include <IMPL/ReconstructedParticleImpl.h>
 #include <UTIL/LCTOOLS.h>
 
 //---//
 #include <HpsEvent.h>
 #include <SvtTrack.h>
 #include <SvtHit.h>
+#include <EcalCluster.h>
 
 using namespace std; 
 
@@ -43,10 +45,16 @@ int getHitLayer(const double *position);
 int main(int argc, char **argv)
 {
 	// Collection Names
-	const string trackCollectionName = "MatchedTracks";
-	const string trigDataCollectionName = "TriggerBank";
+	const string trackCollectionName            = "MatchedTracks";
+	const string trigDataCollectionName         = "TriggerBank";
+	const string ecalClusterCollectionName      = "EcalClusters";
+	const string finalStateReconParticleColName = "FinalStateParticles";
+	const string vertexedReconParticleColName   = "VertexedReconParticles";
 
-    string root_file_name;
+	const int fs_type  = 1;
+	const int vtx_type = 2;
+
+	string root_file_name;
     string lcio_file_name;
     float b_field = -0.491; 
     bool dump_event = false;
@@ -91,9 +99,11 @@ int main(int argc, char **argv)
     // Create a ROOT file	
     TFile *root_file = new TFile(root_file_name.c_str(), "RECREATE");
 
-    HpsEvent *hps_event = new HpsEvent(); 
-    SvtTrack *hps_track = NULL;
-    SvtHit *svt_hit = NULL; 
+    HpsEvent* hps_event = new HpsEvent();
+    SvtTrack* hps_track = NULL;
+    SvtHit* svt_hit = NULL;
+    EcalCluster* hps_ecal_cluster = NULL;
+    HpsReconstructedParticle* hps_recon_particle = NULL;
 
     // Create a ROOT tree along with the HPS Event branch which
     // will encapsulate all event information
@@ -106,12 +116,15 @@ int main(int argc, char **argv)
 
     IMPL::TrackImpl* track;
     IMPL::LCCollectionVec* tracks;
-    IMPL::ClusterImpl* cluster;
-    IMPL::LCCollectionVec* clusters;
-    IMPL::LCCollectionVec* triggerData;
-    IMPL::LCGenericObjectImpl *triggerDatum;
+    IMPL::ClusterImpl* ecal_cluster;
+    IMPL::LCCollectionVec* ecal_clusters;
+    IMPL::LCCollectionVec* trigger_data;
+    IMPL::LCGenericObjectImpl *trigger_datum;
+    IMPL::LCCollectionVec* recon_particles;
+    IMPL::ReconstructedParticleImpl* recon_particle;
     EVENT::LCEvent* event;
     EVENT::TrackerHitVec hits;
+    EVENT::CalorimeterHitVec ecal_hits;
     vector<int> trigger_bits;
     // Loop over all events in the LCIO file
     while( (event = lc_reader->readNextEvent()) != 0 ){
@@ -135,10 +148,10 @@ int main(int argc, char **argv)
 
         // Get the trigger data from the event and fill the trigger bit
         // information
-        triggerData = (IMPL::LCCollectionVec*) event->getCollection(trigDataCollectionName);
-        triggerDatum = (IMPL::LCGenericObjectImpl*) triggerData->getElementAt(0);
-        for(int trig_n = 0; trig_n < triggerDatum->getNInt(); ++trig_n){
-        	trigger_bits.push_back(triggerDatum->getIntVal(trig_n));
+        trigger_data = (IMPL::LCCollectionVec*) event->getCollection(trigDataCollectionName);
+        trigger_datum = (IMPL::LCGenericObjectImpl*) trigger_data->getElementAt(0);
+        for(int trig_n = 0; trig_n < trigger_datum->getNInt(); ++trig_n){
+        	trigger_bits.push_back(trigger_datum->getIntVal(trig_n));
         }
         hps_event->setTriggerBitInfo(trigger_bits);
 
@@ -156,20 +169,25 @@ int main(int argc, char **argv)
 
             // Fill the track parameters
             hps_track->setTrackParameters(track->getD0(), track->getPhi(), 
-                    track->getOmega(), track->getTanLambda(), 
-                    track->getZ0());
+                    				 	  track->getOmega(), track->getTanLambda(),
+                    				 	  track->getZ0());
 
             // Calculate the track momentum
             pt = abs((1/track->getOmega())*b_field*param);
             hps_track->setMomentum(pt*cos(track->getPhi()), 
-                    pt*sin(track->getPhi()), pt*track->getTanLambda()); 
+            							  pt*sin(track->getPhi()), pt*track->getTanLambda());
+
+            // Set the track fit chi^2
+            hps_track->setTrackChi2(track->getChi2());
+
+            // Set the track charge
+            if(track->getOmega() > 0) hps_track->setCharge(1);
+            else hps_track->setCharge(-1);
 
             // Get the hits associated with the track 
             hits = track->getTrackerHits();
 
-            cout << "Track contains " << hits.size() << " hits" << endl;
             for(int hit_n = 0; hit_n < (int) hits.size(); ++hit_n){
-
                 
                    svt_hit = hps_event->addSvtHit(); 
                    hps_track->addHit(svt_hit); 
@@ -182,9 +200,74 @@ int main(int argc, char **argv)
             }
         } 
 
-        cout << "Done processing event" << endl;
+        // Get the collection of Ecal clusters from the event
+        ecal_clusters = (IMPL::LCCollectionVec*) event->getCollection(ecalClusterCollectionName);
+
+        // Loop over all clusters and fill the event
+        for(int cluster_n = 0; cluster_n < ecal_clusters->getNumberOfElements(); ++cluster_n){
+
+        	// Get an Ecal cluster from the LCIO collection
+        	ecal_cluster = (IMPL::ClusterImpl*) ecal_clusters->getElementAt(cluster_n);
+
+        	// Add a cluster to HPS event
+        	hps_ecal_cluster = hps_event->addEcalCluster();
+
+        	// Set the cluster position
+        	hps_ecal_cluster->setClusterPosition((double*) ecal_cluster->getPosition());
+
+        	// Set the cluster energy
+        	hps_ecal_cluster->setClusterEnergy(ecal_cluster->getEnergy());
+
+        	// Get the ecal hits used to create the cluster
+        	ecal_hits = ecal_cluster->getCalorimeterHits();
+
+        	// Set the number of crystals associated with the cluster
+        	hps_ecal_cluster->setNumberOfEcalHits(ecal_hits.size());
+
+        	// Loop through all of the Ecal hits in the event and find the
+        	// crystal with the highest energy
+        	double hit_energy = 0;
+        	float hit_index = -1;
+        	for(int ecal_hit_n = 0; ecal_hit_n < (int) ecal_hits.size(); ++ecal_hit_n){
+        		if(hit_energy < ecal_hits[ecal_hit_n]->getEnergy())
+        			hit_energy = ecal_hits[ecal_hit_n]->getEnergy();
+        			hit_index = ecal_hit_n;
+        	}
+
+        	// Set the energy and position of the highest energy crystal in
+        	// the cluster
+        	hps_ecal_cluster->setHighestEnergyHit(hit_energy);
+        	hps_ecal_cluster->setHighestEnergyHitPosition((double*) ecal_hits[hit_index]->getPosition());
+
+        }
+
+        // Get the collection of of final state ReconstructedParticles
+        recon_particles
+        	= (IMPL::LCCollectionVec*) event->getCollection(finalStateReconParticleColName);
+
+        // Loop over all final state ReconstructedParticles and fill the event
+        for(int recon_n = 0; recon_n < recon_particles->getNumberOfElements(); ++recon_n){
+
+        	// Get a final state ReconstructedParticle from the LCIO collection
+        	recon_particle = (IMPL::ReconstructedParticleImpl*) recon_particles->getElementAt(recon_n);
+
+        	// Add a reconstructed particle to HPS event
+        	hps_recon_particle = hps_event->addReconParticle(fs_type);
+
+        	// Add a cluster to the collection of final state recon particles
+        	for(int cluster_n = 0; cluster_n < ecal_clusters->getNumberOfElements(); ++cluster_n){
+
+        		// Get an Ecal cluster from the LCIO collection
+        		ecal_cluster = (IMPL::ClusterImpl*) ecal_clusters->getElementAt(cluster_n);
+
+        		if(recon_particle->getClusters()[0] == ecal_cluster){
+        			cout << "Matching clusters have been found!" << endl;
+        		}
+        	}
+        }
+
+
         tree->Fill();
-        cout << "Tree has been filled" << endl; 
         pt = 0; 
     }
 
