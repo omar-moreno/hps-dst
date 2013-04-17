@@ -13,25 +13,20 @@
 ClassImp(HpsReconstructedParticle)
 
 HpsReconstructedParticle::HpsReconstructedParticle()
-	:	TObject(),	tracks(new TRefArray()), ecal_clusters(new TRefArray()),
-	 	vtx_x(0), vtx_y(0), vtx_z(0)
+	:	TObject(), vtx_x(0), vtx_y(0), vtx_z(0)
 {}
 
 HpsReconstructedParticle::HpsReconstructedParticle(
 		const HpsReconstructedParticle &reconParticleObj)
-	: TObject(), tracks(new TRefArray()), ecal_clusters(new TRefArray()),
-	  vtx_x(reconParticleObj.vtx_x), vtx_y(reconParticleObj.vtx_y),
-	  vtx_z(reconParticleObj.vtx_z)
-{
-	*tracks = *reconParticleObj.tracks;
-	*ecal_clusters = *reconParticleObj.ecal_clusters;
-}
+	: TObject(), vtx_x(reconParticleObj.vtx_x),
+	  vtx_y(reconParticleObj.vtx_y), vtx_z(reconParticleObj.vtx_z),
+	  track(reconParticleObj.track),
+	  ecal_cluster(reconParticleObj.ecal_cluster)
+{}
 
 HpsReconstructedParticle::~HpsReconstructedParticle()
 {
 	Clear(); 
-	delete tracks; 
-	delete ecal_clusters; 
 }
 
 HpsReconstructedParticle &HpsReconstructedParticle::operator=(
@@ -42,17 +37,12 @@ HpsReconstructedParticle &HpsReconstructedParticle::operator=(
 
 	TObject::operator=(reconParticleObj);
 	Clear(); 
-	delete tracks; 
-	delete ecal_clusters; 
 
 	this->vtx_x = reconParticleObj.vtx_x;
 	this->vtx_y = reconParticleObj.vtx_y;
 	this->vtx_z = reconParticleObj.vtx_z;
-
-	tracks = new TRefArray(); 
-	*tracks = *reconParticleObj.tracks;
-	ecal_clusters = new TRefArray(); 
-	*ecal_clusters = *reconParticleObj.ecal_clusters;
+	this->track = reconParticleObj.track;
+	this->ecal_cluster = reconParticleObj.ecal_cluster;
 
 	return *this; 
 }
@@ -60,18 +50,16 @@ HpsReconstructedParticle &HpsReconstructedParticle::operator=(
 void HpsReconstructedParticle::Clear(Option_t* /* option */)
 {
 	TObject::Clear(); 
-	tracks->Delete(); 
-	ecal_clusters->Delete(); 
 }
 
-void HpsReconstructedParticle::addTrack(SvtTrack* track)
+void HpsReconstructedParticle::setTrack(SvtTrack* track)
 {
-	tracks->Add(track); 
+	this->track = track;
 }
 
-void HpsReconstructedParticle::addCluster(EcalCluster* ecal_cluster)
+void HpsReconstructedParticle::setEcalCluster(EcalCluster* ecal_cluster)
 {
-	ecal_clusters->Add(ecal_cluster);
+	this->ecal_cluster = ecal_cluster;
 }
 
 void HpsReconstructedParticle::setVertexPosition(double *vtx_pos)
@@ -79,5 +67,15 @@ void HpsReconstructedParticle::setVertexPosition(double *vtx_pos)
 	vtx_x = vtx_pos[0];
 	vtx_y = vtx_pos[1];
 	vtx_z = vtx_pos[2];
+}
+
+SvtTrack* HpsReconstructedParticle::getTrack()
+{
+	return (SvtTrack*) track.GetObject();
+}
+
+EcalCluster* HpsReconstructedParticle::getEcalCluster()
+{
+	return (EcalCluster*) ecal_cluster.GetObject();
 }
 
