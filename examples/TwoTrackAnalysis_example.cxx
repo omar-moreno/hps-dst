@@ -24,6 +24,8 @@
 #include <EVENT/LCEvent.h>
 #include <IMPL/TrackImpl.h>
 #include <IMPL/LCCollectionVec.h>
+#include <IMPL/ReconstructedParticleImpl.h>
+#include <Exceptions.h>
 
 using namespace std; 
 
@@ -32,14 +34,15 @@ void setup1DHistogram(TH1F* histo, string x_axis_title);
 
 int main( int argc, char **argv)
 {
-	string trackCollectionName = "MatchedTracks"; 
-    string lcio_file_name = "";
+
+
+	string lcio_file_name = "";
     string pdf_file_name = "default.pdf";
 	int option_char;
 
 	// Parse any command line arguments. If there are no valid command line
 	// arguments given, print the usage.
-    while((option_char = getopt(argc, argv, "i:p:")) != -1){
+    while((option_char = getopt(argc, argv, "i:o:")) != -1){
 		switch(option_char){
 			case 'i':
 				lcio_file_name = optarg;
@@ -63,7 +66,11 @@ int main( int argc, char **argv)
     const double param = 2.99792458e-04;
     const float b_field = -0.491;
 
-    //-- Setup ROOT histograms ---//
+    // Collection Names
+	const string trackCollectionName = "MatchedTracks";
+	const string finalStateReconParticleColName = "FinalStateParticles";
+
+	//-- Setup ROOT histograms ---//
     //----------------------------//
 
     // Create a canvas and set its characteristics
@@ -88,14 +95,21 @@ int main( int argc, char **argv)
 
 	//-----------------------------//
 
-	// Create the LCIO reader and open the LCIO file
-	// TODO: handle IO exception correctly
-	IO::LCReader *lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader(); 
-	lc_reader->open(lcio_file_name.c_str());
-	
+	// Create the LCIO reader and open the LCIO file. If the file doesn't exist
+	// or can't be opened, notify the user and exit
+	IO::LCReader *lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader();
+	try{
+		lc_reader->open(lcio_file_name.c_str());
+	} catch(IO::IOException exception){
+		cout << "File " << lcio_file_name << " cannot be opened!" << endl;
+		return(2);
+	}
+
 	EVENT::LCEvent *event  = 0;
     IMPL::TrackImpl* track = 0;
     IMPL::LCCollectionVec* tracks = 0;
+    IMPL::ReconstructedParticleImpl* recon_particle = 0;
+    IMPL::LCCollectionVec* recon_particles = 0;
 	double pt, px, py, pz, p;
 	int eventNumber = 0;
 
@@ -110,14 +124,19 @@ int main( int argc, char **argv)
 			cout << "Event: " << eventNumber << endl;
 		}
 
-		// TODO: Check that the event has the collection of tracks ("MatchedTracks").
-		// Get the collection of tracks from the event
-        tracks = (IMPL::LCCollectionVec*) event->getCollection(trackCollectionName);
-		
+		// Get the collection of tracks from the event. If the event doesn't
+		// have the specified collection, skip the rest of the event
+		try{
+			tracks = (IMPL::LCCollectionVec*) event->getCollection(trackCollectionName);
+		} catch(EVENT::DataNotAvailableException exception){
+			cout << "Collection " << trackCollectionName << " was not found. "
+			     << "Skipping event ..." << endl;
+			continue;
+		}
 		// Check that the event contains only two tracks, if it doesn't skip the event
-		if(tracks->getNumberOfElements() != 2) continue;
+		//if(tracks->getNumberOfElements() != 2) continue;
 
-		// Loop over all tracks in the event (Should use an iterator instead)
+		// Loop over all tracks in the event
         for(int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n){ 
 				
             // Get a track from the LCIO collection
@@ -125,18 +144,14 @@ int main( int argc, char **argv)
 		
 			// Calculate the transverse momentum of the track
 			pt = abs((1/track->getOmega())*b_field*param);
-			cout << "Track pt: " << pt << endl;
 
 			// Calculate the momentum components
 			px = pt*cos(track->getPhi());
 			py = pt*sin(track->getPhi());
 			pz = pt*track->getTanLambda();
-			cout << "Track px: " << px << " Track py: " << py
-				 << " Track pz: " << pz << endl;
 
 			// Calculate the momentum of the track
 			p = sqrt(px*px + py*py + pz*pz);
-			cout << "Track momentum: " << p << endl;
 
 			// Fil the plots
 			h_pt->Fill(pt);
@@ -145,7 +160,25 @@ int main( int argc, char **argv)
 			h_py->Fill(py);
 			h_pz->Fill(pz);
 				
-		}	 
+		}
+
+        // Get the collection of final state recon particles from the event. If
+        // the event doesn't have the specified collection, skip the rest of
+        // the event
+        try{
+        	recon_particles = (IMPL::LCCollectionVec*) event->getCollection(finalStateReconParticleColName);
+        } catch(EVENT::DataNotAvailableException exception){
+        	cout << "Collection " << finalStateReconParticleColName << " was not found. "
+        		 << "Skipping event ..." << endl;
+        	continue;
+        }
+
+        // Loop over all final state recon particles in the event
+        for(int particle_n = 0; particle_n < recon_particles->getNumberOfElements(); ++particle_n){
+
+        	recon_particle = (IMPL::ReconstructedParticleImpl*) recon_particles->getElementAt(particle_n);
+        	// Get the recon particle from the LCIO collection
+        }
 	}
 
 	// Save all plots to a single pdf file

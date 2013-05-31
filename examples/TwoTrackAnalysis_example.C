@@ -78,7 +78,7 @@ void runTwoTrackAnalysis(std::string root_file_name,
         tree->GetEntry(entry);
 
         // If the event does not contain two tracks, skip it
-        if(hps_event->getNumberOfTracks() != 2) continue;
+        //if(hps_event->getNumberOfTracks() != 2) continue;
 
 		// Loop over all tracks in the event
         for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n){

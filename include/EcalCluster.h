@@ -34,15 +34,19 @@ class EcalCluster : public TObject {
         void setClusterHitTime(double hit_time) { this->hit_time = hit_time; };
         void setHighestEnergyHit(double high_energy) { this->high_energy = high_energy; };
         void setHighestEnergyHitPosition(double*);
+        void setM2(double m2) { this->m2 = m2; };
+        void setM3(double m3) { this->m3 = m3; };
 
         double getNumberOfEcalHits() const { return n_ecal_hits; }
         double getXposition()		  const { return x; };
         double getYPosition()		  const { return y; };
         double getZPosition()		  const { return z; };
         double getClusterEnergy()	  const { return energy; };
-        double getHighestEnergyHit() const { return high_energy; };
-        double getHighestEnergyHitX() const {return x_high_energy; };
-        double getHighestEnergyHitY() const {return y_high_energy; };
+        double getHighestEnergyHit()  const { return high_energy; };
+        double getHighestEnergyHitX() const { return x_high_energy; };
+        double getHighestEnergyHitY() const { return y_high_energy; };
+        double getM2() const { return m2; };
+        double getM3() const { return m3; };
 
         ClassDef(EcalCluster, 1);	
 
@@ -58,6 +62,8 @@ class EcalCluster : public TObject {
         double x_high_energy;
         double y_high_energy;
         double z_high_energy;
+        double m2;
+        double m3;
 
 }; // EcalCluster
 
