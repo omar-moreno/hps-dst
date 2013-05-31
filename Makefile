@@ -8,7 +8,7 @@
 
 # Variables
 CC		:= g++
-CFLAGS	:= -O2 -Wall -fPIC -pthread -m64 `root-config --cflags` -I$(LCIO)/include -I$(PWD)/include   
+CFLAGS	:= -O2 -Wall -fPIC -pthread -m64 `root-config --cflags` -I$(LCIO)/include -I$(PWD)/include -I$(PWD)/utils  
 LFLAGS  := -L$(LCIO)/lib -llcioDict -llcio `root-config --libs`  
 BIN		:= $(PWD)/bin
 OBJ		:= $(PWD)/.obj
@@ -30,10 +30,12 @@ HPS_EVENT_DIC_SRC  := $(HPS_EVENT_DIC_DIR)/HpsEventDic.cxx
 HPS_EVENT_DIC_OBJ  := $(OBJ)/HpsEventDic.o
 ROOTCINT := rootcint
 
-# Root Sources
-ROOT_DIR	:= $(PWD)
-ROOT_SRC	:= $(wildcard $(ROOT_DIR)/*.cxx)
-ROOT_BIN	:= $(patsubst $(ROOT_DIR)/%.cxx, $(BIN)/%, $(ROOT_SRC))
+# Util Sources
+UTILS_DIR := $(PWD)/utils
+UTILS_HDR := $(wildcard $(UTILS_DIR)/*.h)
+UTILS_SRC := $(filter-out $(patsubst $(UTILS_DIR)/%.h, $(UTILS_DIR)/%.cxx, $(UTILS_HDR)), $(wildcard $(UTILS_DIR)/*.cxx))
+UTILS_OBJ := $(patsubst $(UTILS_DIR)/%.h, $(OBJ)/%.o, $(UTILS_HDR)) 
+UTILS_BIN := $(patsubst $(UTILS_DIR)/%.cxx, $(BIN)/%, $(UTILS_SRC))
 
 # Example Sources
 EXAMPLES_DIR := $(PWD)/examples
@@ -41,7 +43,7 @@ EXAMPLES_SRC := $(wildcard $(EXAMPLES_DIR)/*.cxx)
 EXAMPLES_BIN := $(patsubst $(EXAMPLES_DIR)/%.cxx, $(BIN)/%, $(EXAMPLES_SRC))
 
 # Default
-all: dirs $(HPS_EVENT_OBJ) $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_SO) $(ROOT_BIN) $(EXAMPLES_BIN)
+all: dirs $(HPS_EVENT_OBJ) $(HPS_EVENT_DIC_OBJ) $(HPS_EVENT_SO) $(EXAMPLES_BIN) $(UTILS_OBJ) $(UTILS_BIN)
 	@echo "HPS Event is done!"
 	
 # Clean
@@ -52,7 +54,6 @@ clean:
 	rm -rf $(HPS_EVENT_DIC_DIR)
 	rm -rf $(LIB)
 	@echo "Done!"
-	
 
 # Create obj and bin directories
 dirs:
@@ -63,10 +64,16 @@ dirs:
 
 # Compile HPS Event sources
 $(OBJ)/%.o: $(HPS_EVENT_SRC_DIR)/%.cxx $(HPS_EVENT_HDR_DIR)/%.h
+	@echo "Linking $@ ..."
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
-# Compile ROOT sources
-$(BIN)/%: $(ROOT_DIR)/%.cxx  
+# Compile Util Sources
+$(OBJ)/%.o: $(UTILS_DIR)/%.cxx $(UTILS_DIR)/%.h
+	@echo "Linking $@ ..."
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile Utils sources
+$(BIN)/%: $(UTILS_DIR)/%.cxx
 	$(CC) $(CFLAGS) $(LFLAGS) $(OBJ)/* -o $@ $<
 
 # Create the HPS Event ROOT dictionary
