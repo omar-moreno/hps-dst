@@ -36,7 +36,6 @@ print:
 # Clean
 clean:
 	@echo "Cleaning all directories ..."
-	rm -rf $(OBJ)
 	rm -rf $(BIN)
 	@echo "Done!"
 	
@@ -49,5 +48,4 @@ dirs:
 # Compile Ecal Analysis sources
 $(BIN)/%: $(ANALYSIS_DIR)/%.cxx
 	$(CC) $(CFLAGS) $(LFLAGS) $(OBJ)/* -o $@ $<
-	@echo "Done compiling analysis/ sources" 
 
