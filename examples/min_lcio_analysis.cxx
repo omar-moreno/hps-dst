@@ -78,6 +78,8 @@ int main( int argc, char **argv )
 		}
 	}
 
+	cout << "Analysis Complete!" << endl;
+
 	return 0;
 
 }
