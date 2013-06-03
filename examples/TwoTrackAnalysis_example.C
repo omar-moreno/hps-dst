@@ -15,15 +15,22 @@ void runTwoTrackAnalysis(std::string root_file_name,
 	
     const double param = 2.99792458e-04;
     const float b_field = -0.491;
+	
+	if(getenv("HPS_DST_HOME") == NULL){
+		std::cout << "Error! Variable HPS_DST_PATH is not set." << std::endl;
+		return;
+	} 
 
+	std::string hps_dst_path(getenv("HPS_DST_HOME"));
+	hps_dst_path += "/lib/libHpsEvent.so";
 	// Check if the classes (HpsEvent, Track, EcalCluster, ...) are in 
-    // the dictionary.  If not, load their definitions from libHpsEvent.so
- 	if(!TClassTable::GetDict("HpsEvent")){
- 		std::cout << "Class definitions were not found! Loading libHpsEvent.so"
- 				  << std::endl;
- 		gSystem->Load("../lib/libHpsEvent.so");
- 	}
- 	
+	// the dictionary.  If not, load their definitions from libHpsEvent.so
+	if(!TClassTable::GetDict("HpsEvent")){
+		std::cout << "Class definitions were not found! Loading libHpsEvent.so"
+			      << std::endl;
+		gSystem->Load(hps_dst_path.c_str());
+	}
+
  	//-- Setup ROOT histograms ---//
  	//----------------------------//
 
