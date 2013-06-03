@@ -227,11 +227,13 @@ int main(int argc, char **argv)
         	// Set the number of crystals associated with the cluster
         	hps_ecal_cluster->setNumberOfEcalHits(ecal_hits.size());
 
-        	//
-        	hps_ecal_cluster->setM2(EcalUtil::getClusterM2(ecal_cluster, ecal_cal_hits_relations));
+        	double* moments = EcalUtils::getShowerMoments(ecal_cluster, ecal_cal_hits_relations);
 
         	//
-        	hps_ecal_cluster->setM3(EcalUtil::getClusterM3(ecal_cluster, ecal_cal_hits_relations));
+        	hps_ecal_cluster->setM2(moments[1]);
+
+        	//
+        	hps_ecal_cluster->setM3(moments[2]);
 
         	// Loop through all of the Ecal hits in the event and find the
         	// crystal with the highest energy

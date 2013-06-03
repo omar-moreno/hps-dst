@@ -20,10 +20,12 @@
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/LCGenericObjectImpl.h>
 
-namespace EcalUtil {
+//--- ROOT ---//
+#include <TVector3.h>
+
+namespace EcalUtils {
         
-	double getClusterM2(IMPL::ClusterImpl*, IMPL::LCCollectionVec*);
-	double getClusterM3(IMPL::ClusterImpl*, IMPL::LCCollectionVec*);
+	double* getShowerMoments(IMPL::ClusterImpl*, IMPL::LCCollectionVec*);
 
 };
 
