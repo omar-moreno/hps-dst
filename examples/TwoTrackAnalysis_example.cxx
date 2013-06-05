@@ -100,7 +100,7 @@ int main( int argc, char **argv)
 	IO::LCReader *lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader();
 	try{
 		lc_reader->open(lcio_file_name.c_str());
-	} catch(IO::IOException exception){
+	} catch(IO::IOException &exception){
 		cout << "File " << lcio_file_name << " cannot be opened!" << endl;
 		return(2);
 	}
@@ -128,7 +128,7 @@ int main( int argc, char **argv)
 		// have the specified collection, skip the rest of the event
 		try{
 			tracks = (IMPL::LCCollectionVec*) event->getCollection(trackCollectionName);
-		} catch(EVENT::DataNotAvailableException exception){
+		} catch(EVENT::DataNotAvailableException &exception){
 			cout << "Collection " << trackCollectionName << " was not found. "
 			     << "Skipping event ..." << endl;
 			continue;
@@ -167,7 +167,7 @@ int main( int argc, char **argv)
         // the event
         try{
         	recon_particles = (IMPL::LCCollectionVec*) event->getCollection(finalStateReconParticleColName);
-        } catch(EVENT::DataNotAvailableException exception){
+        } catch(EVENT::DataNotAvailableException &exception){
         	cout << "Collection " << finalStateReconParticleColName << " was not found. "
         		 << "Skipping event ..." << endl;
         	continue;
