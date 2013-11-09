@@ -10,6 +10,8 @@
 
 #include <MuonCluster.h>
 
+ClassImp(MuonCluster)
+
 MuonCluster::MuonCluster()
 {}
 

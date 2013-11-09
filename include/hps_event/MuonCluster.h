@@ -20,13 +20,16 @@
 
 class MuonCluster : public TObject {
 
-public:
-	MuonCluster();
-	MuonCluster(const MuonCluster &muonClusterObj);
-	virtual ~MuonCluster();
-	MuonCluster &operator=(const MuonCluster &muonClusterObj);
+	public:
 
-	void Clear(Option_t *option = "");
+		MuonCluster();
+		MuonCluster(const MuonCluster &muonClusterObj);
+		virtual ~MuonCluster();
+		MuonCluster &operator=(const MuonCluster &muonClusterObj);
+
+		void Clear(Option_t *option = "");
+
+		ClassDef(MuonCluster, 1); 
 
 }; // MuonCluster
 
