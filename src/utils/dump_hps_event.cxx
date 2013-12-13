@@ -1,6 +1,7 @@
 /**
  *  @section purpose: 
- *      Dump the contents of an HPS Event
+ *      Print detailed information about an LCEvent.  Specificaly, the size, 
+ *      type and names of collections in an LCEvent are printed.
  *  @author:    Omar Moreno <omoreno1@ucsc.edu>
  *              Santa Cruz Institute for Particle Physics
  *              University of California, Santa Cruz
@@ -12,6 +13,7 @@
  //--- C++ ---//
 #include <iostream>
 #include <stdlib.h>
+#include <unistd.h>
 
 //--- LCIO ---//
 #include <IO/LCReader.h>
