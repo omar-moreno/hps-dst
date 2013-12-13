@@ -1,17 +1,22 @@
 
-#--- Compiled Sources ---#
+# Compiled Sources 
 bin/
 .obj/
 *.o
 *.so
 
-#--- LCIO files ---#
+# Build Directory 
+build/
+
+# LCIO and ROOT files  
 *.lcio
 *.slcio
 *.root
 
-#--- Other ---#
+# Temp files 
 *~
-.*.swp 
+*.swp 
+*.swo
+
+# Eclipse project description file 
 .project
-*.pdf
