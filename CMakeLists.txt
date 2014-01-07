@@ -9,6 +9,9 @@ cmake_minimum_required(VERSION 2.6)
 # Set the name of the project
 project(HPS_DST)
 
+#
+set(CMAKE_CXX_FLAGS "-g")
+
 # Set the current version
 set(HPS_DST_VERSION_MAJOR 1)
 set(HPS_DST_VERSION_MINOR 0)
@@ -21,6 +24,14 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/.obj")
 # Include the HPS Event headers
 set(HPS_EVENT_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/hps_event")
 include_directories("${HPS_EVENT_HDR_DIR}")
+
+# Include DST headers
+set(DST_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/dst")
+include_directories("${DST_HDR_DIR}")
+
+# Include Utils headers
+set(UTILS_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/utils")
+include_directories("${UTILS_HDR_DIR}")
 
 # Include the ROOT headers
 include_directories("$ENV{ROOTSYS}/include")
@@ -40,4 +51,10 @@ add_subdirectory("${HPS_DST_SOURCE_DIR}/src/hps_event")
 
 # Add the utils directory to the build
 add_subdirectory("${HPS_DST_SOURCE_DIR}/src/utils")
+
+# Add dst directory to the build
+add_subdirectory("${HPS_DST_SOURCE_DIR}/src/dst")
+
+
+
 
