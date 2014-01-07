@@ -17,9 +17,13 @@ find_library(ROOT_PHYSICS_LIB Physics $ENV{ROOTSYS}/lib)
 add_library(SvtDataWriter SvtDataWriter.cxx)
 target_link_libraries(SvtDataWriter ${LCIO_LIB} TrackUtils)
 
+# Create the EcalDataWriter library
+add_library(EcalDataWriter EcalDataWriter.cxx)
+target_link_libraries(EcalDataWriter ${LCIO_LIB} EcalUtils)
+
 # Create the HpsEventBuilder library
 add_library(HpsEventBuilder HpsEventBuilder.cxx)
-target_link_libraries(HpsEventBuilder SvtDataWriter HpsEvent)
+target_link_libraries(HpsEventBuilder SvtDataWriter EcalDataWriter HpsEvent)
 
 # Create the dst_writer executable
 add_executable(dst_maker dst_maker.cxx)

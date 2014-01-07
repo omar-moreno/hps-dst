@@ -17,11 +17,11 @@ find_library(ROOT_CORE_LIB Core $ENV{ROOTSYS}/lib)
 find_library(ROOT_RIO_LIB RIO $ENV{ROOTSYS}/lib)
 find_library(ROOT_PHYSICS_LIB Physics $ENV{ROOTSYS}/lib)
 
-# Add the EcalUtils library
-add_library(EcalUtils EcalUtils.cxx)
-target_link_libraries(EcalUtils ${ROOT_PHYSICS_LIB})
-
 # Create the TrackUtils library
 add_library(TrackUtils TrackUtils.cxx)
 target_link_libraries(TrackUtils ${LCIO_DICT_LIB})
+
+# Create the EcalUtils library
+add_library(EcalUtils EcalUtils.cxx)
+target_link_libraries(EcalUtils ${LCIO_DICT_LIB})
 
