@@ -18,10 +18,10 @@ find_library(ROOT_RIO_LIB RIO $ENV{ROOTSYS}/lib)
 find_library(ROOT_PHYSICS_LIB Physics $ENV{ROOTSYS}/lib)
 
 # Add the EcalUtils library
-include_directories(.)
 add_library(EcalUtils EcalUtils.cxx)
 target_link_libraries(EcalUtils ${ROOT_PHYSICS_LIB})
 
-# Add the write_hps_event executable
-add_executable(write_hps_event write_hps_event.cxx)
-target_link_libraries(write_hps_event ${LCIO_LIB} ${ROOT_TREE_LIB} ${ROOT_CORE_LIB} HpsEvent ${ROOT_RIO_LIB} EcalUtils)
+# Create the TrackUtils library
+add_library(TrackUtils TrackUtils.cxx)
+target_link_libraries(TrackUtils ${LCIO_DICT_LIB})
+
