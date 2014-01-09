@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 	// If an LCIO file is not specified, exit the program
 	if(lcio_file_name.length() == 0){
 		cout << "Please specify an LCIO file to process."
-			 << "\nUse the -h flag for usage" << endl;
+			<< "\nUse the -h flag for usage" << endl;
 		return EXIT_FAILURE; 	
 	}
 
@@ -81,8 +81,8 @@ int main(int argc, char **argv)
 	// Open a ROOT file
 	TFile* root_file = new TFile(dst_file_name.c_str(), "RECREATE");
 
-    // Create a ROOT tree along with the HPS Event branch which
-    // will encapsulate all event information
+	// Create a ROOT tree along with the HPS Event branch which
+	// will encapsulate all event information
 	TTree *tree = new TTree("HPS_Event", "HPS event tree"); 
 	HpsEvent* hps_event = new HpsEvent();  
 	tree->Branch("Event", "HpsEvent", &hps_event, 32000, 3); 
@@ -92,28 +92,28 @@ int main(int argc, char **argv)
 	lc_reader->open(lcio_file_name);
 
 	// Loop over all events in the LCIO file
-	EVENT::LCEvent* event;
+	EVENT::LCEvent* event = NULL;
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	while((event = lc_reader->readNextEvent()) != 0){
-	
+		
 		if(event->getEventNumber() == n_events) break; 
 
 		// Print the event number every 1000 events
-		if(event->getEventNumber()%500 == 0){
+		if(event->getEventNumber()%1000 == 0){
 			cout << "Processing event: " << event->getEventNumber() << endl;
-			}
-
-			event_builder->makeHpsEvent(event, hps_event);  
-			tree->Fill();
 		}
 
-		cout << "Finished writing ROOT Tree!" << endl;
-		lc_reader->close();
-		root_file->Write();
-		root_file->Close();
+		event_builder->makeHpsEvent(event, hps_event); 
+		tree->Fill();
+	}
 
-		delete hps_event;
-		delete event_builder;
+	cout << "Finished writing ROOT Tree!" << endl;
+	lc_reader->close();
+	root_file->Write();
+	root_file->Close();
+
+	delete hps_event;
+	delete event_builder;
 
 	return EXIT_SUCCESS;
 }
@@ -123,7 +123,8 @@ void printUsage()
 	cout << "Usage: dst_maker [OPTIONS] -i [LCIO_INPUT_FILE]" << endl;
 	cout << "An LCIO_INPUT_FILE must be specified.\n" << endl;
 	cout << "OPTIONS:\n "
-	     << "\t -i Input LCIO file name \n"
-		 << "\t -o Output ROOT file name \n"
-		 << "\t -h Display this help and exit \n" << endl;	 
+		<< "\t -i Input LCIO file name \n"
+		<< "\t -o Output ROOT file name \n"
+		<< "\t -n The number of events to process \n"
+		<< "\t -h Display this help and exit \n" << endl;	 
 }	
