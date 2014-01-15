@@ -92,12 +92,12 @@ namespace TrackUtils {
 	/**
 	 *
 	 */
-	std::vector<double> getMomentumVector(IMPL::TrackImpl*);
+	std::vector<double> getMomentumVector(IMPL::TrackImpl*, double);
 
 	/**
 	 *
 	 */
-	double getMomentum(IMPL::TrackImpl*);
+	double getMomentum(IMPL::TrackImpl*, double);
 
 	/**
 	 *

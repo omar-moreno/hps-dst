@@ -23,8 +23,12 @@ class HpsEventBuilder : public EventBuilder {
 		HpsEventBuilder(); 
 		~HpsEventBuilder(); 
 
+		//
 		void makeHpsEvent(EVENT::LCEvent*, HpsEvent*); 
-	
+
+		// 
+		void setBField(double);
+
 	private:
 
 		SvtDataWriter* svt_writer; 

@@ -11,6 +11,12 @@
 #ifndef __SVT_DATA_WRITER_H__
 #define __SVT_DATA_WRITER_H__
 
+//--- C++ ---//
+//-----------//
+#include <limits>
+#include <cmath>
+#include <stdexcept>
+
 //--- DST ---//
 //-----------//
 #include <DataWriter.h>
@@ -48,6 +54,11 @@ class SvtDataWriter : public DataWriter {
 		void setHitCollectionName(std::string hits_collection_name){
 			this->hits_collection_name = hits_collection_name; };
 
+		// 
+		void setBField(double b_field){
+			this->b_field = b_field;
+		}
+
 	private:
 	
 		std::string tracks_collection_name;
@@ -58,6 +69,8 @@ class SvtDataWriter : public DataWriter {
 		
 		SvtTrack* hps_track;
 		SvtHit* svt_hit; 		
+	
+		double b_field;
 };
 
 #endif // __SVT_DATA_WRITER_H__

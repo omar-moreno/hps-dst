@@ -12,6 +12,8 @@
 //--- C++ ---//
 //-----------//
 #include <cstdlib>
+#include <cmath>
+#include <limits>
 
 //--- LCIO ---//
 //------------//
@@ -43,9 +45,10 @@ int main(int argc, char **argv)
 	string dst_file_name; 	
 	int option_char;
 	int n_events = 0; 	
+	double b_field = numeric_limits<double>::quiet_NaN();  
 	// Parse any command line arguments.  If an invalid argument is passed, 
 	// print the usage
-	while((option_char = getopt(argc, argv, "i:o:n:h")) != -1){
+	while((option_char = getopt(argc, argv, "i:o:n:b:h")) != -1){
 		switch(option_char){
 			case 'i': 
 				lcio_file_name = optarg; 
@@ -55,7 +58,10 @@ int main(int argc, char **argv)
 				break; 
 			case 'n': 
 				n_events = atoi(optarg); 
-				break; 	
+				break; 
+			case 'b':
+				b_field = atof(optarg);
+				break;	
 			case 'h': 
 				printUsage(); 
 				return EXIT_SUCCESS; 	
@@ -67,7 +73,7 @@ int main(int argc, char **argv)
 
 	// If an LCIO file is not specified, exit the program
 	if(lcio_file_name.length() == 0){
-		cout << "Please specify an LCIO file to process."
+		cerr << "Please specify an LCIO file to process."
 			<< "\nUse the -h flag for usage" << endl;
 		return EXIT_FAILURE; 	
 	}
@@ -76,6 +82,13 @@ int main(int argc, char **argv)
 	if(dst_file_name.length() == 0){
 		cout << "Setting DST name to default value: hps_dst.root" << endl;
 		dst_file_name = "hps_dst.root"; 
+	}
+
+	// If a B-field isn't set, exit the program
+	if(isnan(b_field)){ 
+		cerr << "Please specify the magnetic field strength in Tesla."
+			 << "\nUse the -h flag for usage" << endl;
+		return EXIT_FAILURE;
 	}
 
 	// Open a ROOT file
@@ -94,6 +107,7 @@ int main(int argc, char **argv)
 	// Loop over all events in the LCIO file
 	EVENT::LCEvent* event = NULL;
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
+	event_builder->setBField(b_field); 
 	while((event = lc_reader->readNextEvent()) != 0){
 		
 		if(event->getEventNumber() == n_events) break; 
@@ -126,5 +140,6 @@ void printUsage()
 		<< "\t -i Input LCIO file name \n"
 		<< "\t -o Output ROOT file name \n"
 		<< "\t -n The number of events to process \n"
+		<< "\t -b The strength of the magnetic field in Tesla \n"
 		<< "\t -h Display this help and exit \n" << endl;	 
 }	

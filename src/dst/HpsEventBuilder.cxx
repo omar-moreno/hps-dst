@@ -32,3 +32,7 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 	// Write Ecal Data to HpsEvent
 	ecal_writer->writeData(event, hps_event); 
 }
+
+void HpsEventBuilder::setBField(double b_field){
+	svt_writer->setBField(b_field); 
+}
