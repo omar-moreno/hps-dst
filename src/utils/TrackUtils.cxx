@@ -1,14 +1,16 @@
 /**
+ *	@section purpose:
  *  @author: Omar Moreno <omoreno1@ucsc.edu>
+ *			 Santa Cruz Institute for Particle Physics
+ *			 University of California, Santa Cruz
  *  @date: December 16, 2013
+ *  @version: 1.0
  *
  */
 
 #include <TrackUtils.h>
 
 namespace { 
-
-	    const float b_field = -0.491; 
 		const double param = 2.99792458e-04; 	
 }
 
@@ -67,7 +69,7 @@ namespace TrackUtils {
         return -(getR(track) - getDoca(track))*cos(getPhi0(track));   
     };
 
-	std::vector<double> getMomentumVector(IMPL::TrackImpl* track){
+	std::vector<double> getMomentumVector(IMPL::TrackImpl* track, double b_field){
 		std::vector<double> p(3,0); 
 		double pt = std::abs(getR(track)*b_field*param);
 		
@@ -78,9 +80,9 @@ namespace TrackUtils {
 		return p; 	
 	};
 
-	double getMomentum(IMPL::TrackImpl* track){
+	double getMomentum(IMPL::TrackImpl* track, double b_field){
 	
-		std::vector<double> p_vector = getMomentumVector(track); 
+		std::vector<double> p_vector = getMomentumVector(track, b_field); 
 		double p = 0; 
 		for(int index = 0; index < p_vector.size(); ++index){
 			p += p_vector[index]*p_vector[index]; 

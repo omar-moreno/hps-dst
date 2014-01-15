@@ -12,7 +12,8 @@
 
 SvtDataWriter::SvtDataWriter() 
 	: tracks_collection_name("MatchedTracks"),
-	  hits_collection_name("")
+	  hits_collection_name(""),
+	  b_field(std::numeric_limits<double>::quiet_NaN())
 {}
 
 SvtDataWriter::~SvtDataWriter()
@@ -20,6 +21,12 @@ SvtDataWriter::~SvtDataWriter()
 
 void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
+	// Check if the B-field has been set. If is hasn't, throw
+	// an exception
+	if(std::isnan(b_field)) 
+		throw std::runtime_error("B field was not set!");
+	
+
 	// Get the collection of tracks from the event	
 	tracks = (IMPL::LCCollectionVec*) event->getCollection(tracks_collection_name);
 
@@ -40,7 +47,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 									  track->getZ0());
 
 		// Set the track momentum
-		std::vector<double> momentum = TrackUtils::getMomentumVector(track); 
+		std::vector<double> momentum = TrackUtils::getMomentumVector(track, b_field); 
 		hps_track->setMomentum(momentum[0], momentum[1], momentum[2]); 
 			
 		// Set the track fit chi^2
