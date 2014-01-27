@@ -14,6 +14,7 @@
 
 //--- C++ ---//
 #include <iostream>
+#include <unistd.h>
 
 //--- LCIO ---//
 #include <IO/LCReader.h>
