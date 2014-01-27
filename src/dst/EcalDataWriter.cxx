@@ -57,8 +57,8 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		
         // Set the energy and position of the highest energy crystal in
         // the cluster
-        hps_ecal_cluster->setHighestEnergyHit(cluster_seed->getEnergy());
-        hps_ecal_cluster->setHighestEnergyHitPosition((double*) cluster_seed->getPosition());
+        hps_ecal_cluster->setSeedEnergy(cluster_seed->getEnergy());
+        hps_ecal_cluster->setSeedPosition((double*) cluster_seed->getPosition());
 
 	}
 
