@@ -15,8 +15,8 @@ build/
 
 # Temp files 
 *~
-*.swp 
-*.swo
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
 
 # Eclipse project description file 
 .project
