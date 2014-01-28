@@ -4,7 +4,7 @@
 #
 
 # Specify the minimum CMake version required
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 # Set the name of the project
 project(HPS_DST)
