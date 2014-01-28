@@ -10,5 +10,6 @@
 #pragma link C++ class SvtTrack+;
 #pragma link C++ class SvtHit+;
 #pragma link C++ class HpsReconstructedParticle+;
+#pragma link C++ class EcalHit+;
 
 #endif
