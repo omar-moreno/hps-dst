@@ -44,6 +44,7 @@ set(HPS_EVENT_DIC_DIR "${HPS_DST_BINARY_DIR}/src/root_dic")
 file(MAKE_DIRECTORY ${HPS_EVENT_DIC_DIR})
 file(GLOB HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/*.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
+list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/CalorimeterHit.h")
 execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR} "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 
 # Add the hps_event subdirectory to the build
