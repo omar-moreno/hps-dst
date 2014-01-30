@@ -20,6 +20,7 @@
 #include <TObject.h>
 #include <TClonesArray.h>
 #include <TRefArray.h>
+#include <TRef.h>
 
 //--- HPS Event ---//
 //-----------------//
@@ -41,16 +42,13 @@ class EcalCluster : public Cluster, public TObject {
 
         void setPosition(const std::vector<double>);
         void setEnergy(const double energy){ this->energy = energy; };
-        void setNumberOfEcalHits(const int n_hits){ this->n_ecal_hits = n_hits; };
         void setHitTime(const double hit_time){ this->hit_time = hit_time; };
-        void setSeedEnergy(const double seed_energy){ this->seed_energy = seed_energy; };
-        void setSeedPosition(const std::vector<double>);
         void setM2(const double m2){ this->m2 = m2; };
         void setM3(const double m3){ this->m3 = m3; };
 
 		std::vector<double> getPosition() const;  
         double getEnergy() const { return energy; };
-        double getSeedEnergy() const { return seed_energy; };
+        double getSeedEnergy() const;
 		std::vector<double> getSeedPosition() const; 
 		double getM2() const { return m2; };
         double getM3() const { return m3; };
@@ -60,7 +58,7 @@ class EcalCluster : public Cluster, public TObject {
     private:
 		
 		TRefArray* ecal_hits; 
-		EcalHit* seed_hit; 
+		TRef seed_hit; 
 
         int n_ecal_hits; 
 
