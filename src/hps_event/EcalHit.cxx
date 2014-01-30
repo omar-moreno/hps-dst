@@ -32,7 +32,7 @@ void EcalHit::setPosition(const std::vector<double> position)
 	hit_z = position[2]; 
 }
 
-std::vector<double> EcalHit::getPosition()
+std::vector<double> EcalHit::getPosition() const 
 {
 	std::vector<double> position(3, 0); 
 	position[0] = hit_x; 
@@ -41,4 +41,3 @@ std::vector<double> EcalHit::getPosition()
 	
 	return position; 	
 }
-
