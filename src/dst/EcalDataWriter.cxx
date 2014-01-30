@@ -36,11 +36,11 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		hps_ecal_cluster = hps_event->addEcalCluster();
 
 		// Set the cluster position
-		hps_ecal_cluster->setClusterPosition((double*) cluster->getPosition());
-
+		std::vector<double> position(((double*) cluster->getPosition()), ((double*) cluster->getPosition()) + 3); 
+		hps_ecal_cluster->setPosition(position);
 
 		// Set the cluster energy
-		hps_ecal_cluster->setClusterEnergy(cluster->getEnergy());
+		hps_ecal_cluster->setEnergy(cluster->getEnergy());
 
 		// Get the ecal hits used to create the cluster
 		EVENT::CalorimeterHitVec ecal_hits = cluster->getCalorimeterHits(); 
@@ -58,7 +58,8 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
         // Set the energy and position of the highest energy crystal in
         // the cluster
         hps_ecal_cluster->setSeedEnergy(cluster_seed->getEnergy());
-        hps_ecal_cluster->setSeedPosition((double*) cluster_seed->getPosition());
+		std::vector<double> seed_position(((double*) cluster_seed->getPosition()), ((double*) cluster_seed->getPosition()) + 3);
+		hps_ecal_cluster->setSeedPosition(seed_position);
 
 	}
 
