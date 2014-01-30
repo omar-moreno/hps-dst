@@ -13,22 +13,28 @@
 ClassImp(EcalCluster)
 
 EcalCluster::EcalCluster()
-	: TObject(), n_ecal_hits(0), x(0), y(0), z(0), energy(0),
+	: TObject(), ecal_hits(new TRefArray()), seed_hit(new EcalHit()),
+	  n_ecal_hits(0), x(0), y(0), z(0), energy(0),
 	  hit_time(0), seed_energy(0), seed_x(0), seed_y(0)
 {}
 
 EcalCluster::EcalCluster(const EcalCluster &ecalClusterObj)
-	: TObject(), n_ecal_hits(ecalClusterObj.n_ecal_hits),
+	: TObject(), ecal_hits(new TRefArray()), seed_hit(new EcalHit()), 
+	  n_ecal_hits(ecalClusterObj.n_ecal_hits),
 	  x(ecalClusterObj.x), y(ecalClusterObj.y), z(ecalClusterObj.z),
 	  energy(ecalClusterObj.energy), hit_time(ecalClusterObj.hit_time),
 	  seed_energy(ecalClusterObj.seed_energy),
 	  seed_x(ecalClusterObj.seed_x),
 	  seed_y(ecalClusterObj.seed_y)
-{}
+{
+	*ecal_hits = *ecalClusterObj.ecal_hits; 
+	*seed_hit = *ecalClusterObj.seed_hit; 
+}
 
 EcalCluster::~EcalCluster()
 {
-    Clear(); 
+    Clear();
+	delete ecal_hits; 	
 }
 
 EcalCluster &EcalCluster::operator=(const EcalCluster &ecalClusterObj)
@@ -49,6 +55,9 @@ EcalCluster &EcalCluster::operator=(const EcalCluster &ecalClusterObj)
 	this->seed_x = ecalClusterObj.seed_x;
 	this->seed_y = ecalClusterObj.seed_y;
 
+	ecal_hits = new TRefArray(); 
+	*ecal_hits = *ecalClusterObj.ecal_hits; 
+
 	return *this;
 }
 
@@ -57,17 +66,42 @@ void EcalCluster::Clear(Option_t* /*option*/)
     TObject::Clear();
 }
 
-void EcalCluster::setClusterPosition(double* position)
+void EcalCluster::setPosition(const std::vector<double> position)
 {
     this->x = position[0];
     this->y = position[1];
     this->z = position[2];
 }
 
-void EcalCluster::setSeedPosition(double* position)
+void EcalCluster::setSeedPosition(const std::vector<double> position)
 {
 	this->seed_x = position[0];
 	this->seed_y = position[1];
 	this->seed_z = position[2];
 }
 
+std::vector<double> EcalCluster::getPosition() const
+{
+	std::vector<double> position(3, 0); 
+	position[0] = x; 
+	position[1] = y; 
+	position[2] = z; 
+	
+	return position; 	
+}
+
+std::vector<double> EcalCluster::getSeedPosition() const
+{
+	std::vector<double> position(3, 0); 
+	position[0] = x; 
+	position[1] = y; 
+	position[2] = z; 
+	
+	return position; 	
+}
+
+void EcalCluster::addHit(EcalHit* hit)
+{
+	++n_ecal_hits;
+	ecal_hits->Add(hit); 
+}
