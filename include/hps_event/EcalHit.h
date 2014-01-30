@@ -17,7 +17,7 @@
 
 //--- HPS Event ---//
 //-----------------//
-#include <CalorimterHit.h>
+#include <CalorimeterHit.h>
 
 class EcalHit : public CalorimeterHit, public TObject { 
 
@@ -30,7 +30,7 @@ class EcalHit : public CalorimeterHit, public TObject {
 		void setPosition(const std::vector<double>); 
 		void setEnergy(const double energy){ this->energy = energy; }; 
 
-		std::vector<double> getPosition(); 
+		std::vector<double> getPosition() const; 
 		double getEnergy() const { return energy; };  
 
 		ClassDef(EcalHit, 1); 

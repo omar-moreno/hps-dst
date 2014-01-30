@@ -18,8 +18,8 @@ class CalorimeterHit {
 
 		virtual ~CalorimeterHit(){}; 
 
-		virtual std::vector<double> getPosition() = 0;
-		virtual double getEnergy() = 0; 
+		virtual std::vector<double> getPosition() const = 0;
+		virtual double getEnergy() const = 0; 
 		
 		virtual void setPosition(const std::vector<double>) = 0; 
 		virtual void setEnergy(const double) = 0; 	
