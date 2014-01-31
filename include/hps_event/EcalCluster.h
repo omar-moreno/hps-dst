@@ -27,7 +27,7 @@
 #include <Cluster.h>
 #include <EcalHit.h>
 
-class EcalCluster : public Cluster, public TObject {
+class EcalCluster : public TObject, public Cluster {
 
     public:
 
@@ -48,8 +48,9 @@ class EcalCluster : public Cluster, public TObject {
 
 		std::vector<double> getPosition() const;  
         double getEnergy() const { return energy; };
-        double getSeedEnergy() const;
-		std::vector<double> getSeedPosition() const; 
+        //double getSeedEnergy() const;
+		//std::vector<double> getSeedPosition() const;
+        EcalHit* getSeed() const;
 		double getM2() const { return m2; };
         double getM3() const { return m3; };
 
@@ -67,10 +68,10 @@ class EcalCluster : public Cluster, public TObject {
         double z;
         double energy; 
         double hit_time;
-        double seed_energy;
-        double seed_x;
-        double seed_y;
-		double seed_z; 
+        //double seed_energy;
+        //double seed_x;
+        //double seed_y;
+		//double seed_z;
         double m2;
         double m3;
 
