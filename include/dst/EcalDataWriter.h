@@ -23,10 +23,12 @@
 //------------//
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/ClusterImpl.h>
+#include <IMPL/CalorimeterHitImpl.h>
 
 //--- HPS Event ---//
 //-----------------//
 #include <EcalCluster.h>
+#include <EcalHit.h>
 
 class EcalDataWriter : public DataWriter {
 
@@ -44,11 +46,11 @@ class EcalDataWriter : public DataWriter {
 		std::string cal_hits_relation_collection_name; 
 
 		IMPL::LCCollectionVec* clusters;  
-		IMPL::LCCollectionVec* cal_hits_relations; 		
-		IMPL::ClusterImpl* cluster; 
+		IMPL::ClusterImpl* cluster;
+		IMPL::CalorimeterHitImpl* calorimeter_hit;
 
-		EcalCluster* hps_ecal_cluster;
-
+		EcalCluster* ecal_cluster;
+		EcalHit* ecal_hit;
 
 };
 
