@@ -20,3 +20,6 @@ build/
 
 # Eclipse project description file 
 .project
+
+# Sandbox directory
+sandbox/
