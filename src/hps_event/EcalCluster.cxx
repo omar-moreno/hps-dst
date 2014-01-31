@@ -15,17 +15,18 @@ ClassImp(EcalCluster)
 EcalCluster::EcalCluster()
 	: TObject(), ecal_hits(new TRefArray()),
 	  n_ecal_hits(0), x(0), y(0), z(0), energy(0),
-	  hit_time(0), seed_energy(0), seed_x(0), seed_y(0)
+	  hit_time(0)
+	  //, seed_energy(0), seed_x(0), seed_y(0)
 {}
 
 EcalCluster::EcalCluster(const EcalCluster &ecalClusterObj)
 	: TObject(), ecal_hits(new TRefArray()), 
 	  n_ecal_hits(ecalClusterObj.n_ecal_hits), seed_hit(ecalClusterObj.seed_hit), 
 	  x(ecalClusterObj.x), y(ecalClusterObj.y), z(ecalClusterObj.z),
-	  energy(ecalClusterObj.energy), hit_time(ecalClusterObj.hit_time),
-	  seed_energy(ecalClusterObj.seed_energy),
-	  seed_x(ecalClusterObj.seed_x),
-	  seed_y(ecalClusterObj.seed_y)
+	  energy(ecalClusterObj.energy), hit_time(ecalClusterObj.hit_time)
+	  //seed_energy(ecalClusterObj.seed_energy),
+	  //seed_x(ecalClusterObj.seed_x),
+	  //seed_y(ecalClusterObj.seed_y)
 {
 	*ecal_hits = *ecalClusterObj.ecal_hits; 
 }
@@ -50,9 +51,9 @@ EcalCluster &EcalCluster::operator=(const EcalCluster &ecalClusterObj)
 	this->z = ecalClusterObj.z;
 	this->energy = ecalClusterObj.energy;
 	this->hit_time = ecalClusterObj.hit_time;
-	this->seed_energy = ecalClusterObj.seed_energy;
-	this->seed_x = ecalClusterObj.seed_x;
-	this->seed_y = ecalClusterObj.seed_y;
+	//this->seed_energy = ecalClusterObj.seed_energy;
+	//this->seed_x = ecalClusterObj.seed_x;
+	//this->seed_y = ecalClusterObj.seed_y;
 
 	ecal_hits = new TRefArray(); 
 	*ecal_hits = *ecalClusterObj.ecal_hits;
@@ -65,6 +66,8 @@ EcalCluster &EcalCluster::operator=(const EcalCluster &ecalClusterObj)
 void EcalCluster::Clear(Option_t* /*option*/)
 {
     TObject::Clear();
+    ecal_hits->Delete();
+    n_ecal_hits = 0;
 }
 
 void EcalCluster::setPosition(const std::vector<double> position)
@@ -84,22 +87,30 @@ std::vector<double> EcalCluster::getPosition() const
 	return position; 	
 }
 
+/*
 std::vector<double> EcalCluster::getSeedPosition() const
 {
 	return ((EcalHit*) seed_hit.GetObject())->getPosition(); 	
-}
+}*/
 
+/*
 double EcalCluster::getSeedEnergy() const
 {
 	return ((EcalHit*) seed_hit.GetObject())->getEnergy(); 	
+}*/
+
+EcalHit* EcalCluster::getSeed() const
+{
+	return (EcalHit*) seed_hit.GetObject();
 }
 
 void EcalCluster::addHit(EcalHit* hit)
 {
 	++n_ecal_hits;
 	
-	if(((EcalHit*) seed_hit.GetObject())->getEnergy() < hit->getEnergy()){
-		seed_hit = hit; 
+	if(seed_hit.GetObject() == NULL
+			|| (((EcalHit*) seed_hit.GetObject())->getEnergy() < hit->getEnergy())){
+		seed_hit = hit;
 	}
 
 	ecal_hits->Add(hit); 
