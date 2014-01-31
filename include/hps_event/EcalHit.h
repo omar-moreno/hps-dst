@@ -19,25 +19,32 @@
 //-----------------//
 #include <CalorimeterHit.h>
 
-class EcalHit : public CalorimeterHit, public TObject { 
+class EcalHit : public TObject, public CalorimeterHit {
 
-	public: 
+	public:
+
 		EcalHit(); 
 		~EcalHit();
 		
 		void Clear(Option_t* option=""); 
 		
-		void setPosition(const std::vector<double>); 
+		void setPosition(const int, const int, const int);
 		void setEnergy(const double energy){ this->energy = energy; }; 
+		void setCrystalIndices(int, int);
 
 		std::vector<double> getPosition() const; 
-		double getEnergy() const { return energy; };  
+		double getEnergy() const { return energy; };
+		int getXCrystalIndex() const { return index_x; };
+		int getYCrystalIndex() const { return index_y; };
 
-		ClassDef(EcalHit, 1); 
+		ClassDef(EcalHit, 1);
 
 	private: 
 
 		double energy;
+
+		int index_x;
+		int index_y;
 
 		double hit_x; 
 		double hit_y; 
