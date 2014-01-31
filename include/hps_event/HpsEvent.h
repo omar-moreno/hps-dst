@@ -19,10 +19,12 @@
 #include <TObject.h>
 #include <TClonesArray.h>
 
-//---//
+//--- HPS Event ---//
+//-----------------//
 #include <SvtTrack.h>
 #include <SvtHit.h>
 #include <EcalCluster.h> 
+#include <EcalHit.h>
 #include <MuonCluster.h>
 #include <HpsReconstructedParticle.h>
 
@@ -35,10 +37,11 @@ class HpsEvent : public TObject {
         HpsEvent &operator=(const HpsEvent &hpsEventObj);
 
         void Clear(Option_t *option="");
-        SvtTrack* addTrack();
-        SvtHit* addSvtHit();
-        EcalCluster* addEcalCluster();
-        MuonCluster* addMuonCluster();
+        SvtTrack* 		addTrack();
+        SvtHit* 		addSvtHit();
+        EcalCluster* 	addEcalCluster();
+        EcalHit* 		addEcalHit();
+        MuonCluster* 	addMuonCluster();
         HpsReconstructedParticle* addReconParticle(int);
 
         void setEventNumber(int event_number){ this->event_number = event_number; };
@@ -57,8 +60,9 @@ class HpsEvent : public TObject {
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
         SvtTrack*     getTrack(int);
-        EcalCluster*  getEcalCluster(int);
         SvtHit*       getSvtHit(int);
+        EcalCluster*  getEcalCluster(int);
+        EcalHit* 	  getEcalHit(int);
         MuonCluster*  getMuonCluster(int);
 
         ClassDef(HpsEvent, 1);	
@@ -67,6 +71,7 @@ class HpsEvent : public TObject {
         TClonesArray *tracks;              //->
         TClonesArray *svt_hits;            //->
         TClonesArray *ecal_clusters;       //->
+        TClonesArray *ecal_hits; 		   //->
         TClonesArray *muon_clusters;       //->
         TClonesArray *fs_recon_particles;  //->
         TClonesArray *vtx_recon_particles; //->
@@ -76,6 +81,7 @@ class HpsEvent : public TObject {
         int n_tracks;
         int n_hits; 
         int n_ecal_clusters;
+        int n_ecal_hits;
         int n_muon_clusters;
         int n_fs_recon_particles;
         int n_vtx_recon_particles;
