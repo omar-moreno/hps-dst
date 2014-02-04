@@ -51,6 +51,7 @@ class EcalCluster : public TObject, public Cluster {
         //double getSeedEnergy() const;
 		//std::vector<double> getSeedPosition() const;
         EcalHit* getSeed() const;
+        TRefArray* getEcalHits() const;
 		double getM2() const { return m2; };
         double getM3() const { return m3; };
 
