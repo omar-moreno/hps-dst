@@ -104,6 +104,11 @@ EcalHit* EcalCluster::getSeed() const
 	return (EcalHit*) seed_hit.GetObject();
 }
 
+TRefArray* EcalCluster::getEcalHits() const
+{
+	return ecal_hits;
+}
+
 void EcalCluster::addHit(EcalHit* hit)
 {
 	++n_ecal_hits;
