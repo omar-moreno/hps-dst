@@ -11,4 +11,5 @@ file(GLOB HPS_EVENT_DIC_SRC "${HPS_EVENT_DIC_DIR}/*.cxx")
 
 # Add the HpsEvent library
 add_library(HpsEvent SHARED ${HPS_EVENT_SRC} ${HPS_EVENT_DIC_SRC})
+target_link_libraries(HpsEvent ${ROOT_CORE_LIBRARY})
 
