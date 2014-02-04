@@ -21,5 +21,8 @@ build/
 # Eclipse project description file 
 .project
 
+# Pydev project file
+.pydevproject
+
 # Sandbox directory
 sandbox/
