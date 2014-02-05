@@ -5,6 +5,7 @@
 
 #include <GblDataWriter.h>
 #include <iostream>
+#include <UTIL/LCRelationNavigator.h>
 
 using namespace std;
 
@@ -19,57 +20,67 @@ GblDataWriter::~GblDataWriter()
 
 
 void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
-
+  
   // write information needed for GBL to the event
   // then use the event in the GBL API
   // this will allow GBL to run standalone on DST
   
-  
-  string gbl_track_col_name = "GBLTrackData";
+
+  string track_col_name = "MatchedTracks";
   IMPL::LCCollectionVec* tracks = 0;
-  // Get the collection of GBL tracks from the event. If the event doesn't
+  // Get the collection of tracks from the event. If the event doesn't
   // have the specified collection, skip the rest and just return
   try{
-    tracks = (IMPL::LCCollectionVec*) event->getCollection(gbl_track_col_name);
+    tracks = (IMPL::LCCollectionVec*) event->getCollection(track_col_name);
   } catch(EVENT::DataNotAvailableException exception){
-    cout << "Collection " << gbl_track_col_name << " was not found. "
+    cout << "Collection " << track_col_name << " was not found. "
          << "Skipping adding GBL data ..." << endl;
     return;
   }
   
-  EVENT::LCGenericObject* track = NULL;
-
-  // Loop over the tracks and fill the HpsEvent
-  for(int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n){
-    
-    // Get a track from the LCIO collection
-    track = (EVENT::LCGenericObject*) tracks->getElementAt(track_n);
-
-    cout << "processing GBLTrackData " << track_n << endl;
-	
-    // Add a track to the HpsEvent
-    GblTrackData* gbl_track_data = hps_event->addGblTrackData();
-    
-    cout << " n doubles " << track->getNDouble() << endl;
-    // Fill the track parameters
-    gbl_track_data->setTrackParameters(track->getDoubleVal(0),track->getDoubleVal(1),track->getDoubleVal(2),track->getDoubleVal(3),track->getDoubleVal(4));
-                                               
-    cout << gbl_track_data->toString() << endl;
-
-// public static final int PERKAPPA =0;
-// 		public static final int PERTHETA = 1;
-// 		public static final int PERPHI = 2;
-// 		public static final int PERD0 = 3;
-// 		public static final int PERZ0 = 4;
-
-    // hps_track->setTrackParameters(track->getD0(), 
-    //                               track->getPhi(), 
-    //                               track->getOmega(), 
-	// 								  track->getTanLambda(), 
-    //                               track->getZ0());
+  string rel_name = "TrackToGBLTrack";
+  IMPL::LCCollectionVec* trkToGblTrk = NULL;  
+  try {
+    trkToGblTrk = (IMPL::LCCollectionVec*) event->getCollection(rel_name);
+  } catch(EVENT::DataNotAvailableException exception) {
+    cout << "Collection " << rel_name << " was not found. "
+         << "Skipping adding GBL data ..." << endl;
+    return;
   }
   
-
+  UTIL::LCRelationNavigator* rel_nav = new UTIL::LCRelationNavigator(trkToGblTrk);
   
-
+  cout << "relation from " << rel_nav->getFromType() << " to " << rel_nav->getToType() << " found" << endl;
+  
+  for(unsigned int itrack = 0; itrack != tracks->getNumberOfElements(); ++itrack) {
+    const EVENT::LCObjectVec gbltracks = rel_nav->getRelatedToObjects(tracks->getElementAt(itrack));
+    EVENT::LCObjectVec::size_type n_gbltracks =  gbltracks.size();
+    
+    for(unsigned int igbl = 0 ; igbl != n_gbltracks; ++ igbl) {
+      
+      EVENT::LCGenericObject* gbltrack = (EVENT::LCGenericObject*) gbltracks.at(igbl);
+      
+      cout << "processing GBLTrackData igbl " << igbl << endl;
+      
+      
+      // Add a track to the HpsEvent
+      GblTrackData* gbl_track_data = hps_event->addGblTrackData();
+      
+      cout << " n doubles " << gbltrack->getNDouble() << endl;
+      // Fill the track parameters
+      gbl_track_data->setTrackParameters(gbltrack->getDoubleVal(0),gbltrack->getDoubleVal(1),gbltrack->getDoubleVal(2),gbltrack->getDoubleVal(3),gbltrack->getDoubleVal(4));
+      
+      cout << gbl_track_data->toString() << endl;
+      
+      
+    } // gbl tracks
+  } // seed tracks
+  
+  
+  delete rel_nav;
+  
+  
+  
 }
+
+
