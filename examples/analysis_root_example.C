@@ -10,15 +10,17 @@
  *  @version: v1.0
  */	
  
+#include <cstdlib>
  
 void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 	
     const double param = 2.99792458e-04;
 
+    // Check if the path to hps-dst has been set
 	if(getenv("HPS_DST_HOME") == NULL){
-		std::cout << "Error! Variable HPS_DST_PATH is not set."
+		std::err << "Error! Environmental variable HPS_DST_HOME is not set."
 				  << "\nExiting ..." << std::endl;
-		return;
+		return EXIT_FAILURE;
 	} 
 
 	std::string hps_dst_path(getenv("HPS_DST_HOME"));
@@ -36,11 +38,7 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 
 	// Create a canvas and set its characteristics
  	TCanvas *canvas = new TCanvas("canvas", "Track Momentum", 700, 700);
- 	canvas->SetFillColor(0);
- 	canvas->SetBorderMode(0);
- 	canvas->SetBorderSize(0);
- 	canvas->SetFrameFillColor(0);
- 	canvas->SetFrameBorderMode(0);
+ 	setupCanvas(canvas);
 
  	// Ecal
  	TH2F* h_hit_pos = new TH2F("h_hit_pos", "Ecal Hit Positions", 47, -23, 24, 12, -6, 6);
@@ -114,6 +112,7 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
         	// Get the Ecal hits used to create the cluster
         	TRefArray* ecal_hits = ecal_cluster->getEcalHits();
 
+        	// Loop through all of the Ecal hits and plot their positions
         	for(int hit_n = 0; hit_n < ecal_hits->GetEntries(); ++hit_n){
 
         		// Get an Ecal hit from the cluster
@@ -123,7 +122,7 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
         		index_x = ecal_hit->getXCrystalIndex();
         		index_y = ecal_hit->getYCrystalIndex();
 
-        		// Fill the ecal cluster position plot
+        		// Fill the Ecal hit position plot
         		h_hit_pos->Fill(index_x, index_y, 1);
 
         	}
@@ -169,6 +168,16 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 
 // Note: These functions will be placed in utility classes included with the
 //	     DST at some point.
+
+void setupCanvas(TCanvas* canvas){
+
+	canvas->SetFillColor(0);
+ 	canvas->SetBorderMode(0);
+ 	canvas->SetBorderSize(0);
+ 	canvas->SetFrameFillColor(0);
+ 	canvas->SetFrameBorderMode(0);
+
+}
 
 void setup1DHistogram(TH1 *histo, string x_axis_title){
 

@@ -207,7 +207,7 @@ int main( int argc, char **argv)
         		index_x = getIdentifierFieldValue("ix", calorimeter_hit);
         		index_y = getIdentifierFieldValue("iy", calorimeter_hit);
 
-        		// Fill the ecal cluster position plot
+        		// Fill the Ecal hit position plot
         		h_hit_pos->Fill(index_x, index_y, 1);
 
         	}
