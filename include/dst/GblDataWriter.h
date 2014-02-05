@@ -31,7 +31,6 @@ class GblDataWriter : public DataWriter {
   
  private:
   bool m_debug;
-  GblTrackData* gbl_track_data;
 
 };
 
