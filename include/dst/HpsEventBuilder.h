@@ -16,11 +16,12 @@
 #include <EventBuilder.h>
 #include <SvtDataWriter.h>
 #include <EcalDataWriter.h>
+#include <GblDataWriter.h>
 
 class HpsEventBuilder : public EventBuilder {
 
 	public: 
-		HpsEventBuilder(); 
+        HpsEventBuilder(); 
 		~HpsEventBuilder(); 
 
 		//
@@ -29,10 +30,19 @@ class HpsEventBuilder : public EventBuilder {
 		// 
 		void setBField(double);
 
+		// 
+		void setGblFlag(bool);
+
+		// 
+		bool getGblFlag() const;
+
 	private:
 
 		SvtDataWriter* svt_writer; 
 		EcalDataWriter* ecal_writer; 
+        GblDataWriter* gbl_writer;
+        bool m_run_gbl;
+
 };
 
 #endif // __HPS_EVENT_BUILDER_H__

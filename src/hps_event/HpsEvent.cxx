@@ -20,6 +20,7 @@ HpsEvent::HpsEvent()
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
         vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
+        gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
         event_number(0), run_number(0), n_tracks(0), n_hits(0),
         n_ecal_clusters(0), n_ecal_hits(0), n_muon_clusters(0)
 {}
@@ -32,7 +33,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
         ecal_hits(new TClonesArray("EcalHit", 1000)),
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
-        vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000))
+        vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
+        gbl_tracks_data(new TClonesArray("GblTrackData", 1000))
 {
     this->event_number = hpsEventObj.event_number; 
     this->run_number   = hpsEventObj.run_number; 
@@ -42,7 +44,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters  = hpsEventObj.n_muon_clusters;
     this->trigger_bits = hpsEventObj.trigger_bits;
-
+    this->n_gbl_tracks_data = hpsEventObj.n_gbl_tracks_data;
 
     *tracks    = *hpsEventObj.tracks;
     *svt_hits  = *hpsEventObj.svt_hits;  
@@ -51,6 +53,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     *muon_clusters = *hpsEventObj.muon_clusters;
     *fs_recon_particles = *hpsEventObj.fs_recon_particles;
     *vtx_recon_particles = *hpsEventObj.vtx_recon_particles;
+    *gbl_tracks_data = *hpsEventObj.gbl_tracks_data;
 }
 
 
@@ -64,6 +67,7 @@ HpsEvent::~HpsEvent()
     delete muon_clusters;
     delete fs_recon_particles;
     delete vtx_recon_particles;
+    delete gbl_tracks_data;
 }
 
 HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
@@ -83,6 +87,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters   = hpsEventObj.n_muon_clusters;
     this->trigger_bits = hpsEventObj.trigger_bits;
+    this->n_gbl_tracks_data     = hpsEventObj.n_gbl_tracks_data; 
 
     tracks = new TClonesArray("SvtTrack", 1000);
     svt_hits = new TClonesArray("SvtHit", 1000);
@@ -90,6 +95,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     ecal_hits = new TClonesArray("EcalHit", 1000);
     fs_recon_particles = new TClonesArray("HpsReconstructedParticle", 1000);
     vtx_recon_particles = new TClonesArray("HpsReconstructedParticle", 1000);
+    gbl_tracks_data = new TClonesArray("GblTrackData", 1000);
 
     *tracks    = *hpsEventObj.tracks;
     *svt_hits  = *hpsEventObj.svt_hits;  
@@ -98,6 +104,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     *muon_clusters = *hpsEventObj.muon_clusters;
     *fs_recon_particles = *hpsEventObj.fs_recon_particles;
     *vtx_recon_particles = *hpsEventObj.vtx_recon_particles;
+    *gbl_tracks_data = *hpsEventObj.gbl_tracks_data;
 
     return *this;     
 }
@@ -112,6 +119,7 @@ void HpsEvent::Clear(Option_t * /*option*/)
     muon_clusters->Clear("C");
     fs_recon_particles->Clear("C");
     vtx_recon_particles->Clear("C");
+    gbl_tracks_data->Clear("C");
     n_ecal_clusters = 0;
     n_ecal_hits = 0;
     n_muon_clusters = 0;
@@ -119,6 +127,7 @@ void HpsEvent::Clear(Option_t * /*option*/)
     n_hits = 0; 
     n_fs_recon_particles = 0;
     n_vtx_recon_particles = 0;
+    n_gbl_tracks_data = 0;
     trigger_bits.clear();
 }
 
@@ -159,9 +168,21 @@ HpsReconstructedParticle* HpsEvent::addReconParticle(int type)
 		return (HpsReconstructedParticle*) vtx_recon_particles->ConstructedAt(n_vtx_recon_particles++);
 	}
 }
+
+GblTrackData* HpsEvent::addGblTrackData()
+{
+	return (GblTrackData*) gbl_tracks_data->ConstructedAt(n_gbl_tracks_data++);
+}
+
+
 SvtTrack* HpsEvent::getTrack(int track_n)
 {
 	return (SvtTrack*) tracks->At(track_n);
+}
+
+GblTrackData* HpsEvent::getGblTrackData(int track_n)
+{
+	return (GblTrackData*) gbl_tracks_data->At(track_n);
 }
 
 SvtHit* HpsEvent::getSvtHit(int hit_n)

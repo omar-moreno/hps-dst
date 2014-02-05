@@ -14,5 +14,7 @@
 #pragma link C++ class CalorimeterHit+;
 #pragma link C++ class Cluster+;
 #pragma link C++ class EcalHit+;
+#pragma link C++ class GblTrack+;
+#pragma link C++ class GblTrackData+;
 
 #endif
