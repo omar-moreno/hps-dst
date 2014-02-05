@@ -46,9 +46,10 @@ int main(int argc, char **argv)
 	int option_char;
 	int n_events = 0; 	
 	double b_field = numeric_limits<double>::quiet_NaN();  
+    bool do_gbl = false;
 	// Parse any command line arguments.  If an invalid argument is passed, 
 	// print the usage
-	while((option_char = getopt(argc, argv, "i:o:n:b:h")) != -1){
+	while((option_char = getopt(argc, argv, "i:o:n:b:g:h")) != -1){
 		switch(option_char){
 			case 'i': 
 				lcio_file_name = optarg; 
@@ -61,6 +62,9 @@ int main(int argc, char **argv)
 				break; 
 			case 'b':
 				b_field = atof(optarg);
+				break;	
+			case 'g':
+              do_gbl = true;
 				break;	
 			case 'h': 
 				printUsage(); 
@@ -108,6 +112,7 @@ int main(int argc, char **argv)
 	EVENT::LCEvent* event = NULL;
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	event_builder->setBField(b_field); 
+    event_builder->setGblFlag(do_gbl);
 	while((event = lc_reader->readNextEvent()) != 0){
 		
 		if(event->getEventNumber() == n_events) break; 
@@ -141,5 +146,6 @@ void printUsage()
 		<< "\t -o Output ROOT file name \n"
 		<< "\t -n The number of events to process \n"
 		<< "\t -b The strength of the magnetic field in Tesla \n"
+		<< "\t -g Run GBL trackrefit \n"
 		<< "\t -h Display this help and exit \n" << endl;	 
 }	
