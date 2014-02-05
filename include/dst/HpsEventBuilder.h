@@ -40,7 +40,7 @@ class HpsEventBuilder : public EventBuilder {
 
 		SvtDataWriter* svt_writer; 
 		EcalDataWriter* ecal_writer; 
-        GblDataWriter* gbl_writer;
+        GblDataWriter* gbl_data_writer;
         bool m_run_gbl;
 
 };
