@@ -25,33 +25,35 @@
 class SvtTrack : public TObject {
 
     public:
-        SvtTrack();
+
+		SvtTrack();
         SvtTrack(const SvtTrack &svtTrackObj);
-        virtual ~SvtTrack();
+        ~SvtTrack();
         SvtTrack &operator=(const SvtTrack &svtTrackObj);
         
         void Clear(Option_t *option="");
+
         void addHit(SvtHit*); 
 
         void setTrackParameters(double, double, double, double, double);
         void setMomentum(double, double, double);
-        void setTrackChi2(double chi_squared){ this->chi_squared = chi_squared; };
+        void setChi2(double chi_squared){ this->chi_squared = chi_squared; };
         void setCharge(double charge){ this->charge = charge; };
 
-        double getPx()  	  const { return px; };
-        double getPy()  	  const { return py; };
-        double getPz()  	  const { return pz; };
-        double getD0()  	  const { return d0; };
-        double getPhi()       const { return phi; };
-        double getOmega() 	  const { return omega; };
+        std::vector<double> getMomentum() const;
+        double getD0() const { return d0; };
+        double getPhi() const { return phi; };
+        double getOmega() const { return omega; };
         double getTanLambda() const { return tan_lambda; };
-        double getZ0() 		  const { return z0; };
+        double getZ0() const { return z0; };
         double getChi2() const {return chi_squared; };
         double getCharge() const {return charge; };
+        TRefArray* getSvtHits() const;
 
         ClassDef(SvtTrack, 1);
 
     private:
+
         TRefArray *svt_hits; 
 
         int n_hits; 
