@@ -21,27 +21,37 @@
 class SvtHit : public TObject { 
 
     public: 
-        SvtHit(); 
-        virtual ~SvtHit();
-        
+
+		SvtHit();
+		virtual ~SvtHit();
         void Clear(Option_t *option="");
         
-        void setLayer(int hit_layer) { this->hit_layer = hit_layer; };
-        void setHitPosition(const double*);
-        void setHitPositionError(double, double, double);
+        void setLayer(const int layer){ this->layer = layer; };
+        void setPosition(const double*);
+        void setCovarianceMatrix(std::vector<float>);
+        void setTime(const double time) { this->time = time; };
+
+        double getLayer() const { return layer; };
+        std::vector<double> getPosition() const;
+        std::vector<double> getCovarianceMatrix() const;
+        double getTime() const { return time; };
 
         ClassDef(SvtHit, 1);	
     
     private:
 
-        int hit_layer;
+        int layer;
 
         double x; 
         double y; 
         double z;
-        double x_err; 
-        double y_err; 
-        double z_err;  
+        double cxx;
+        double cxy;
+        double cxz;
+        double cyy;
+        double cyz;
+        double czz;
+        double time;
 
 };
 
