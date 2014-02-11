@@ -19,6 +19,7 @@
 //--- LCIO ---//
 //------------//
 #include <IMPL/TrackImpl.h>
+#include <IMPL/TrackerHitImpl.h>
 
 namespace TrackUtils { 
 
@@ -103,6 +104,11 @@ namespace TrackUtils {
 	 *
 	 */
 	int getCharge(IMPL::TrackImpl*);
+
+	/**
+	 *
+	 */
+	int getLayer(IMPL::TrackerHitImpl*);
 
 }
 
