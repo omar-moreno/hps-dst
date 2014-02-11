@@ -28,12 +28,12 @@ class EcalHit : public TObject, public CalorimeterHit {
 		
 		void Clear(Option_t* option=""); 
 		
-		void setPosition(const int, const int, const int);
 		void setEnergy(const double energy){ this->energy = energy; }; 
+		void setPosition(const double*);
 		void setCrystalIndices(int, int);
 
-		std::vector<double> getPosition() const; 
 		double getEnergy() const { return energy; };
+ 		std::vector<double> getPosition() const;
 		int getXCrystalIndex() const { return index_x; };
 		int getYCrystalIndex() const { return index_y; };
 
@@ -41,14 +41,14 @@ class EcalHit : public TObject, public CalorimeterHit {
 
 	private: 
 
-		double energy;
-
 		int index_x;
 		int index_y;
+		int x;
+		int y;
+		int z;
 
-		double hit_x; 
-		double hit_y; 
-		double hit_z; 
-};
+		double energy;
 
-#endif
+}; // EcalHit
+
+#endif // _ECAL_HIT_H_

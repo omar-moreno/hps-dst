@@ -13,8 +13,8 @@
 ClassImp(EcalHit)
 
 EcalHit::EcalHit() : TObject(),
-					 energy(0), hit_x(0), hit_y(0), hit_z(0),
-					 index_x(0), index_y(0)
+					 energy(0), index_x(0), index_y(0),
+					 x(0), y(0), z(0)
 {}
 
 EcalHit::~EcalHit()
@@ -27,11 +27,11 @@ void EcalHit::Clear(Option_t* /* options */)
 	TObject::Clear(); 
 }
 
-void EcalHit::setPosition(const int hit_x, const int hit_y, const int hit_z)
+void EcalHit::setPosition(const double* position)
 {
-	this->hit_x = hit_x;
-	this->hit_y = hit_y;
-	this->hit_z = hit_z;
+	x = position[0];
+	y = position[1];
+	z = position[2];
 }
 
 void EcalHit::setCrystalIndices(int index_x, int index_y)
@@ -40,12 +40,11 @@ void EcalHit::setCrystalIndices(int index_x, int index_y)
 	this->index_y = index_y;
 }
 
-std::vector<double> EcalHit::getPosition() const 
+std::vector<double> EcalHit::getPosition() const
 {
-	std::vector<double> position(3, 0); 
-	position[0] = hit_x; 
-	position[1] = hit_y; 
-	position[2] = hit_z; 
-	
-	return position; 	
+	std::vector<double> position(3,0);
+	position[0] = x;
+	position[1] = y;
+	position[2] = z;
+	return position;
 }

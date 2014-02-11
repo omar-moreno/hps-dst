@@ -21,7 +21,7 @@ class CalorimeterHit {
 		virtual std::vector<double> getPosition() const = 0;
 		virtual double getEnergy() const = 0; 
 		
-		virtual void setPosition(const int, const int, const int) = 0;
+		virtual void setPosition(const double*) = 0;
 		virtual void setEnergy(const double) = 0; 	
 
 };
