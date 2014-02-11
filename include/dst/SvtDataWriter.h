@@ -25,16 +25,16 @@
 //-------------//
 #include <TrackUtils.h>
 
-//--- HPS Event ---//
-//-----------------//
-#include <SvtTrack.h>
-#include <SvtHit.h>
-
-
 //--- LCIO ---//
 //------------//
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/TrackImpl.h>
+#include <IMPL/TrackerHitImpl.h>
+
+//--- HPS Event ---//
+//-----------------//
+#include <SvtTrack.h>
+#include <SvtHit.h>
 
 class SvtDataWriter : public DataWriter { 
 
@@ -48,7 +48,8 @@ class SvtDataWriter : public DataWriter {
 
 		// 
 		void setTracksCollectionName(std::string tracks_collection_name){
-			this->tracks_collection_name = tracks_collection_name; }; 
+			this->tracks_collection_name = tracks_collection_name;
+		};
 
 		//
 		void setHitCollectionName(std::string hits_collection_name){
@@ -66,6 +67,7 @@ class SvtDataWriter : public DataWriter {
 
 		IMPL::LCCollectionVec* tracks;
 		IMPL::TrackImpl* track;
+		IMPL::TrackerHitImpl* tracker_hit;
 		
 		SvtTrack* hps_track;
 		SvtHit* svt_hit; 		
