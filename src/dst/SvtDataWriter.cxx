@@ -51,7 +51,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		hps_track->setMomentum(momentum[0], momentum[1], momentum[2]); 
 			
 		// Set the track fit chi^2
-		hps_track->setTrackChi2(track->getChi2());
+		hps_track->setChi2(track->getChi2());
 
 		// Set the track charge
 		hps_track->setCharge(TrackUtils::getCharge(track)); 
@@ -62,10 +62,16 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		//
 		for(int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n){
 			
-			svt_hit = hps_event->addSvtHit();
-			hps_track->addHit(svt_hit); 
-				
+			tracker_hit = (IMPL::TrackerHitImpl*) tracker_hits[hit_n];
 
+			svt_hit = hps_event->addSvtHit();
+
+			svt_hit->setLayer(TrackUtils::getLayer(tracker_hit));
+			svt_hit->setPosition(tracker_hit->getPosition());
+			svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
+			svt_hit->setTime(tracker_hit->getTime());
+
+			hps_track->addHit(svt_hit); 
 		}		
 	}
 }
