@@ -108,17 +108,20 @@ int main(int argc, char **argv)
 	EVENT::LCEvent* event = NULL;
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	event_builder->setBField(b_field); 
+	int event_number = 0;
 	while((event = lc_reader->readNextEvent()) != 0){
-		
-		if(event->getEventNumber() == n_events) break; 
+		event_number++;
 
 		// Print the event number every 1000 events
 		if(event->getEventNumber()%1000 == 0){
-			cout << "Processing event: " << event->getEventNumber() << endl;
+			cout << "Processing event: " << event_number << endl;
 		}
 
 		event_builder->makeHpsEvent(event, hps_event); 
 		tree->Fill();
+
+		if(event_number == n_events) break;
+
 	}
 
 	cout << "Finished writing ROOT Tree!" << endl;
