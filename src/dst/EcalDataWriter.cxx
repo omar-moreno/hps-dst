@@ -10,9 +10,11 @@
 
 #include <EcalDataWriter.h>
 
+// TODO: The shower moments should be calculated in the reconstruction and
+//		 persisted as a generic object.
+
 EcalDataWriter::EcalDataWriter()
-	: cluster_collection_name("EcalClusters"), 
-	  cal_hits_relation_collection_name("EcalCalHitsRelation") 
+	: clusters_collection_name("EcalClusters")
 {}
 
 EcalDataWriter::~EcalDataWriter()
@@ -21,7 +23,7 @@ EcalDataWriter::~EcalDataWriter()
 void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
 	// Get the collection of Ecal clusters from the event
-	clusters = (IMPL::LCCollectionVec*) event->getCollection(cluster_collection_name);
+	clusters = (IMPL::LCCollectionVec*) event->getCollection(clusters_collection_name);
 
 	// Loop over all clusters and fill the event
 	for(int cluster_n = 0; cluster_n < clusters->getNumberOfElements(); ++cluster_n){ 
@@ -33,8 +35,7 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		ecal_cluster = hps_event->addEcalCluster();
 
 		// Set the cluster position
-		std::vector<double> position(((double*) cluster->getPosition()), ((double*) cluster->getPosition()) + 3); 
-		ecal_cluster->setPosition(position);
+		ecal_cluster->setPosition(cluster->getPosition());
 
 		// Set the cluster energy
 		ecal_cluster->setEnergy(cluster->getEnergy());
@@ -42,7 +43,7 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		// Get the ecal hits used to create the cluster
 		EVENT::CalorimeterHitVec calorimeter_hits = cluster->getCalorimeterHits();
 
-		//
+		// Loop over all of the Ecal hits and add them to the Ecal cluster
 		for(int ecal_hit_n = 0; ecal_hit_n < (int) calorimeter_hits.size(); ++ecal_hit_n){
 
 			calorimeter_hit = (IMPL::CalorimeterHitImpl*) calorimeter_hits[ecal_hit_n];
@@ -57,11 +58,5 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 
 			ecal_cluster->addHit(ecal_hit);
 		}
-
-		// Calculate the shower moments
-		/*std::vector<double> moments = EcalUtils::getShowerMoments(cluster, cal_hits_relations);
-		ecal_cluster->setM2(moments[1]);
-		ecal_cluster->setM3(moments[2]);*/
-
 	}
 }

@@ -40,10 +40,13 @@ class EcalDataWriter : public DataWriter {
 		// 
 		void writeData(EVENT::LCEvent*, HpsEvent*); 	
 
+		void setClusterCollectionName(std::string clusters_collection_name){
+			this->clusters_collection_name = clusters_collection_name;
+		};
+
 	private:
 
-		std::string cluster_collection_name;
-		std::string cal_hits_relation_collection_name; 
+		std::string clusters_collection_name;
 
 		IMPL::LCCollectionVec* clusters;  
 		IMPL::ClusterImpl* cluster;
@@ -52,6 +55,6 @@ class EcalDataWriter : public DataWriter {
 		EcalCluster* ecal_cluster;
 		EcalHit* ecal_hit;
 
-};
+};  // EcalDataWriter
 
 #endif // __ECAL_DATA_WRITER_H__
