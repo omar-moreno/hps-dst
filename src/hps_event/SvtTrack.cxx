@@ -68,7 +68,7 @@ void SvtTrack::Clear(Option_t* /* option */)
 }
 
 void SvtTrack::setTrackParameters(double d0, double phi, double omega,
-		double tan_lambda, double z0)
+								  double tan_lambda, double z0)
 {
     this->d0 		 = d0;
     this->phi 		 = phi;
@@ -91,3 +91,16 @@ void SvtTrack::addHit(SvtHit* hit)
     svt_hits->Add(hit); 
 }
 
+std::vector<double> SvtTrack::getMomentum() const
+{
+	std::vector<double> momentum(3, 0);
+	momentum[0] = px;
+	momentum[1] = py;
+	momentum[2] = pz;
+	return momentum;
+}
+
+TRefArray* SvtTrack::getSvtHits() const
+{
+	return svt_hits;
+}
