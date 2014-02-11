@@ -40,7 +40,7 @@ class EcalCluster : public TObject, public Cluster {
 
 		void addHit(EcalHit*); 
 
-        void setPosition(const std::vector<double>);
+        void setPosition(const float*);
         void setEnergy(const double energy){ this->energy = energy; };
         void setHitTime(const double hit_time){ this->hit_time = hit_time; };
         void setM2(const double m2){ this->m2 = m2; };
@@ -48,8 +48,6 @@ class EcalCluster : public TObject, public Cluster {
 
 		std::vector<double> getPosition() const;  
         double getEnergy() const { return energy; };
-        //double getSeedEnergy() const;
-		//std::vector<double> getSeedPosition() const;
         EcalHit* getSeed() const;
         TRefArray* getEcalHits() const;
 		double getM2() const { return m2; };
@@ -69,10 +67,6 @@ class EcalCluster : public TObject, public Cluster {
         double z;
         double energy; 
         double hit_time;
-        //double seed_energy;
-        //double seed_x;
-        //double seed_y;
-		//double seed_z;
         double m2;
         double m3;
 

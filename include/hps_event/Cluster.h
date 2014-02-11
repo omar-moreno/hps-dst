@@ -21,7 +21,7 @@ class Cluster {
 		virtual std::vector<double> getPosition() const = 0; 
 		virtual double getEnergy() const = 0; 
 
-		virtual void setPosition(const std::vector<double>) = 0; 
+		virtual void setPosition(const float*) = 0;
 		virtual void setEnergy(const double) = 0;
 
 };
