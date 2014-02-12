@@ -19,20 +19,26 @@
 
 //---//
 #include <TRefArray.h>
-#include <sstream>
+
+class GblStripData;
 
 class GblTrackData : public TObject {
   
  private:
+  TRefArray* m_gbl_strip_hits;
+  int n_gbl_strip_hits;
   double m_kappa;
   double m_theta;
   double m_phi;
   double m_d0;
   double m_z0;
   
+  
  public:
   GblTrackData();
   virtual ~GblTrackData();
+  void Clear(Option_t *option="");
+  void addStrip(GblStripData* strip);
   
   void setTrackParameters(double kappa, double theta, double phi, double d0, double z0) {
     m_kappa = kappa;
@@ -46,18 +52,14 @@ class GblTrackData : public TObject {
   double getTheta() const { return m_theta;}
   double getPhi() const { return m_phi;}
   double getD0() const { return m_d0;}
-  double getZ0() const { return m_z0;}
-  
-  std::string toString() const {
-    std::ostringstream oss;
-    oss << "GblTrackData:\n kappa " << getKappa() << "\n";
-    return oss.str();
-  }
+  double getZ0() const { return m_z0;}  
+
+  std::string toString() const;
   
   ClassDef(GblTrackData,1) //Track information needed by GBL
     
+}; // GblTrackData
     
     
-    }; // GblTrackData
 
 #endif // _GBL_TRACK_DATA_H_

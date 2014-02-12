@@ -37,10 +37,12 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 
     // Write info for GBL to HpsEvent
     gbl_data_writer->writeData(event, hps_event);
-
+    
     // Write GBL track refit to HpsEvent
     if( getGblFlag() == true ) {
       // this object encapsulates the interface with the GBL tracking code
+      std::cout << "makeHpsEvent: " << hps_event->getNumberOfGblStripData() 
+                << " strips " << std::endl;
       //gbl_track_writer->writeData(hps_event);
     }
 
