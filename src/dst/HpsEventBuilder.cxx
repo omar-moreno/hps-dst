@@ -28,6 +28,12 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
 	hps_event->Clear(); 
 	
+	// Set the event number
+	hps_event->setEventNumber(event->getEventNumber());
+
+	// Set the run number
+	hps_event->setRunNumber(event->getRunNumber());
+
 	// Write SVT data to HpsEvent
 	svt_writer->writeData(event, hps_event);
 	
