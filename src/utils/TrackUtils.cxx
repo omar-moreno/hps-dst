@@ -99,13 +99,14 @@ namespace TrackUtils {
 
 	int getLayer(IMPL::TrackerHitImpl* tracker_hit){
 
-		int z = (int) round(tracker_hit->getPosition()[2]);
+		int z = (int) round(tracker_hit->getPosition()[0]/100);
 		switch(z){
-			case 100: return 1;
-			case 200: return 2;
-			case 300: return 3;
-			case 500: return 4;
-			case 700: return 5;
+			case 1: return 1;
+			case 2: return 2;
+			case 3: return 3;
+			case 5: return 4;
+			case 7: return 5;
+			case 9: return 6;
 			default: return -1;
 		}
 	}
