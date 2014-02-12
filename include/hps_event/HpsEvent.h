@@ -27,6 +27,7 @@
 #include <EcalHit.h>
 #include <MuonCluster.h>
 #include <HpsReconstructedParticle.h>
+#include <HpsMCParticle.h>
 
 class HpsEvent : public TObject { 
 
@@ -43,6 +44,7 @@ class HpsEvent : public TObject {
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
         HpsReconstructedParticle* addReconParticle(int);
+        HpsMCParticle*  addHpsMCParticle();
 
         void setEventNumber(int event_number){ this->event_number = event_number; };
         void setRunNumber(int run_number){ this->run_number = run_number; };
@@ -59,22 +61,25 @@ class HpsEvent : public TObject {
         int getNumberOfMuonClusters()  const { return n_muon_clusters; };
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
-        SvtTrack*     getTrack(int);
-        SvtHit*       getSvtHit(int);
-        EcalCluster*  getEcalCluster(int);
-        EcalHit* 	  getEcalHit(int);
-        MuonCluster*  getMuonCluster(int);
+        SvtTrack*      getTrack(int);
+        SvtHit*        getSvtHit(int);
+        EcalCluster*   getEcalCluster(int);
+        EcalHit* 	   getEcalHit(int);
+        MuonCluster*   getMuonCluster(int);
+        HpsMCParticle* getMCParticle(int);
 
         ClassDef(HpsEvent, 1);	
 
     private:
-        TClonesArray *tracks;              //->
-        TClonesArray *svt_hits;            //->
-        TClonesArray *ecal_clusters;       //->
-        TClonesArray *ecal_hits; 		   //->
-        TClonesArray *muon_clusters;       //->
-        TClonesArray *fs_recon_particles;  //->
-        TClonesArray *vtx_recon_particles; //->
+
+        TClonesArray* tracks;              //->
+        TClonesArray* svt_hits;            //->
+        TClonesArray* ecal_clusters;       //->
+        TClonesArray* ecal_hits; 		   //->
+        TClonesArray* muon_clusters;       //->
+        TClonesArray* fs_recon_particles;  //->
+        TClonesArray* vtx_recon_particles; //->
+        TClonesArray* mc_particles; 	   //->
 
         int event_number;
         int run_number;
@@ -85,6 +90,7 @@ class HpsEvent : public TObject {
         int n_muon_clusters;
         int n_fs_recon_particles;
         int n_vtx_recon_particles;
+        int n_mc_particles;
 
         static const int fs_type;
         static const int vtx_type;

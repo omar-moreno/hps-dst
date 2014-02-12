@@ -16,6 +16,7 @@
 #include <EventBuilder.h>
 #include <SvtDataWriter.h>
 #include <EcalDataWriter.h>
+#include <MCParticleDataWriter.h>
 
 class HpsEventBuilder : public EventBuilder {
 
@@ -33,6 +34,7 @@ class HpsEventBuilder : public EventBuilder {
 
 		SvtDataWriter* svt_writer; 
 		EcalDataWriter* ecal_writer; 
+		MCParticleDataWriter* mc_particle_writer;
 };
 
 #endif // __HPS_EVENT_BUILDER_H__

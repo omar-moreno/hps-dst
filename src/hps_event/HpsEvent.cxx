@@ -20,8 +20,11 @@ HpsEvent::HpsEvent()
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
         vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
+        mc_particles(new TClonesArray("HpsMCParticle", 1000)),
         event_number(0), run_number(0), n_tracks(0), n_hits(0),
-        n_ecal_clusters(0), n_ecal_hits(0), n_muon_clusters(0)
+        n_ecal_clusters(0), n_ecal_hits(0), n_muon_clusters(0),
+        n_fs_recon_particles(0), n_vtx_recon_particles(0),
+        n_mc_particles(0)
 {}
 
 HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
@@ -32,7 +35,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
         ecal_hits(new TClonesArray("EcalHit", 1000)),
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
-        vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000))
+        vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
+        mc_particles(new TClonesArray("HpsMCParticle", 1000))
 {
     this->event_number = hpsEventObj.event_number; 
     this->run_number   = hpsEventObj.run_number; 
@@ -42,7 +46,9 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters  = hpsEventObj.n_muon_clusters;
     this->trigger_bits = hpsEventObj.trigger_bits;
-
+    this->n_fs_recon_particles = hpsEventObj.n_fs_recon_particles;
+    this->n_vtx_recon_particles = hpsEventObj.n_vtx_recon_particles;
+    this->n_mc_particles = hpsEventObj.n_mc_particles;
 
     *tracks    = *hpsEventObj.tracks;
     *svt_hits  = *hpsEventObj.svt_hits;  
@@ -51,6 +57,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     *muon_clusters = *hpsEventObj.muon_clusters;
     *fs_recon_particles = *hpsEventObj.fs_recon_particles;
     *vtx_recon_particles = *hpsEventObj.vtx_recon_particles;
+    *mc_particles = *hpsEventObj.mc_particles;
 }
 
 
@@ -64,6 +71,7 @@ HpsEvent::~HpsEvent()
     delete muon_clusters;
     delete fs_recon_particles;
     delete vtx_recon_particles;
+    delete mc_particles;
 }
 
 HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
@@ -83,6 +91,9 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters   = hpsEventObj.n_muon_clusters;
     this->trigger_bits = hpsEventObj.trigger_bits;
+    this->n_fs_recon_particles = hpsEventObj.n_fs_recon_particles;
+    this->n_vtx_recon_particles = hpsEventObj.n_vtx_recon_particles;
+    this->n_mc_particles = hpsEventObj.n_mc_particles;
 
     tracks = new TClonesArray("SvtTrack", 1000);
     svt_hits = new TClonesArray("SvtHit", 1000);
@@ -90,6 +101,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     ecal_hits = new TClonesArray("EcalHit", 1000);
     fs_recon_particles = new TClonesArray("HpsReconstructedParticle", 1000);
     vtx_recon_particles = new TClonesArray("HpsReconstructedParticle", 1000);
+    mc_particles = new TClonesArray("HpsMCParticle", 1000);
 
     *tracks    = *hpsEventObj.tracks;
     *svt_hits  = *hpsEventObj.svt_hits;  
@@ -98,6 +110,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     *muon_clusters = *hpsEventObj.muon_clusters;
     *fs_recon_particles = *hpsEventObj.fs_recon_particles;
     *vtx_recon_particles = *hpsEventObj.vtx_recon_particles;
+    *mc_particles = *hpsEventObj.mc_particles;
 
     return *this;     
 }
@@ -112,6 +125,7 @@ void HpsEvent::Clear(Option_t * /*option*/)
     muon_clusters->Clear("C");
     fs_recon_particles->Clear("C");
     vtx_recon_particles->Clear("C");
+    mc_particles->Clear("C");
     n_ecal_clusters = 0;
     n_ecal_hits = 0;
     n_muon_clusters = 0;
@@ -119,6 +133,7 @@ void HpsEvent::Clear(Option_t * /*option*/)
     n_hits = 0; 
     n_fs_recon_particles = 0;
     n_vtx_recon_particles = 0;
+    n_mc_particles = 0;
     trigger_bits.clear();
 }
 
@@ -159,6 +174,13 @@ HpsReconstructedParticle* HpsEvent::addReconParticle(int type)
 		return (HpsReconstructedParticle*) vtx_recon_particles->ConstructedAt(n_vtx_recon_particles++);
 	}
 }
+
+HpsMCParticle* HpsEvent::addHpsMCParticle()
+{
+	return (HpsMCParticle*) mc_particles->ConstructedAt(n_mc_particles++);
+}
+
+
 SvtTrack* HpsEvent::getTrack(int track_n)
 {
 	return (SvtTrack*) tracks->At(track_n);
@@ -182,6 +204,11 @@ EcalHit* HpsEvent::getEcalHit(int ecal_hit_n)
 MuonCluster* HpsEvent::getMuonCluster(int muon_cluster_n)
 {
 	return (MuonCluster*) muon_clusters->At(muon_cluster_n);
+}
+
+HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_n)
+{
+	return (HpsMCParticle*) mc_particles->At(mc_particle_n);
 }
 
 const int HpsEvent::fs_type  = 1;

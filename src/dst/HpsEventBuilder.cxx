@@ -13,24 +13,29 @@
 HpsEventBuilder::HpsEventBuilder()
 {
 	svt_writer = new SvtDataWriter(); 
-	ecal_writer = new EcalDataWriter(); 
+	ecal_writer = new EcalDataWriter();
+	mc_particle_writer = new MCParticleDataWriter();
 }
 
 HpsEventBuilder::~HpsEventBuilder()
 {
 	delete svt_writer;
     delete ecal_writer; 	
+    delete mc_particle_writer;
 }
 
 void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
 	hps_event->Clear(); 
 	
-	// Write SVT Data to HpsEvent
+	// Write SVT data to HpsEvent
 	svt_writer->writeData(event, hps_event);
 	
-	// Write Ecal Data to HpsEvent
+	// Write Ecal data to HpsEvent
 	ecal_writer->writeData(event, hps_event); 
+
+	// Write MC particle data to HpsEvent
+	mc_particle_writer->writeData(event, hps_event);
 }
 
 void HpsEventBuilder::setBField(double b_field){
