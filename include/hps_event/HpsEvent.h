@@ -32,7 +32,8 @@
 class HpsEvent : public TObject { 
 
     public:
-        HpsEvent();
+
+		HpsEvent();
         HpsEvent(const HpsEvent &hpsEventoObj);
         virtual ~HpsEvent();    
         HpsEvent &operator=(const HpsEvent &hpsEventObj);
@@ -48,15 +49,11 @@ class HpsEvent : public TObject {
 
         void setEventNumber(int event_number){ this->event_number = event_number; };
         void setRunNumber(int run_number){ this->run_number = run_number; };
-        void setNumberOfTracks(int n_tracks){ this->n_tracks = n_tracks; };
-        void setNumberOfEcalClusters(int n_ecal_clusters){ this->n_ecal_clusters = n_ecal_clusters; };
-        void setNumberOfMuonClusters(int n_muon_clusters){ this->n_muon_clusters = n_muon_clusters; };
         void setTriggerBitInfo(std::vector<int> trigger_bits){ this->trigger_bits = trigger_bits; };
 
         int getEventNumber()       const  { return event_number; };
         int getRunNumber()         const  { return run_number; };
         int getNumberOfTracks()    const { return n_tracks; };
-        int getNumberOfHits()      const  { return n_hits; };
         int getNumberOfEcalClusters()  const { return n_ecal_clusters; };
         int getNumberOfMuonClusters()  const { return n_muon_clusters; };
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
@@ -84,7 +81,7 @@ class HpsEvent : public TObject {
         int event_number;
         int run_number;
         int n_tracks;
-        int n_hits; 
+        int n_svt_hits;
         int n_ecal_clusters;
         int n_ecal_hits;
         int n_muon_clusters;

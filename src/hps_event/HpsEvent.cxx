@@ -21,7 +21,7 @@ HpsEvent::HpsEvent()
         fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
         vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
         mc_particles(new TClonesArray("HpsMCParticle", 1000)),
-        event_number(0), run_number(0), n_tracks(0), n_hits(0),
+        event_number(0), run_number(0), n_tracks(0), n_svt_hits(0),
         n_ecal_clusters(0), n_ecal_hits(0), n_muon_clusters(0),
         n_fs_recon_particles(0), n_vtx_recon_particles(0),
         n_mc_particles(0)
@@ -41,7 +41,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->event_number = hpsEventObj.event_number; 
     this->run_number   = hpsEventObj.run_number; 
     this->n_tracks     = hpsEventObj.n_tracks; 
-    this->n_hits       = hpsEventObj.n_hits; 
+    this->n_svt_hits       = hpsEventObj.n_svt_hits;
     this->n_ecal_clusters  = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters  = hpsEventObj.n_muon_clusters;
@@ -86,7 +86,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     this->event_number = hpsEventObj.event_number; 
     this->run_number   = hpsEventObj.run_number; 
     this->n_tracks     = hpsEventObj.n_tracks; 
-    this->n_hits       = hpsEventObj.n_hits; 
+    this->n_svt_hits       = hpsEventObj.n_svt_hits;
     this->n_ecal_clusters   = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters   = hpsEventObj.n_muon_clusters;
@@ -130,7 +130,7 @@ void HpsEvent::Clear(Option_t * /*option*/)
     n_ecal_hits = 0;
     n_muon_clusters = 0;
     n_tracks = 0;  
-    n_hits = 0; 
+    n_svt_hits = 0;
     n_fs_recon_particles = 0;
     n_vtx_recon_particles = 0;
     n_mc_particles = 0;
@@ -145,7 +145,7 @@ SvtTrack* HpsEvent::addTrack()
 
 SvtHit* HpsEvent::addSvtHit()
 {
-    return (SvtHit*) svt_hits->ConstructedAt(n_hits++); 
+    return (SvtHit*) svt_hits->ConstructedAt(n_svt_hits++);
 }
 
 EcalCluster* HpsEvent::addEcalCluster()
