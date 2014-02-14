@@ -15,6 +15,7 @@ HpsEventBuilder::HpsEventBuilder() : m_run_gbl(false)
 	svt_writer = new SvtDataWriter(); 
 	ecal_writer = new EcalDataWriter(); 
     gbl_data_writer  = new GblDataWriter();
+    gbl_track_writer  = new GblTrackWriter();
 }
 
 HpsEventBuilder::~HpsEventBuilder()
@@ -22,6 +23,7 @@ HpsEventBuilder::~HpsEventBuilder()
 	delete svt_writer;
     delete ecal_writer; 	
     delete gbl_data_writer;
+    delete gbl_track_writer;
     
 }
 
@@ -35,15 +37,14 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 	// Write Ecal Data to HpsEvent
 	ecal_writer->writeData(event, hps_event); 
 
-    // Write info for GBL to HpsEvent
-    gbl_data_writer->writeData(event, hps_event);
-    
-    // Write GBL track refit to HpsEvent
     if( getGblFlag() == true ) {
+      // Write info for GBL to HpsEvent
+      gbl_data_writer->writeData(event, hps_event);
+      // Write GBL track refit to HpsEvent    
       // this object encapsulates the interface with the GBL tracking code
       std::cout << "makeHpsEvent: " << hps_event->getNumberOfGblStripData() 
                 << " strips " << std::endl;
-      //gbl_track_writer->writeData(hps_event);
+      gbl_track_writer->writeData(hps_event);
     }
 
 }

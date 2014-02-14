@@ -20,6 +20,7 @@
 //---//
 #include <TRefArray.h>
 
+#include <GblStripData.h>
 class GblStripData;
 
 class GblTrackData : public TObject {
@@ -48,11 +49,18 @@ class GblTrackData : public TObject {
     m_z0 = z0;
   }
   
+  int getNStrips() const { return n_gbl_strip_hits;}
+  GblStripData* getStrip(const int& i) const {
+    //TObject* obj = m_gbl_strip_hits->At(i);
+    //GblStripData* strip = (GblStripData*)obj;
+    //return strip;
+    return static_cast<GblStripData*>(m_gbl_strip_hits->At(i));
+  }
   double getKappa() const { return m_kappa;}
   double getTheta() const { return m_theta;}
   double getPhi() const { return m_phi;}
   double getD0() const { return m_d0;}
-  double getZ0() const { return m_z0;}  
+  double getZ0() const { return m_z0;}
 
   std::string toString() const;
   

@@ -1,3 +1,7 @@
+/**
+ * @author Per Hansson Adrian <phansson@slac.stanford.edu>
+ *
+ */
 #ifndef __GBL_DATA_WRITER_H__
 #define __GBL_DATA_WRITER_H__
 
@@ -10,8 +14,6 @@
 
 //--- HPS Event ---//
 //-----------------//
-#include <SvtTrack.h>
-#include <SvtHit.h>
 
 //--- LCIO ---//
 //------------//

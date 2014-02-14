@@ -39,6 +39,10 @@ include_directories("$ENV{ROOTSYS}/include")
 # Include the LCIO headers
 include_directories("$ENV{LCIO}/include")
 
+# Include the GBL headers
+set(GBL_HDR_DIR "$ENV{GBL}/include")
+include_directories("${GBL_HDR_DIR}")
+
 # Create the HPS Event ROOT dictionary
 set(HPS_EVENT_DIC_DIR "${HPS_DST_BINARY_DIR}/src/root_dic")
 file(MAKE_DIRECTORY ${HPS_EVENT_DIC_DIR})
