@@ -21,13 +21,17 @@ target_link_libraries(SvtDataWriter ${LCIO_LIB} TrackUtils)
 add_library(GblDataWriter GblDataWriter.cxx)
 target_link_libraries(GblDataWriter ${LCIO_LIB})
 
+# Create the GblTrackWriter library
+add_library(GblTrackWriter GblTrackWriter.cxx)
+target_link_libraries(GblTrackWriter HpsGblFitter)
+
 # Create the EcalDataWriter library
 add_library(EcalDataWriter EcalDataWriter.cxx)
 target_link_libraries(EcalDataWriter ${LCIO_LIB} EcalUtils)
 
 # Create the HpsEventBuilder library
 add_library(HpsEventBuilder HpsEventBuilder.cxx)
-target_link_libraries(HpsEventBuilder SvtDataWriter GblDataWriter EcalDataWriter HpsEvent)
+target_link_libraries(HpsEventBuilder SvtDataWriter GblDataWriter GblTrackWriter EcalDataWriter HpsEvent)
 
 # Create the dst_writer executable
 add_executable(dst_maker dst_maker.cxx)

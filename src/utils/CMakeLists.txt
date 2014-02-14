@@ -25,3 +25,7 @@ target_link_libraries(TrackUtils ${LCIO_DICT_LIB})
 add_library(EcalUtils EcalUtils.cxx)
 target_link_libraries(EcalUtils ${LCIO_DICT_LIB})
 
+# Create the HpsGblFitter library
+add_library(HpsGblFitter HpsGblFitter.cxx)
+#target_link_libraries(EcalUtils ${LCIO_DICT_LIB})
+

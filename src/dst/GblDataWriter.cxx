@@ -5,6 +5,8 @@
 
 //-- DST --//
 #include <GblDataWriter.h>
+#include <SvtTrack.h>
+#include <SvtHit.h>
 
 //-- C++ --//
 #include <cstdlib>
@@ -134,6 +136,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
           gbl_strip_data->SetTrackPos(gblStripGeneric->getDoubleVal(16),gblStripGeneric->getDoubleVal(17),gblStripGeneric->getDoubleVal(18));
           gbl_strip_data->SetUmeasErr(gblStripGeneric->getDoubleVal(19));
           gbl_strip_data->SetMSAngle(gblStripGeneric->getDoubleVal(20));
+          gbl_strip_data->SetLambda(gblStripGeneric->getDoubleVal(14));
         }
         else {
           cout << "ERROR! The data structure has the wrong format:\n";

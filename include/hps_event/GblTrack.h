@@ -16,8 +16,6 @@
 //--- ROOT ---//
 #include <TObject.h>
 #include <TClonesArray.h>
-
-//---//
 #include <TRefArray.h>
 
 class GblTrack : public TObject {
