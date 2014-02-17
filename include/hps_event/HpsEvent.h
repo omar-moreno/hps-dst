@@ -30,6 +30,8 @@
 #include <GblTrackData.h>
 #include <GblStripData.h>
 
+class GblTrack;
+
 class HpsEvent : public TObject { 
 
     public:
@@ -45,6 +47,7 @@ class HpsEvent : public TObject {
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
         HpsReconstructedParticle* addReconParticle(int);
+        GblTrack*   	addGblTrack();
         GblTrackData* 	addGblTrackData();
         GblStripData* 	addGblStripData();
 
@@ -61,6 +64,7 @@ class HpsEvent : public TObject {
         int getNumberOfHits()      const  { return n_hits; };
         int getNumberOfEcalClusters()  const { return n_ecal_clusters; };
         int getNumberOfMuonClusters()  const { return n_muon_clusters; };
+        int getNumberOfGblTracks()    const { return n_gbl_tracks; };
         int getNumberOfGblTracksData()    const { return n_gbl_tracks_data; };
         int getNumberOfGblStripData()    const { return n_gbl_strips_data; };
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
@@ -70,6 +74,7 @@ class HpsEvent : public TObject {
         EcalCluster*  getEcalCluster(int);
         EcalHit* 	  getEcalHit(int);
         MuonCluster*  getMuonCluster(int);
+        GblTrack* getGblTrack(int);
         GblTrackData* getGblTrackData(int);
         GblStripData* getGblStripData(int);
 
@@ -83,6 +88,7 @@ class HpsEvent : public TObject {
         TClonesArray *muon_clusters;       //->
         TClonesArray *fs_recon_particles;  //->
         TClonesArray *vtx_recon_particles; //->
+        TClonesArray *gbl_tracks;     //->
         TClonesArray *gbl_tracks_data;     //->
         TClonesArray *gbl_strips_data;     //->
 
@@ -95,6 +101,7 @@ class HpsEvent : public TObject {
         int n_muon_clusters;
         int n_fs_recon_particles;
         int n_vtx_recon_particles;
+        int n_gbl_tracks;
         int n_gbl_tracks_data;
         int n_gbl_strips_data;
 

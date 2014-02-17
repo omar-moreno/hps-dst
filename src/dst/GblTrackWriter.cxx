@@ -64,9 +64,12 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
     cout << "GblTrackWriter: Run " << hps_event->getRunNumber() << " event " << hps_event->getEventNumber() << endl;
   }
 
-    // create the GBL track fitter
+  // create the GBL track fitter
+  // TODO: move this to a member variable?
+  // TODO: get magnetic field from event
   
   HpsGblFitter gblFitter(-0.491);
+  gblFitter.SetDebug(debug);
   
   
   // Loop over the GBL tracks
@@ -94,11 +97,16 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
       cout << "GblTrackWriter: track " << i_gbl_track << endl;
     }
 
-    
     // do the GBL refit    
-    gblFitter.Fit(gblTrackData);
+    HpsGblFitter::HpsGblFitStatus fit_status = gblFitter.Fit(gblTrackData);
     
+    if( fit_status == HpsGblFitter::OK) {
+      // add a 
+      GblTrack* gblTrack = hps_event->addGblTrack();
+      gblFitter.SetTrackProperties(gblTrack, gblTrackData);
+    }
     
   } //tracks
 
 }
+

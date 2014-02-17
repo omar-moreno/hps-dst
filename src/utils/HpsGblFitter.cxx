@@ -9,6 +9,7 @@
 #include "HpsGblFitter.h"
 
 //--- DST ---//
+#include "GblTrack.h"
 #include "GblTrackData.h"
 #include "GblStripData.h"
 
@@ -20,6 +21,7 @@
 //--- GBL ---//
 #include <GblTrajectory.h>
 #include <GblPoint.h>
+#include <MilleBinary.h>
 
 //--- ROOT ---//
 #include "TRandom3.h"
@@ -55,16 +57,15 @@ bool HpsGblFitter::GetDebug() {
 HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
   
   
-  m_debug = true;
+  //m_debug = true;
 
   // Time the fits
   clock_t startTime = clock();
   // Number of track fits so far and the sum of results
   // TODO: obsolete since only one fit in in this function - need to move outside
   int nTry = 0;
-  double Chi2Sum = 0.;
-  double NdfSum = 0;
-  double LostSum = 0.;
+  gbl::MilleBinary mille; // for producing MillePede-II binary file
+
   // path length along trajectory
   double s = 0.;
   // jacobian to transport errors between points along the path
@@ -336,33 +337,32 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
   int Ndf;
   double lostWeight;
   traj.fit(Chi2, Ndf, lostWeight);
-  //		std::cout << " Fit: " << Chi2 << ", " << Ndf << ", " << lostWeight << std::endl;
+  if( m_debug ) {
+    std::cout << " Fit: " << Chi2 << ", " << Ndf << ", " << lostWeight << std::endl;
+  }
   // write to MP binary file
-  //MP		traj.milleOut(mille);
-  Chi2Sum += Chi2;
-  NdfSum += Ndf;
-  LostSum += lostWeight;
+  traj.milleOut(mille);
 
   
-  // clean up
+  // clean up local variables allocated
   for(std::map<unsigned int,TMatrixD*>::iterator it = proL2m_list.begin(); it!=proL2m_list.end(); ++it) {
     delete (it->second);
   }
   
-  if(m_debug) {
-    cout << "HpsGblFitter: Fit() done." << endl;
-  }
   
 
   clock_t endTime = clock();
   double diff = endTime - startTime;
   double cps = CLOCKS_PER_SEC;
-  std::cout << " Time elapsed " << diff / cps << " s" << std::endl;
-  std::cout << " Chi2/Ndf = " << Chi2Sum / NdfSum << std::endl;
+  if( m_debug ) {
+    std::cout << " Time elapsed " << diff / cps << " s" << std::endl;
+  }
 
+  if(m_debug) {
+    cout << "HpsGblFitter: Fit() done successfully." << endl;
+  }
 
-  nTry += 1;
-
+  return OK;
 }
 
 
@@ -404,4 +404,11 @@ TMatrixD HpsGblFitter::gblSimpleJacobianLambdaPhi(double ds, double cosl, double
   jac[3][2] = ds * cosl;
   jac[4][1] = ds;
   return jac;
+}
+
+
+void HpsGblFitter::SetTrackProperties(GblTrack* track, const GblTrackData* track_data) {
+  // do something
+  track->SetTrackParameters(track_data->getKappa(),track_data->getTheta(),track_data->getPhi(),track_data->getD0(),track_data->getZ0());
+  
 }

@@ -14,21 +14,23 @@ class TRandom;
 
 //--- DST ---//
 class GblTrackData;
+class GblTrack;
 
 
 class HpsGblFitter {
 
+ public:
+
   enum HpsGblFitStatus {
     OK,INVALIDTRAJ,ERROR
   };
-
- public:
   HpsGblFitter(double bz);
   ~HpsGblFitter();
   HpsGblFitStatus Fit(const GblTrackData* track);  
   void Clear();
   void SetDebug(bool debug);
   bool GetDebug();
+  void SetTrackProperties(GblTrack* track, const GblTrackData* track_data);
  private:
   TMatrixD gblSimpleJacobianLambdaPhi(double ds, double cosl, double bfac);
   double m_Bz;
