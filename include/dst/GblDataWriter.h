@@ -1,4 +1,8 @@
 /**
+ *	@section purpose: write GBL input data to DST
+ *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	@date: Feb. 12, 2014
+ *	@version: 1.0
  * @author Per Hansson Adrian <phansson@slac.stanford.edu>
  *
  */

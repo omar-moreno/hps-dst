@@ -1,35 +1,36 @@
 /**
  *	@section purpose: 
- *		Creates an HPS Data Summary Tape
- *	@author: Omar Moreno <omoreno1@ucsc.edu>
- *			 Santa Cruz Institute for Particle Physics
- *			 University of California, Santa Cruz
- *	@date: December 20, 2013
+ *		GBL track refit
+ *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
  *	@version: 1.0
  *
  */
 #ifndef __HPS_GBL_FITTER_H__
 #define __HPS_GBL_FITTER_H__
 
-//--- C++ ---//
-
-//--- HPS GBL ---//
-class GblTrackData;
+//--- ROOT ---//
+#include "TMatrixD.h" //Cannot do forward declaration since it's typedef'ed in GBL
 class TRandom;
 
-
+//--- DST ---//
+class GblTrackData;
 
 
 class HpsGblFitter {
 
+  enum HpsGblFitStatus {
+    OK,INVALIDTRAJ,ERROR
+  };
+
  public:
   HpsGblFitter(double bz);
   ~HpsGblFitter();
-  void Fit(const GblTrackData* track);  
+  HpsGblFitStatus Fit(const GblTrackData* track);  
   void Clear();
   void SetDebug(bool debug);
   bool GetDebug();
  private:
+  TMatrixD gblSimpleJacobianLambdaPhi(double ds, double cosl, double bfac);
   double m_Bz;
   double m_bfac;// for Bz in Tesla, momentum in GeV and Radius in mm
   TRandom *m_r;

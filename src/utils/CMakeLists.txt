@@ -7,6 +7,9 @@
 find_library(LCIO_DICT_LIB lcioDict $ENV{LCIO}/lib)
 find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 
+# Find the necessary GBL library
+find_library(GBL_LIB GBL $ENV{GBL}/lib)
+
 # Add the dump_hps_event executable
 add_executable(dump_hps_event dump_hps_event.cxx)
 target_link_libraries(dump_hps_event ${LCIO_DICT_LIB} ${LCIO_LIB})
@@ -27,5 +30,5 @@ target_link_libraries(EcalUtils ${LCIO_DICT_LIB})
 
 # Create the HpsGblFitter library
 add_library(HpsGblFitter HpsGblFitter.cxx)
-#target_link_libraries(EcalUtils ${LCIO_DICT_LIB})
+target_link_libraries(HpsGblFitter ${GBL_LIB})
 
