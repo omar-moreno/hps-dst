@@ -113,17 +113,19 @@ int main(int argc, char **argv)
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	event_builder->setBField(b_field); 
     event_builder->setGblFlag(do_gbl);
+    unsigned int events_processed = 0;
 	while((event = lc_reader->readNextEvent()) != 0){
 		
-		if(event->getEventNumber() == n_events) break; 
+		if(events_processed >= n_events) break; 
 
 		// Print the event number every 1000 events
-		if(event->getEventNumber()%1000 == 0){
-			cout << "Processing event: " << event->getEventNumber() << endl;
+		if(events_processed%1000 == 0){
+          cout << "Processing event: " << event->getEventNumber() << ", so far processed " << events_processed << " events." << endl;
 		}
 
 		event_builder->makeHpsEvent(event, hps_event); 
 		tree->Fill();
+        ++events_processed;
 	}
 
 	cout << "Finished writing ROOT Tree!" << endl;
