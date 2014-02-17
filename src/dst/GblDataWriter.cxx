@@ -1,4 +1,8 @@
 /**
+ *	@section purpose: write GBL input data to DST
+ *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	@date: Feb. 12, 2014
+ *	@version: 1.0
  * @author Per Hansson Adrian <phansson@slac.stanford.edu>
  *
  */
@@ -122,7 +126,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         }
         
         // Check that the data structure is the correct length
-        if( gblStripGeneric->getNDouble() == 21 ) {
+        if( gblStripGeneric->getNDouble() == 22 ) {
           gbl_strip_data->SetPath3D(gblStripGeneric->getDoubleVal(0));
           gbl_strip_data->SetPath(gblStripGeneric->getDoubleVal(1));
           gbl_strip_data->SetU(gblStripGeneric->getDoubleVal(2),gblStripGeneric->getDoubleVal(3),gblStripGeneric->getDoubleVal(4));
@@ -136,7 +140,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
           gbl_strip_data->SetTrackPos(gblStripGeneric->getDoubleVal(16),gblStripGeneric->getDoubleVal(17),gblStripGeneric->getDoubleVal(18));
           gbl_strip_data->SetUmeasErr(gblStripGeneric->getDoubleVal(19));
           gbl_strip_data->SetMSAngle(gblStripGeneric->getDoubleVal(20));
-          gbl_strip_data->SetLambda(gblStripGeneric->getDoubleVal(14));
+          gbl_strip_data->SetLambda(gblStripGeneric->getDoubleVal(21));
         }
         else {
           cout << "ERROR! The data structure has the wrong format:\n";

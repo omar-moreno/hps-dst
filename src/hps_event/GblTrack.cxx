@@ -1,9 +1,8 @@
 /**
  *
  * @author: 	phansson@slac.stanford.edu
- * @section institution
- * 				SLAC
- * @version:    v 0.1
+ * @section purpose: GBL track information
+ * @version:    v1.0
  * @date:       February 3, 2014
  */
 

@@ -1,9 +1,7 @@
 /**
- *
+ * @section purpose: Stores track information needed by GBL
  * @author: 	Per Hansson Adrian <phansson@slac.stanford.edu>
- * @section institution
- * 				SLAC
- * @version:    v 0.1
+ * @version:    v1.0
  * @date:       February 3, 2014
  */
 

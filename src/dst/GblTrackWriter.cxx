@@ -1,10 +1,17 @@
 /**
- * @author Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	@section purpose: interface to GBL track refit 
+ *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	@date: Feb. 12, 2014
+ *	@version: 1.0
  *
  */
 
 //--- DST ---//
 #include <GblTrackWriter.h>
+
+//--- C++ ---//
+#include <iostream>
+#include <cstdlib>
 
 //--- HPS EVENT ---//
 #include <HpsEvent.h>
@@ -13,9 +20,6 @@
 //--- UTILS ---//
 #include <HpsGblFitter.h>
 
-//--- C++ ---//
-#include <iostream>
-#include <cstdlib>
 
 using namespace std;
 
