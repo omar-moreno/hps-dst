@@ -20,10 +20,12 @@ class GblTrackWriter {
   ~GblTrackWriter();
   
   void writeData(HpsEvent* hps_event);
+  void setDebug(bool debug);
+  void setBField(double b_field);
   
  private:
-  
-
+  bool m_debug;
+  double m_b_field;
 };
 
 
