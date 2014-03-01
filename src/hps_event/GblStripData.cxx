@@ -37,6 +37,7 @@ std::string GblStripData::toString() const {
     oss << "\t" << "tpos      " << "(" << GetTrackPos().x() << "," << GetTrackPos().y() << "," << GetTrackPos().z() << ")"  << "\n";
     oss << "\t" << "tdir (gl) " << "(" << GetGlobalTrackDir().x() << "," << GetGlobalTrackDir().y() << "," << GetGlobalTrackDir().z() << ")"  << "\n";
     oss << "\t" << "track phi " << GetPhi() << "\n";
+    oss << "\t" << "track lambda " << GetLambda() << "\n";
     oss << "\t" << "MS angle  " << GetMSAngle() << "\n";
     return oss.str();
   }

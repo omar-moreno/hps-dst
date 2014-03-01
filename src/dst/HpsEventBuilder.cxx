@@ -10,7 +10,7 @@
 
 #include <HpsEventBuilder.h>
 
-HpsEventBuilder::HpsEventBuilder() : m_run_gbl(false)
+HpsEventBuilder::HpsEventBuilder() : m_run_gbl(false), m_debug(false)
 {
 	svt_writer = new SvtDataWriter(); 
 	ecal_writer = new EcalDataWriter(); 
@@ -38,19 +38,37 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 	ecal_writer->writeData(event, hps_event); 
 
     if( getGblFlag() == true ) {
+
+      if(m_debug) {
+        std::cout << "makeHpsEvent: write gbl data to event " << std::endl;
+      }
+
       // Write info for GBL to HpsEvent
       gbl_data_writer->writeData(event, hps_event);
-      // Write GBL track refit to HpsEvent    
-      std::cout << "makeHpsEvent: " << hps_event->getNumberOfGblStripData() << " GBL strips " << std::endl;
-      gbl_track_writer->writeData(hps_event);
-      std::cout << "makeHpsEvent: " << hps_event->getNumberOfGblTracksData() << " GBL tracks data " << std::endl;
-      std::cout << "makeHpsEvent: " << hps_event->getNumberOfGblTracks() << " GBL tracks " << std::endl;
-    }
 
+      if(m_debug) {
+        std::cout << "makeHpsEvent: " << hps_event->getNumberOfGblStripData() << " GBL strips available for the GBL track writer" << std::endl;
+      }
+
+      // Write GBL track refit to HpsEvent    
+      gbl_track_writer->writeData(hps_event);
+      
+      if(m_debug) {
+        std::cout << "makeHpsEvent: made " << hps_event->getNumberOfGblTracks() << " GBL tracks from " << hps_event->getNumberOfGblTracksData() << " GBL track data objects" << std::endl;
+      }
+    }
+    
 }
 
 void HpsEventBuilder::setBField(double b_field){
 	svt_writer->setBField(b_field); 
+    gbl_track_writer->setBField(b_field);
+}
+
+void HpsEventBuilder::setDebug(bool debug) {
+  m_debug = debug;
+  gbl_data_writer->setDebug(debug);
+  gbl_track_writer->setDebug(debug);
 }
 
 void HpsEventBuilder::setGblFlag(bool flag) {

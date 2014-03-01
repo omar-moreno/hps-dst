@@ -14,6 +14,7 @@
 //--- ROOT ---//
 #include <TObject.h>
 #include <TClonesArray.h>
+#include <TMatrixD.h>
 
 //---//
 #include <TRefArray.h>
@@ -31,7 +32,7 @@ class GblTrackData : public TObject {
   double m_phi;
   double m_d0;
   double m_z0;
-  
+  TMatrixD m_prjPerToCl;
   
  public:
   GblTrackData();
@@ -47,6 +48,10 @@ class GblTrackData : public TObject {
     m_z0 = z0;
   }
   
+  void setPrjPerToCl(const unsigned int& row, const unsigned int& col, const double& val) {
+    m_prjPerToCl[row][col] = val;
+  }
+  
   int getNStrips() const { return n_gbl_strip_hits;}
   GblStripData* getStrip(const int& i) const {
     //TObject* obj = m_gbl_strip_hits->At(i);
@@ -59,7 +64,7 @@ class GblTrackData : public TObject {
   double getPhi() const { return m_phi;}
   double getD0() const { return m_d0;}
   double getZ0() const { return m_z0;}
-
+  TMatrixD getPrjPerToCl() const { return m_prjPerToCl; }
   std::string toString() const;
   
   ClassDef(GblTrackData,1) //Track information needed by GBL

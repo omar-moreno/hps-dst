@@ -32,6 +32,9 @@ class HpsEventBuilder : public EventBuilder {
 		void setBField(double);
 
 		// 
+		void setDebug(bool);
+
+		// 
 		void setGblFlag(bool);
 
 		// 
@@ -44,7 +47,7 @@ class HpsEventBuilder : public EventBuilder {
         GblDataWriter* gbl_data_writer;
         GblTrackWriter* gbl_track_writer;
         bool m_run_gbl;
-
+        bool m_debug;
 };
 
 #endif // __HPS_EVENT_BUILDER_H__

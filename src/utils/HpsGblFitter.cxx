@@ -19,7 +19,6 @@
 #include <map>
 
 //--- GBL ---//
-#include <GblTrajectory.h>
 #include <GblPoint.h>
 #include <MilleBinary.h>
 
@@ -30,19 +29,40 @@ using namespace std;
 
 // constant to normalize curvature
 static const double Bconst = 0.0002998; 
+//variable that defines the reference point on the trajectory (typically at path length zero)
+static const int refLabel = 1;
+//variable indexes
+static const unsigned int idx_qOverP = 0;
+static const unsigned int idx_xT = 3;
+static const unsigned int idx_yT = 4;
+
 
 
 HpsGblFitter::HpsGblFitter(double bz) : m_Bz(bz), 
                                         m_bfac(Bconst*m_Bz), 
                                         m_r(new TRandom3()),
-                                        m_debug(false) {
+                                        m_debug(false),
+                                        m_chi2(-1.), 
+                                        m_ndf(-1),
+                                        m_lost_weight(-1.),
+                                        m_traj(NULL) {
 }
 
 HpsGblFitter::~HpsGblFitter() {
   delete m_r;
+  if( m_traj != NULL) {
+    delete m_traj;
+  }
 }
 
 void HpsGblFitter::Clear() {
+  m_chi2 = -1.; 
+  m_ndf = -1;
+  m_lost_weight = -1.;
+  if( m_traj != NULL) {
+    delete m_traj;
+    m_traj = NULL;
+  }
 }
 
 void HpsGblFitter::SetDebug(bool debug) {
@@ -57,7 +77,6 @@ bool HpsGblFitter::GetDebug() {
 HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
   
   
-  //m_debug = true;
 
   // Time the fits
   clock_t startTime = clock();
@@ -87,6 +106,9 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
   // Save the association between strip cluster and label
   std::map<const GblStripData*,unsigned int> stripLabelMap;
   
+  //start trajectory at refence point (s=0) - this point has no measurement
+  gbl::GblPoint ref_point(jacPointToPoint);
+  listOfPoints.push_back(ref_point);
   
   // Loop over strips
   const unsigned int n_strips = track->getNStrips();  
@@ -95,14 +117,14 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     const GblStripData* strip = track->getStrip(istrip);
     
     if( m_debug ) {
-      cout << "Processing strip " << istrip << " with id/layer " << strip->GetId() << endl;
+      cout << "HpsGblFitter: " << "Processing strip " << istrip << " with id/layer " << strip->GetId() << endl;
     }
     
     // Path length step for this cluster
     double step = strip->GetPath3D() - s;
     
     if( m_debug ) {
-      cout << "Path length step " << step << " from " << s << " to " << strip->GetPath3D() << endl;
+      cout << "HpsGblFitter: " << "Path length step " << step << " from " << s << " to " << strip->GetPath3D() << endl;
     }
     
     // Measurement direction (perpendicular and parallel to strip direction)
@@ -115,14 +137,14 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     mDir[1][2] = strip->GetV().z();
  
     if(m_debug) {
-      cout << "mDir" << endl;
+      cout << "HpsGblFitter: " << "mDir" << endl;
       mDir.Print();
     }
 
     TMatrixD mDirT(TMatrixD::kTransposed,mDir);
 
     if(m_debug) {
-      cout << "mDirT" << endl;
+      cout << "HpsGblFitter: " << "mDirT" << endl;
       mDirT.Print();
     }
 
@@ -133,7 +155,7 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     double cosPhi = sqrt(1.0 - sinPhi*sinPhi);
     
     if(m_debug) {
-      cout << "Track direction sinLambda=" << sinLambda << " sinPhi=" << sinPhi << endl;
+      cout << "HpsGblFitter: " << "Track direction sinLambda=" << sinLambda << " sinPhi=" << sinPhi << endl;
     }
 
     // Track direction in curvilinear frame (U,V,T)
@@ -147,18 +169,17 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     uvDir[1][2] = cosLambda;
 
     if(m_debug) {
-      cout << "uvDir" << endl;
+      cout << "HpsGblFitter: " << "uvDir" << endl;
       uvDir.Print();
     }
 
-    cout << "test" <<endl;
-    TMatrixD a(2,3);
-    TMatrixD b(3,2);
-    a.Print();
-    b.Print();
-    (a*b).Print();
-    cout << "end test" << endl;
-    
+    // if(m_debug) cout << "HpsGblFitter: " << "test" <<endl;
+    // TMatrixD a(2,3);
+    // TMatrixD b(3,2);
+    // a.Print();
+    // b.Print();
+    // (a*b).Print();
+    // if(m_debug) cout << "HpsGblFitter: " << "end test" << endl;
 
     // projection from  measurement to local (curvilinear uv) directions (duv/dm)
     //TMatrixD proM2l(uvDir,TMatrixD::kMult,mDirT);
@@ -168,19 +189,19 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     //projection from local (uv) to measurement directions (dm/duv)
     //TMatrixD proL2m(TMatrixD::kInverted,proM2l);
     TMatrixD proL2m(proM2l);
-    cout << "hej" << endl;
     proL2m.Invert();
     if(proL2m_list.find(strip->GetId()) != proL2m_list.end()) {
-      cout << strip->GetId() << " was already in list?" << endl;
+      cout << "HpsGblFitter: " << strip->GetId() << " was already in list?" << endl;
       exit(1);
     }
     proL2m_list[strip->GetId()] = new TMatrixD(proL2m);
 
     if(m_debug) {
-      cout << "proM2l:" <<endl;
+      cout << "HpsGblFitter: " << "proM2l:" <<endl;
       proM2l.Print();
-      cout << "proL2m:" <<endl;
+      cout << "HpsGblFitter: " << "proL2m:" <<endl;
       proL2m.Print();
+      cout << "HpsGblFitter: " << "proM2l*proL2m (should be unit matrix):" <<endl;
       (proM2l*proL2m).Print();
     }
 
@@ -199,11 +220,11 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     measPrec[1] = 0.; 
     
     if (m_debug) {
-      cout << "meas: " << endl;
+      cout << "HpsGblFitter: " << "meas: " << endl;
       meas.Print();
-      cout << "measErr:" << endl;
+      cout << "HpsGblFitter: " << "measErr:" << endl;
       measErr.Print();
-      cout << "measPrec:" << endl;
+      cout << "HpsGblFitter: " << "measPrec:" << endl;
       measPrec.Print();
     }
 
@@ -213,7 +234,7 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     
     
     if (m_debug) {
-      cout << "jacPointToPoint to extrapolate to this point:" << endl;
+      cout << "HpsGblFitter: " << "jacPointToPoint to extrapolate to this point:" << endl;
       jacPointToPoint.Print();
     }
     
@@ -222,9 +243,9 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     //measMsCov = np.dot(proL2m, np.dot(msCov[3:, 3:], proL2m.T))
 
     if (m_debug) {
-      cout << " msCov at this point:" << endl;
+      cout << "HpsGblFitter: " << " msCov at this point:" << endl;
       msCov.Print();
-      //cout << "measMsCov at this point:" << endl;
+      //cout << "HpsGblFitter: " << "measMsCov at this point:" << endl;
       //measMsCov.Print();
     }
 
@@ -260,7 +281,7 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     if (! useUncorrMS) {
       point.addScatterer(scat, scatPrec);
       if (m_debug) {
-        cout << "adding scatError to this point:" << endl;
+        cout << "HpsGblFitter: " << "adding scatError to this point:" << endl;
         scatErr.Print();
       }
     }
@@ -308,8 +329,9 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
     */
         
     
-    if (nTry==0) {
-      cout << "uRes " <<  strip->GetId() <<  " uRes " << uRes <<  " pred (" <<  strip->GetTrackPos().x() << "," << strip->GetTrackPos().y() << "," << strip->GetTrackPos().z() << ") s(3D) " << strip->GetPath3D() << endl;
+    //if (nTry==0) {
+    if(m_debug) {
+      cout << "HpsGblFitter: " << "uRes " <<  strip->GetId() <<  " uRes " << uRes <<  " pred (" <<  strip->GetTrackPos().x() << "," << strip->GetTrackPos().y() << "," << strip->GetTrackPos().z() << ") s(3D) " << strip->GetPath3D() << endl;
     }
 
     //go to next point
@@ -326,22 +348,19 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 
 
   //create the trajectory
-  gbl::GblTrajectory traj(listOfPoints); //,seedLabel, clSeed);
+  m_traj = new gbl::GblTrajectory(listOfPoints); //,seedLabel, clSeed);
   
-  if (! traj.isValid()) {
-    cout << " Invalid GblTrajectory -> skip" << endl;
+  if (! m_traj->isValid()) {
+    cout << "HpsGblFitter: " << " Invalid GblTrajectory -> skip" << endl;
     return INVALIDTRAJ;
   }
   // fit trajectory
-  double Chi2;
-  int Ndf;
-  double lostWeight;
-  traj.fit(Chi2, Ndf, lostWeight);
+  m_traj->fit(m_chi2, m_ndf, m_lost_weight);
   if( m_debug ) {
-    std::cout << " Fit: " << Chi2 << ", " << Ndf << ", " << lostWeight << std::endl;
+    std::cout << "HpsGblFitter: Chi2 " << " Fit: " << m_chi2 << ", " << m_ndf << ", " << m_lost_weight << std::endl;
   }
   // write to MP binary file
-  traj.milleOut(mille);
+  m_traj->milleOut(mille);
 
   
   // clean up local variables allocated
@@ -355,11 +374,11 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
   double diff = endTime - startTime;
   double cps = CLOCKS_PER_SEC;
   if( m_debug ) {
-    std::cout << " Time elapsed " << diff / cps << " s" << std::endl;
+    std::cout << "HpsGblFitter: " << " Time elapsed " << diff / cps << " s" << std::endl;
   }
 
   if(m_debug) {
-    cout << "HpsGblFitter: Fit() done successfully." << endl;
+    cout << "HpsGblFitter: " << "HpsGblFitter: Fit() done successfully." << endl;
   }
 
   return OK;
@@ -408,7 +427,95 @@ TMatrixD HpsGblFitter::gblSimpleJacobianLambdaPhi(double ds, double cosl, double
 
 
 void HpsGblFitter::SetTrackProperties(GblTrack* track, const GblTrackData* track_data) {
-  // do something
-  track->SetTrackParameters(track_data->getKappa(),track_data->getTheta(),track_data->getPhi(),track_data->getD0(),track_data->getZ0());
+
+  // Convert GBL trajectory information to the track object
   
+  if( m_traj == NULL) {
+    cout << "HpsGblFitter: ERROR there is no trajectory created so can't set properties!" << endl;
+    return;
+  }
+
+  // set original track parameters for comparison
+  // TODO: should be removed as they are duplicated?
+  track->SetSeedTrackParameters(track_data->getKappa(),track_data->getTheta(),track_data->getPhi(),track_data->getD0(),track_data->getZ0());
+
+  // get the track parameter corrections to the reference point (path length zero)
+  TVectorD localPar(5);
+  TMatrixDSym localCov(5);
+  m_traj->getResults(refLabel,localPar, localCov);
+
+  // convert xT,yT,zT correction in curvilinear frame to perigee frame
+  TVectorD clParCorr(3);
+  clParCorr[0] = localPar[idx_xT];
+  clParCorr[1] = localPar[idx_yT];
+  clParCorr[2] = 0.;
+  
+  // get the projection from perigee to curvilinear frame
+  //TMatrixD prjClToPer(TMatrixD::kInverted, track_data->getPrjPerToCl());
+  TMatrixD prjClToPer(track_data->getPrjPerToCl());
+  
+  // project into the perigee frame
+  TVectorD perParCorr = prjClToPer * clParCorr;
+  
+  // corrections
+  double qOverP_corr = localPar[idx_qOverP]; 
+  double pz_corr = fabs(1/qOverP_corr) * sin(track_data->getTheta());
+  double pt_corr = pz_corr * tan(track_data->getTheta());
+  double curv_corr = 1/pt_corr * m_bfac;
+  double d0_corr = -1.0 * perParCorr[1]; // sign convention of d0 in curvilinear frame
+  double z0_corr = -1.0 * perParCorr[2]; // sign convention of d0 in curvilinear frame
+  
+  // set the new parameters
+  track->SetTrackParameters(track_data->getKappa() + curv_corr,track_data->getTheta(),track_data->getPhi(),track_data->getD0() + d0_corr,track_data->getZ0() + z0_corr);
+  track->SetChi2(m_chi2);
+  track->SetNdf(m_ndf);
+
+  if( m_debug) {
+    cout << "HpsGblFitter: Corrections of at reference point " << refLabel << endl;
+    cout << "locPar " << endl;
+    localPar.Print();
+    //cout << "locCov " << endl;
+    //localCov.Print();
+    cout << "clParCorr " << endl;
+    clParCorr.Print();
+    cout << "perParCorr " << endl;
+    perParCorr.Print();
+  }
+  
+  
+  
+  
+  /*
+  if( m_debug) {
+    cout << "HpsGblFitter: print GBL trajectory:" << endl;
+    m_traj->printTrajectory(99);
+    cout << "HpsGblFitter: print GBL points:" << endl;
+    m_traj->printPoints(99);
+    cout << "HpsGblFitter: print fit results" << endl;
+    int n_meas = m_traj->getNumPoints();
+    for(unsigned int i = 1; i <= n_meas; ++i) {
+      int aSignedLabel = i;
+      TVectorD localPar(5);
+      TMatrixDSym localCov(5);
+      m_traj->getResults(aSignedLabel, localPar, localCov);
+      cout << ">Point " << i << endl;
+      cout << "locPar " << endl;
+      localPar.Print();
+      cout << "locCov " << endl;
+      localCov.Print();
+      aSignedLabel = -i;
+      m_traj->getResults(aSignedLabel, localPar, localCov);
+      cout << "<Point " << i << endl;
+      cout << "locPar " << endl;
+      localPar.Print();
+      cout << "locCov " << endl;
+      localCov.Print();
+    } 
+  }
+  */
+
+
+  
+
 }
+

@@ -33,6 +33,7 @@ class GblDataWriter : public DataWriter {
   GblDataWriter(bool debug);
   ~GblDataWriter();
   
+  void setDebug(bool debug);
   void writeData(EVENT::LCEvent*, HpsEvent*);
   
  private:

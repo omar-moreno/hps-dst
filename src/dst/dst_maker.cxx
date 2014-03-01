@@ -47,9 +47,10 @@ int main(int argc, char **argv)
 	int n_events = 0; 	
 	double b_field = numeric_limits<double>::quiet_NaN();  
     bool do_gbl = false;
+    bool debug = false;
 	// Parse any command line arguments.  If an invalid argument is passed, 
 	// print the usage
-	while((option_char = getopt(argc, argv, "i:o:n:b:g:h")) != -1){
+	while((option_char = getopt(argc, argv, "i:o:n:b:g:d:h")) != -1){
 		switch(option_char){
 			case 'i': 
 				lcio_file_name = optarg; 
@@ -65,6 +66,9 @@ int main(int argc, char **argv)
 				break;	
 			case 'g':
               do_gbl = true;
+				break;	
+			case 'd':
+              debug = true;
 				break;	
 			case 'h': 
 				printUsage(); 
@@ -113,13 +117,14 @@ int main(int argc, char **argv)
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	event_builder->setBField(b_field); 
     event_builder->setGblFlag(do_gbl);
+    event_builder->setDebug(debug);
     unsigned int events_processed = 0;
 	while((event = lc_reader->readNextEvent()) != 0){
 		
 		if(events_processed >= n_events) break; 
 
 		// Print the event number every 1000 events
-		if(events_processed%1000 == 0){
+		if(events_processed%1000 == 0 || debug){
           cout << "Processing event: " << event->getEventNumber() << ", so far processed " << events_processed << " events." << endl;
 		}
 
@@ -148,6 +153,7 @@ void printUsage()
 		<< "\t -o Output ROOT file name \n"
 		<< "\t -n The number of events to process \n"
 		<< "\t -b The strength of the magnetic field in Tesla \n"
-		<< "\t -g Run GBL trackrefit \n"
-		<< "\t -h Display this help and exit \n" << endl;	 
+        << "\t -g Run GBL trackrefit \n"
+        << "\t -h Display this help and exit \n"
+        << "\t -d debug mode \n" << endl;
 }	

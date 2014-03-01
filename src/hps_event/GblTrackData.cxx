@@ -18,7 +18,7 @@
 ClassImp(GblTrackData)
 
 GblTrackData::GblTrackData()
-: 	TObject(), m_gbl_strip_hits(new TRefArray()), n_gbl_strip_hits(0)
+: 	TObject(), m_gbl_strip_hits(new TRefArray()), n_gbl_strip_hits(0), m_prjPerToCl(3,3)
 {}
 
 void GblTrackData::Clear(Option_t* /* option */) {
