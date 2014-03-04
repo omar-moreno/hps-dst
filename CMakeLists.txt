@@ -42,6 +42,11 @@ include_directories("${DST_HDR_DIR}")
 set(UTILS_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/utils")
 include_directories("${UTILS_HDR_DIR}")
 
+# Include the GBL headers
+set(GBL_DIR "${HPS_DST_SOURCE_DIR}/gbl")
+set(GBL_HDR_DIR "${GBL_DIR}/include")
+include_directories("${GBL_HDR_DIR}")
+
 
 #--- Create the HPS Event ROOT dictionary ---#
 #--------------------------------------------#

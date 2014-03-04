@@ -28,6 +28,9 @@
 #include <MuonCluster.h>
 #include <HpsReconstructedParticle.h>
 #include <HpsMCParticle.h>
+class GblTrackData;
+class GblStripData;
+class GblTrack;
 
 class HpsEvent : public TObject { 
 
@@ -46,6 +49,9 @@ class HpsEvent : public TObject {
         MuonCluster* 	addMuonCluster();
         HpsReconstructedParticle* addReconParticle(int);
         HpsMCParticle*  addHpsMCParticle();
+        GblTrack*   	addGblTrack();
+        GblTrackData* 	addGblTrackData();
+        GblStripData* 	addGblStripData();
 
         void setEventNumber(int event_number){ this->event_number = event_number; };
         void setRunNumber(int run_number){ this->run_number = run_number; };
@@ -56,6 +62,9 @@ class HpsEvent : public TObject {
         int getNumberOfTracks()    const { return n_tracks; };
         int getNumberOfEcalClusters()  const { return n_ecal_clusters; };
         int getNumberOfMuonClusters()  const { return n_muon_clusters; };
+        int getNumberOfGblTracks()    const { return n_gbl_tracks; };
+        int getNumberOfGblTracksData()    const { return n_gbl_tracks_data; };
+        int getNumberOfGblStripData()    const { return n_gbl_strips_data; };
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
         SvtTrack*      getTrack(int);
@@ -64,6 +73,9 @@ class HpsEvent : public TObject {
         EcalHit* 	   getEcalHit(int);
         MuonCluster*   getMuonCluster(int);
         HpsMCParticle* getMCParticle(int);
+        GblTrack* getGblTrack(int);
+        GblTrackData* getGblTrackData(int);
+        GblStripData* getGblStripData(int);
 
         ClassDef(HpsEvent, 1);	
 
@@ -77,6 +89,9 @@ class HpsEvent : public TObject {
         TClonesArray* fs_recon_particles;  //->
         TClonesArray* vtx_recon_particles; //->
         TClonesArray* mc_particles; 	   //->
+        TClonesArray *gbl_tracks;     //->
+        TClonesArray *gbl_tracks_data;     //->
+        TClonesArray *gbl_strips_data;     //->
 
         int event_number;
         int run_number;
@@ -88,6 +103,9 @@ class HpsEvent : public TObject {
         int n_fs_recon_particles;
         int n_vtx_recon_particles;
         int n_mc_particles;
+        int n_gbl_tracks;
+        int n_gbl_tracks_data;
+        int n_gbl_strips_data;
 
         static const int fs_type;
         static const int vtx_type;
