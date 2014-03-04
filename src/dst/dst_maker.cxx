@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 		if(events_processed >= n_events) break; 
 
 		// Print the event number every 1000 events
-		if(events_processed%1000 == 0 || debug){
+		if((events_processed > 0 && events_processed%1000 == 0) || debug){
           cout << "Processing event: " << event->getEventNumber() << ", so far processed " << events_processed << " events." << endl;
 		}
 

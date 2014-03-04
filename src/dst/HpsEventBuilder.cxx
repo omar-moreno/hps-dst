@@ -37,13 +37,14 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event)
 	// Write Ecal Data to HpsEvent
 	ecal_writer->writeData(event, hps_event); 
 
+    // Write GBL data to HpsEvent
     if( getGblFlag() == true ) {
 
       if(m_debug) {
         std::cout << "makeHpsEvent: write gbl data to event " << std::endl;
       }
 
-      // Write info for GBL to HpsEvent
+      // Write info used for GBL to HpsEvent
       gbl_data_writer->writeData(event, hps_event);
 
       if(m_debug) {
@@ -67,8 +68,8 @@ void HpsEventBuilder::setBField(double b_field){
 
 void HpsEventBuilder::setDebug(bool debug) {
   m_debug = debug;
-  gbl_data_writer->setDebug(debug);
-  gbl_track_writer->setDebug(debug);
+  //gbl_data_writer->setDebug(debug);
+  //gbl_track_writer->setDebug(debug);
 }
 
 void HpsEventBuilder::setGblFlag(bool flag) {

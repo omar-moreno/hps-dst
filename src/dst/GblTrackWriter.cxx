@@ -35,6 +35,7 @@ void GblTrackWriter::setDebug(bool debug) {
 
 void GblTrackWriter::writeData(HpsEvent* hps_event) {
 
+   m_debug = false;
 
   // Do the GBL refit of the existing track
   
