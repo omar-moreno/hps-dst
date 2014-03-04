@@ -8,7 +8,8 @@ find_library(LCIO_DICT_LIB lcioDict $ENV{LCIO}/lib)
 find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 
 # Find the necessary GBL library
-find_library(GBL_LIB GBL $ENV{GBL}/lib)
+#find_library(GBL_LIB GBL $ENV{GBL}/lib)
+find_library(GBL_LIB GBL ${GBL_DIR}/lib)
 
 # Add the dump_hps_event executable
 add_executable(dump_hps_event dump_hps_event.cxx)

@@ -40,7 +40,8 @@ include_directories("$ENV{ROOTSYS}/include")
 include_directories("$ENV{LCIO}/include")
 
 # Include the GBL headers
-set(GBL_HDR_DIR "$ENV{GBL}/include")
+set(GBL_DIR "${HPS_DST_SOURCE_DIR}/gbl")
+set(GBL_HDR_DIR "${GBL_DIR}/include")
 include_directories("${GBL_HDR_DIR}")
 
 # Create the HPS Event ROOT dictionary
