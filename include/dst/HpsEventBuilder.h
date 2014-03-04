@@ -17,11 +17,13 @@
 #include <SvtDataWriter.h>
 #include <EcalDataWriter.h>
 #include <MCParticleDataWriter.h>
+#include <GblDataWriter.h>
+#include <GblTrackWriter.h>
 
 class HpsEventBuilder : public EventBuilder {
 
 	public: 
-		HpsEventBuilder(); 
+        HpsEventBuilder(); 
 		~HpsEventBuilder(); 
 
 		//
@@ -30,11 +32,24 @@ class HpsEventBuilder : public EventBuilder {
 		// 
 		void setBField(double);
 
+		// 
+		void setDebug(bool);
+
+		// 
+		void setGblFlag(bool);
+
+		// 
+		bool getGblFlag() const;
+
 	private:
 
 		SvtDataWriter* svt_writer; 
 		EcalDataWriter* ecal_writer; 
 		MCParticleDataWriter* mc_particle_writer;
+        GblDataWriter* gbl_data_writer;
+        GblTrackWriter* gbl_track_writer;
+        bool m_run_gbl;
+        bool m_debug;
 };
 
 #endif // __HPS_EVENT_BUILDER_H__

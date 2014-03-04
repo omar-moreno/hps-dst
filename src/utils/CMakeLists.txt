@@ -6,6 +6,10 @@
 # Find the necessary LCIO libraries
 find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 
+# Find the necessary GBL library
+#find_library(GBL_LIB GBL $ENV{GBL}/lib)
+find_library(GBL_LIB GBL ${GBL_DIR}/lib)
+
 # Add the dump_hps_event executable
 add_executable(dump_hps_event dump_hps_event.cxx)
 target_link_libraries(dump_hps_event ${LCIO_LIB})
@@ -17,4 +21,8 @@ target_link_libraries(TrackUtils ${LCIO_LIB})
 # Create the EcalUtils library
 add_library(EcalUtils EcalUtils.cxx)
 target_link_libraries(EcalUtils ${LCIO_LIB})
+
+# Create the HpsGblFitter library
+add_library(HpsGblFitter HpsGblFitter.cxx)
+target_link_libraries(HpsGblFitter ${GBL_LIB})
 
