@@ -38,6 +38,10 @@ class GblDataWriter : public DataWriter {
   
  private:
   bool m_debug;
+  std::string m_track_col_name;
+  std::string m_rel_gbltrk_name;
+  std::string m_rel_toGblStrip_name;
+
 
 };
 

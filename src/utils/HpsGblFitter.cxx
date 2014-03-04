@@ -437,11 +437,12 @@ void HpsGblFitter::SetTrackProperties(GblTrack* track, const GblTrackData* track
 
   // set original track parameters for comparison
   // TODO: should be removed as they are duplicated?
-  track->SetSeedTrackParameters(track_data->getKappa(),track_data->getTheta(),track_data->getPhi(),track_data->getD0(),track_data->getZ0());
+  track->setSeedTrackParameters(track_data->getKappa(),track_data->getTheta(),track_data->getPhi(),track_data->getD0(),track_data->getZ0());
 
   // get the track parameter corrections to the reference point (path length zero)
   TVectorD localPar(5);
   TMatrixDSym localCov(5);
+
   m_traj->getResults(refLabel,localPar, localCov);
 
   // convert xT,yT,zT correction in curvilinear frame to perigee frame
@@ -451,70 +452,59 @@ void HpsGblFitter::SetTrackProperties(GblTrack* track, const GblTrackData* track
   clParCorr[2] = 0.;
   
   // get the projection from perigee to curvilinear frame
-  //TMatrixD prjClToPer(TMatrixD::kInverted, track_data->getPrjPerToCl());
-  TMatrixD prjClToPer(track_data->getPrjPerToCl());
+  TMatrixD prjClToPer(TMatrixD::kInverted, track_data->getPrjPerToCl());
+  //TMatrixD prjClToPer(track_data->getPrjPerToCl());
   
   // project into the perigee frame
   TVectorD perParCorr = prjClToPer * clParCorr;
   
   // corrections
-  double qOverP_corr = localPar[idx_qOverP]; 
-  double pz_corr = fabs(1/qOverP_corr) * sin(track_data->getTheta());
-  double pt_corr = pz_corr * tan(track_data->getTheta());
-  double curv_corr = 1/pt_corr * m_bfac;
+  double qP_corr = localPar[idx_qOverP]; 
+  double pt_old = fabs(1.0/track->getSeedKappa() * m_bfac);
+  double qP_old = pt_old/sin(track->getSeedTheta());
+  double qP_new = qP_old + qP_corr;
+  double p_new = fabs(1/qP_new);
+  double pt_new = p_new * sin(track->getSeedTheta());
+  double kappa_new = 1/pt_new * m_bfac;
   double d0_corr = -1.0 * perParCorr[1]; // sign convention of d0 in curvilinear frame
-  double z0_corr = -1.0 * perParCorr[2]; // sign convention of d0 in curvilinear frame
+  double z0_corr = perParCorr[2]; 
   
   // set the new parameters
-  track->SetTrackParameters(track_data->getKappa() + curv_corr,track_data->getTheta(),track_data->getPhi(),track_data->getD0() + d0_corr,track_data->getZ0() + z0_corr);
-  track->SetChi2(m_chi2);
-  track->SetNdf(m_ndf);
+  track->setTrackParameters(kappa_new,track->getSeedTheta(),track->getSeedPhi(),track->getSeedD0() + d0_corr,track->getSeedZ0() + z0_corr);
+
+  //set covariance matrix
+  //TODO: do this correctly for perigee frame - right now it's the CL frame 
+  track->setCov(localCov);
+
+  // set momentum vector
+  track->setMomentumVector(pt_new*cos(track->getPhi()), pt_new*sin(track->getPhi()),p_new*cos(track->getSeedTheta()));
+
+  // set chi2 
+  track->setChi2(m_chi2);
+  track->setNdf(m_ndf);
 
   if( m_debug) {
     cout << "HpsGblFitter: Corrections of at reference point " << refLabel << endl;
     cout << "locPar " << endl;
     localPar.Print();
+    cout << "prjPerToCl:" << endl;
+    track_data->getPrjPerToCl().Print();
+    cout << "prjClToPer:" << endl;
+    prjClToPer.Print();
     //cout << "locCov " << endl;
     //localCov.Print();
     cout << "clParCorr " << endl;
     clParCorr.Print();
     cout << "perParCorr " << endl;
     perParCorr.Print();
+    double curv_corr = kappa_new - track->getSeedKappa();   
+    cout << "d0_gbl " << track->getD0() << "(" << track->getSeedD0() << ") z0_gbl " << track->getZ0() << " (" << track->getSeedZ0() << ")" << endl;
+    cout << "kappa_gbl " << track->getKappa() << "(" << track->getSeedKappa() << " from q/p_corr " << qP_corr << " qP_old " << qP_old << " qP_new " << qP_new << " pt_new " << pt_new <<  " curv_corr " << curv_corr << " theta " << track->getSeedTheta() <<  " )" << endl;
+    track->print();
+
   }
   
   
-  
-  
-  /*
-  if( m_debug) {
-    cout << "HpsGblFitter: print GBL trajectory:" << endl;
-    m_traj->printTrajectory(99);
-    cout << "HpsGblFitter: print GBL points:" << endl;
-    m_traj->printPoints(99);
-    cout << "HpsGblFitter: print fit results" << endl;
-    int n_meas = m_traj->getNumPoints();
-    for(unsigned int i = 1; i <= n_meas; ++i) {
-      int aSignedLabel = i;
-      TVectorD localPar(5);
-      TMatrixDSym localCov(5);
-      m_traj->getResults(aSignedLabel, localPar, localCov);
-      cout << ">Point " << i << endl;
-      cout << "locPar " << endl;
-      localPar.Print();
-      cout << "locCov " << endl;
-      localCov.Print();
-      aSignedLabel = -i;
-      m_traj->getResults(aSignedLabel, localPar, localCov);
-      cout << "<Point " << i << endl;
-      cout << "locPar " << endl;
-      localPar.Print();
-      cout << "locCov " << endl;
-      localCov.Print();
-    } 
-  }
-  */
-
-
   
 
 }

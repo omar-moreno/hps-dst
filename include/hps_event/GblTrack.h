@@ -16,58 +16,60 @@
 #include <TObject.h>
 #include <TClonesArray.h>
 #include <TRefArray.h>
+#include <TMatrixD.h>
 
 class GblTrack : public TObject {
-
- private:
-  double m_kappa;
-  double m_theta;
-  double m_phi;
-  double m_d0;
-  double m_z0;
-  double m_seed_kappa;
-  double m_seed_theta;
-  double m_seed_phi;
-  double m_seed_d0;
-  double m_seed_z0;
-  double m_chi2;
-  double m_ndf;
-
   
  public:
   GblTrack();
   virtual ~GblTrack();
-  void SetSeedTrackParameters(double kappa, double theta, double phi, double d0, double z0) {
-    m_seed_kappa = kappa;
-    m_seed_theta = theta;
-    m_seed_phi = phi;
-    m_seed_d0 = d0;
-    m_seed_z0 = z0;
-  }
-  void SetTrackParameters(double kappa, double theta, double phi, double d0, double z0) {
-    m_kappa = kappa;
-    m_theta = theta;
-    m_phi = phi;
-    m_d0 = d0;
-    m_z0 = z0;
-  }
-  void SetChi2(double chi2) {
-    m_chi2 = chi2;
-  }
-  void SetNdf(double ndf) {
-    m_ndf = ndf;
-  }
-  double getKappa() const { return m_kappa;}
-  double getTheta() const { return m_theta;}
-  double getPhi() const { return m_phi;}
-  double getD0() const { return m_d0;}
-  double getZ0() const { return m_z0;}
-  double getChi2() const { return m_chi2;}
-  double getNdf() const { return m_ndf;}
 
+   // setters
+   void setSeedTrackParameters(double kappa, double theta, double phi, double d0, double z0);
+   void setTrackParameters(double C, double th, double phi0, double dca, double z);
+   void setChi2(double c);
+   void setNdf(double ndof);
+   void setMomentumVector(double x, double y, double z);
+   void setCov(const TMatrixD& mat);
 
+   // Getters
+   double getPx()  	  const { return px; };
+   double getPy()  	  const { return py; };
+   double getPz()  	  const { return pz; };
+   double getKappa() const { return kappa;}
+   double getTheta() const { return theta;}
+   double getPhi() const { return phi;}
+   double getD0() const { return d0;}
+   double getZ0() const { return z0;}
+   double getChi2() const { return chi2;}
+   double getNdf() const { return ndf;}
+   double getSeedKappa() const { return seed_kappa;}
+   double getSeedTheta() const { return seed_theta;}
+   double getSeedPhi() const { return seed_phi;}
+   double getSeedD0() const { return seed_d0; }
+   double getSeedZ0() const { return seed_z0; }
+   void print();
 
-        ClassDef(GblTrack,1) //Track class for use with GBL
+   ClassDef(GblTrack,1) //Track class for use with GBL
+   
+ private:
+   double kappa;
+   double theta;
+   double phi;
+   double d0;
+   double z0;
+   double seed_kappa;
+   double seed_theta;
+   double seed_phi;
+   double seed_d0;
+   double seed_z0;
+   double chi2;
+   double ndf;
+   double px;
+   double py;
+   double pz;
+   TMatrixD cov;
+
 }; // GblTrack
 
 #endif // _GBL_TRACK_H_

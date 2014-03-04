@@ -20,17 +20,25 @@
 //-- LCIO --//
 #include <UTIL/LCRelationNavigator.h>
 
+//-- HPS event --//
+#include <GblTrackData.h>
+#include <GblStripData.h>
+
+
 using namespace std;
 
 // definition of generic collection sizes
 // these will need to be matched to the input DST
-static const unsigned int n_gblTrackGenericDoubleDST = 5;
+static const unsigned int n_gblTrackGenericDoubleDST = 14;
 static const unsigned int n_gblTrackGenericIntDST = 1;
 static const unsigned int n_gblStripGenericDoubleDST = 22;
 static const unsigned int n_gblStripGenericIntDST = 1;
+static const unsigned int n_prjPerToCl = 9; // n matrix elements in projection matrix
 
-
-GblDataWriter::GblDataWriter() : m_debug(false) 
+GblDataWriter::GblDataWriter() : m_debug(false), 
+                                 m_track_col_name("MatchedTracks"), 
+                                 m_rel_gbltrk_name("TrackToGBLTrack"), 
+                                 m_rel_toGblStrip_name("GBLTrackToStripData")
 {}
 
 GblDataWriter::GblDataWriter(bool debug) : m_debug(debug) 
@@ -39,7 +47,7 @@ GblDataWriter::GblDataWriter(bool debug) : m_debug(debug)
 GblDataWriter::~GblDataWriter() 
 {}
 
-void GblDataWriter::setDebug(bool debug) {
+void GblDataWriter::setDebug(bool debug){
   m_debug = debug;
 }
 
@@ -51,16 +59,15 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
   // write information needed for GBL to the event  
 
-  string track_col_name = "MatchedTracks";
   IMPL::LCCollectionVec* tracks = 0;
 
   // Get the collection of tracks from the event. If the event doesn't
   // have the specified collection, skip the rest and just return
   try{
-    tracks = (IMPL::LCCollectionVec*) event->getCollection(track_col_name);
+    tracks = (IMPL::LCCollectionVec*) event->getCollection(m_track_col_name);
   } catch(EVENT::DataNotAvailableException exception){
     if(m_debug) {
-      cout << "Collection " << track_col_name << " was not found. "
+      cout << "Collection " << m_track_col_name << " was not found. "
            << "Skipping adding GBL data ..." << endl;
     }
     return;
@@ -69,13 +76,12 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   // Get the relation to the GBL track data object
   // if it's not there, skip test rest and return
 
-  string rel_gbltrk_name = "TrackToGBLTrack";
   IMPL::LCCollectionVec* trkToGblTrk = NULL;  
   try {
-    trkToGblTrk = (IMPL::LCCollectionVec*) event->getCollection(rel_gbltrk_name);
+    trkToGblTrk = (IMPL::LCCollectionVec*) event->getCollection(m_rel_gbltrk_name);
   } catch(EVENT::DataNotAvailableException exception) {
     if(m_debug) {
-      cout << "Collection " << rel_gbltrk_name << " was not found. "
+      cout << "Collection " << m_rel_gbltrk_name << " was not found. "
            << "Skipping adding GBL data ..." << endl;
     }
     return;
@@ -84,12 +90,11 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   // Get the relation to the GBL hit data object
   // if it's not there, skip test rest and return
 
-  string rel_toGblStrip_name = "GBLTrackToStripData";
   IMPL::LCCollectionVec* gblTrkToGblStrip = NULL;  
   try {
-    gblTrkToGblStrip = (IMPL::LCCollectionVec*) event->getCollection(rel_toGblStrip_name);
+    gblTrkToGblStrip = (IMPL::LCCollectionVec*) event->getCollection(m_rel_toGblStrip_name);
   } catch(EVENT::DataNotAvailableException exception) {
-    cout << "Collection " << rel_toGblStrip_name << " was not found. "
+    cout << "Collection " << m_rel_toGblStrip_name << " was not found. "
          << "Skipping adding GBL data ..." << endl;
     return;
   }
@@ -135,12 +140,12 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         exit(1);
       }
 
-      cout <<  gblTrackGeneric->getNDouble() << " doubles in dst" << endl;
+
 
       // Fill the track parameters
       gbl_track_data->setTrackParameters(gblTrackGeneric->getDoubleVal(0),gblTrackGeneric->getDoubleVal(1),gblTrackGeneric->getDoubleVal(2),gblTrackGeneric->getDoubleVal(3),gblTrackGeneric->getDoubleVal(4));
       
-      for(unsigned int idx = 0; idx < 9; ++idx) {
+      for(unsigned int idx = 0; idx < n_prjPerToCl; ++idx) {
         unsigned int row = static_cast<unsigned int>(floor(static_cast<double>(idx)/3.0));
         unsigned int col = idx % 3;        
         //cout << "prjmat " << idx << "," << row << "," << col << " -> " << gblTrackGeneric->getDoubleVal(5+idx) << endl;
