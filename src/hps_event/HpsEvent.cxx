@@ -45,7 +45,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
         vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
-        mc_particles(new TClonesArray("HpsMCParticle", 1000))
+        mc_particles(new TClonesArray("HpsMCParticle", 1000)),
         gbl_tracks(new TClonesArray("GblTrack", 1000)),
         gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
         gbl_strips_data(new TClonesArray("GblStripData", 1000))
