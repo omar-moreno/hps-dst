@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	string lcio_file_name;
 	string dst_file_name; 	
 	int option_char;
-	int n_events = 0; 	
+	int n_events = -1; 	
 	double b_field = numeric_limits<double>::quiet_NaN();  
     bool do_gbl = false;
     bool debug = false;
