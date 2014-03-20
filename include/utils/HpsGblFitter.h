@@ -9,44 +9,48 @@
 #define __HPS_GBL_FITTER_H__
 
 //--- GBL ---//
+//-----------//
 #include <GblTrajectory.h>
 
 //--- ROOT ---//
-#include "TMatrixD.h" //Cannot do forward declaration since it's typedef'ed in GBL
-class TRandom;
+//------------//
+#include <TMatrixD.h>
+#include <TRandom.h>
+#include <TRandom3.h>
 
 //--- DST ---//
+//-----------//
 class GblTrackData;
 class GblTrack;
 
-
-
 class HpsGblFitter {
 
- public:
+    public:
 
-  enum HpsGblFitStatus {
-    OK,INVALIDTRAJ,ERROR
-  };
-  HpsGblFitter(double bz);
-  ~HpsGblFitter();
-  HpsGblFitStatus Fit(const GblTrackData* track);  
-  void Clear();
-  void SetDebug(bool debug);
-  bool GetDebug();
-  void SetTrackProperties(GblTrack* track, const GblTrackData* track_data);
- private:
-  TMatrixD gblSimpleJacobianLambdaPhi(double ds, double cosl, double bfac);
-  double m_Bz;
-  double m_bfac;// for Bz in Tesla, momentum in GeV and Radius in mm
-  TRandom *m_r;
-  bool m_debug;
-  double m_chi2;
-  int m_ndf;
-  double m_lost_weight;
-  gbl::GblTrajectory * m_traj;
+        enum HpsGblFitStatus {
+            OK,INVALIDTRAJ,ERROR
+        };
+        HpsGblFitter(double bz);
+        ~HpsGblFitter();
+        HpsGblFitStatus Fit(const GblTrackData* track);  
+        void Clear();
+        void SetDebug(bool debug);
+        bool GetDebug();
+        void SetTrackProperties(GblTrack* track, const GblTrackData* track_data);
 
-  
+    private:
+
+        TMatrixD gblSimpleJacobianLambdaPhi(double ds, double cosl, double bfac);
+        double m_Bz;
+        double m_bfac;// for Bz in Tesla, momentum in GeV and Radius in mm
+        TRandom *m_r;
+        bool m_debug;
+        double m_chi2;
+        int m_ndf;
+        double m_lost_weight;
+        gbl::GblTrajectory * m_traj;
+
+
 };
 
 #endif
