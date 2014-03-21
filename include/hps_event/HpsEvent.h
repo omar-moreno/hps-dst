@@ -28,9 +28,9 @@
 #include <MuonCluster.h>
 #include <HpsReconstructedParticle.h>
 #include <HpsMCParticle.h>
-class GblTrackData;
-class GblStripData;
-class GblTrack;
+#include <GblTrackData.h>
+#include <GblStripData.h>
+#include <GblTrack.h>
 
 class HpsEvent : public TObject { 
 
