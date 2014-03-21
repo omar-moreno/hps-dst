@@ -9,12 +9,6 @@
  */
 #include <HpsEvent.h>
 
-//--- DST ---//
-#include <GblStripData.h>
-#include <GblTrackData.h>
-#include <GblTrack.h>
-
-
 ClassImp(HpsEvent)
 	
 HpsEvent::HpsEvent()
