@@ -11,7 +11,7 @@ project(HPS_DST)
 
 # Set the current version
 set(HPS_DST_VERSION_MAJOR 1)
-set(HPS_DST_VERSION_MINOR 0)
+set(HPS_DST_VERSION_MINOR 1)
 
 # Set the output directories of the binaries, static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
@@ -42,11 +42,18 @@ include_directories("${DST_HDR_DIR}")
 set(UTILS_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/utils")
 include_directories("${UTILS_HDR_DIR}")
 
-# Include the GBL headers
-set(GBL_DIR "${HPS_DST_SOURCE_DIR}/gbl")
-set(GBL_HDR_DIR "${GBL_DIR}/include")
-include_directories("${GBL_HDR_DIR}")
+# Find GBL.
+set(GBL_DIR "$ENV{GBL_DIR}")
+find_package(GBL QUIET)
 
+if(NOT GBL_FOUND)
+    message(FATAL_ERROR 
+        "\nGBL wasn't found!  Either GBL hasn't been installed or the " 
+        "variable GBL_DIR has not been set. See documentation for details")
+endif()
+
+# include the GBL headers
+include_directories("${GBL_INCLUDE_DIR}")
 
 #--- Create the HPS Event ROOT dictionary ---#
 #--------------------------------------------#
@@ -55,7 +62,9 @@ message(STATUS "Generating the HpsEvent ROOT dictionary")
 
 # Check if rootcint exist, otherwise exit
 if(NOT ROOT_CINT_EXECUTABLE)
-	message(FATAL_ERROR "rootcint was not found, make sure ROOTSYS/bin is include in the path")
+	message(FATAL_ERROR 
+        "rootcint was not found, make sure ROOTSYS/bin is "
+        "include in the path")
 endif()
 
 # Set the output directory for the ROOT dictionary and make sure it exists

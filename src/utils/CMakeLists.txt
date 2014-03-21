@@ -22,7 +22,7 @@ target_link_libraries(TrackUtils ${LCIO_LIB})
 add_library(EcalUtils EcalUtils.cxx)
 target_link_libraries(EcalUtils ${LCIO_LIB})
 
-# Create the HpsGblFitter library
+# If GBL is installed, create the HpsGblFitter library
+find_library(GBL_LIB GBL ${GBL_LIBRARY_DIRS})
 add_library(HpsGblFitter HpsGblFitter.cxx)
-target_link_libraries(HpsGblFitter ${GBL_LIB})
-
+target_link_libraries(HpsGblFitter ${GBL_LIB} ${ROOT_MATHCORE_LIBRARY} ${ROOT_MATRIX_LIBRARY})
