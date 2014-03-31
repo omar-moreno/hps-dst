@@ -26,7 +26,7 @@
 #include <EcalCluster.h> 
 #include <EcalHit.h>
 #include <MuonCluster.h>
-#include <HpsReconstructedParticle.h>
+#include <HpsParticle.h>
 #include <HpsMCParticle.h>
 #include <GblTrackData.h>
 #include <GblStripData.h>
@@ -47,7 +47,7 @@ class HpsEvent : public TObject {
         EcalCluster* 	addEcalCluster();
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
-        HpsReconstructedParticle* addReconParticle(int);
+        HpsParticle*    addHpsParticle(int);
         HpsMCParticle*  addHpsMCParticle();
         GblTrack*   	addGblTrack();
         GblTrackData* 	addGblTrackData();

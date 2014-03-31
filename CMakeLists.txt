@@ -49,7 +49,7 @@ find_package(GBL QUIET)
 if(NOT GBL_FOUND)
     message(FATAL_ERROR 
         "\nGBL wasn't found!  Either GBL hasn't been installed or the " 
-        "variable GBL_DIR has not been set. See documentation for details")
+        "variable GBL_DIR has not been set. See documentation for details.")
 endif()
 
 # include the GBL headers
