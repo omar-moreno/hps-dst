@@ -18,8 +18,8 @@ HpsEvent::HpsEvent()
         ecal_clusters(new TClonesArray("EcalCluster", 1000)),
         ecal_hits(new TClonesArray("EcalHit", 1000)),
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
-        fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
-        vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
+        fs_recon_particles(new TClonesArray("HpsParticle", 1000)),
+        vtx_recon_particles(new TClonesArray("HpsParticle", 1000)),
         mc_particles(new TClonesArray("HpsMCParticle", 1000)),
         gbl_tracks(new TClonesArray("GblTrack", 1000)),
         gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
@@ -37,8 +37,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
         ecal_clusters(new TClonesArray("EcalCluster", 1000)),
         ecal_hits(new TClonesArray("EcalHit", 1000)),
         muon_clusters(new TClonesArray("MuonCluster", 1000)),
-        fs_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
-        vtx_recon_particles(new TClonesArray("HpsReconstructedParticle", 1000)),
+        fs_recon_particles(new TClonesArray("HpsParticle", 1000)),
+        vtx_recon_particles(new TClonesArray("HpsParticle", 1000)),
         mc_particles(new TClonesArray("HpsMCParticle", 1000)),
         gbl_tracks(new TClonesArray("GblTrack", 1000)),
         gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
@@ -117,8 +117,8 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     svt_hits = new TClonesArray("SvtHit", 1000);
     ecal_clusters = new TClonesArray("EcalCluster", 1000); 
     ecal_hits = new TClonesArray("EcalHit", 1000);
-    fs_recon_particles = new TClonesArray("HpsReconstructedParticle", 1000);
-    vtx_recon_particles = new TClonesArray("HpsReconstructedParticle", 1000);
+    fs_recon_particles = new TClonesArray("HpsParticle", 1000);
+    vtx_recon_particles = new TClonesArray("HpsParticle", 1000);
     mc_particles = new TClonesArray("HpsMCParticle", 1000);
     gbl_tracks = new TClonesArray("GblTrack", 1000);
     gbl_tracks_data = new TClonesArray("GblTrackData", 1000);
@@ -193,15 +193,15 @@ MuonCluster* HpsEvent::addMuonCluster()
 	return (MuonCluster*) muon_clusters->ConstructedAt(n_muon_clusters++);
 }
 
-HpsReconstructedParticle* HpsEvent::addReconParticle(int type)
+HpsParticle* HpsEvent::addHpsParticle(int type)
 {
 	//
 	assert(type == fs_type || type == vtx_type);
 
 	if(type == fs_type){
-		return (HpsReconstructedParticle*) fs_recon_particles->ConstructedAt(n_fs_recon_particles++);
+		return (HpsParticle*) fs_recon_particles->ConstructedAt(n_fs_recon_particles++);
 	} else {
-		return (HpsReconstructedParticle*) vtx_recon_particles->ConstructedAt(n_vtx_recon_particles++);
+		return (HpsParticle*) vtx_recon_particles->ConstructedAt(n_vtx_recon_particles++);
 	}
 }
 

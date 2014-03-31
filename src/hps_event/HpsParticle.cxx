@@ -8,29 +8,27 @@
  * @date:       March 29, 2013
  */
 
-#include <HpsReconstructedParticle.h>
+#include <HpsParticle.h>
 
-ClassImp(HpsReconstructedParticle)
+ClassImp(HpsParticle)
 
-HpsReconstructedParticle::HpsReconstructedParticle()
+HpsParticle::HpsParticle()
 	:	TObject(), vtx_x(0), vtx_y(0), vtx_z(0)
 {}
 
-HpsReconstructedParticle::HpsReconstructedParticle(
-		const HpsReconstructedParticle &reconParticleObj)
+HpsParticle::HpsParticle(const HpsParticle &reconParticleObj)
 	: TObject(), vtx_x(reconParticleObj.vtx_x),
 	  vtx_y(reconParticleObj.vtx_y), vtx_z(reconParticleObj.vtx_z),
-	  track(reconParticleObj.track),
+	  svt_track(reconParticleObj.svt_track),
 	  ecal_cluster(reconParticleObj.ecal_cluster)
 {}
 
-HpsReconstructedParticle::~HpsReconstructedParticle()
+HpsParticle::~HpsParticle()
 {
 	Clear(); 
 }
 
-HpsReconstructedParticle &HpsReconstructedParticle::operator=(
-		const HpsReconstructedParticle &reconParticleObj)
+HpsParticle &HpsParticle::operator=(const HpsParticle &reconParticleObj)
 {
 	// Check for self-assignment
 	if(this == &reconParticleObj) return *this;
@@ -41,41 +39,51 @@ HpsReconstructedParticle &HpsReconstructedParticle::operator=(
 	this->vtx_x = reconParticleObj.vtx_x;
 	this->vtx_y = reconParticleObj.vtx_y;
 	this->vtx_z = reconParticleObj.vtx_z;
-	this->track = reconParticleObj.track;
+	this->svt_track = reconParticleObj.svt_track;
 	this->ecal_cluster = reconParticleObj.ecal_cluster;
 
 	return *this; 
 }
 
-void HpsReconstructedParticle::Clear(Option_t* /* option */)
+void HpsParticle::Clear(Option_t* /* option */)
 {
 	TObject::Clear(); 
 }
 
-void HpsReconstructedParticle::setTrack(SvtTrack* track)
+void HpsParticle::setTrack(SvtTrack* svt_track)
 {
-	this->track = track;
+	this->svt_track = svt_track;
 }
 
-void HpsReconstructedParticle::setEcalCluster(EcalCluster* ecal_cluster)
+void HpsParticle::setCluster(EcalCluster* ecal_cluster)
 {
 	this->ecal_cluster = ecal_cluster;
 }
 
-void HpsReconstructedParticle::setVertexPosition(double *vtx_pos)
+void HpsParticle::setVertexPosition(const double *vtx_pos)
 {
 	vtx_x = vtx_pos[0];
 	vtx_y = vtx_pos[1];
 	vtx_z = vtx_pos[2];
 }
 
-SvtTrack* HpsReconstructedParticle::getTrack()
+SvtTrack* HpsParticle::getTrack() const
 {
-	return (SvtTrack*) track.GetObject();
+	return (SvtTrack*) svt_track.GetObject();
 }
 
-EcalCluster* HpsReconstructedParticle::getEcalCluster()
+EcalCluster* HpsParticle::getEcalCluster() const
 {
 	return (EcalCluster*) ecal_cluster.GetObject();
+}
+
+
+std::vector<double> HpsParticle::getVertexPosition() const
+{
+    std::vector<double> vertex(3,0); 
+    vertex[0] = vtx_x; 
+    vertex[1] = vtx_y; 
+    vertex[2] = vtx_z; 
+    return vertex; 
 }
 
