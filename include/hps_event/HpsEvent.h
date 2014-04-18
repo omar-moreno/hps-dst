@@ -47,7 +47,8 @@ class HpsEvent : public TObject {
         EcalCluster* 	addEcalCluster();
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
-        HpsParticle*    addHpsParticle(int);
+        HpsParticle*    addFSParticle();
+        HpsParticle*    addVtxParticle(int); 
         HpsMCParticle*  addHpsMCParticle();
         GblTrack*   	addGblTrack();
         GblTrackData* 	addGblTrackData();
@@ -57,14 +58,14 @@ class HpsEvent : public TObject {
         void setRunNumber(int run_number){ this->run_number = run_number; };
         void setTriggerBitInfo(std::vector<int> trigger_bits){ this->trigger_bits = trigger_bits; };
 
-        int getEventNumber()       const  { return event_number; };
-        int getRunNumber()         const  { return run_number; };
-        int getNumberOfTracks()    const { return n_tracks; };
-        int getNumberOfEcalClusters()  const { return n_ecal_clusters; };
-        int getNumberOfMuonClusters()  const { return n_muon_clusters; };
-        int getNumberOfGblTracks()    const { return n_gbl_tracks; };
-        int getNumberOfGblTracksData()    const { return n_gbl_tracks_data; };
-        int getNumberOfGblStripData()    const { return n_gbl_strips_data; };
+        int getEventNumber()            const  { return event_number; };
+        int getRunNumber()              const  { return run_number; };
+        int getNumberOfTracks()         const  { return n_tracks; };
+        int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
+        int getNumberOfMuonClusters()   const  { return n_muon_clusters; };
+        int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
+        int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
+        int getNumberOfGblStripData()   const  { return n_gbl_strips_data; };
         std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
         SvtTrack*      getTrack(int);
@@ -73,9 +74,11 @@ class HpsEvent : public TObject {
         EcalHit* 	   getEcalHit(int);
         MuonCluster*   getMuonCluster(int);
         HpsMCParticle* getMCParticle(int);
-        GblTrack* getGblTrack(int);
-        GblTrackData* getGblTrackData(int);
-        GblStripData* getGblStripData(int);
+        HpsParticle*   getFSParticle(int); 
+        HpsParticle*   getVtxParticle(int, int); 
+        GblTrack*      getGblTrack(int);
+        GblTrackData*  getGblTrackData(int);
+        GblStripData*  getGblStripData(int);
 
         ClassDef(HpsEvent, 1);	
 
@@ -86,12 +89,14 @@ class HpsEvent : public TObject {
         TClonesArray* ecal_clusters;       //->
         TClonesArray* ecal_hits; 		   //->
         TClonesArray* muon_clusters;       //->
-        TClonesArray* fs_recon_particles;  //->
-        TClonesArray* vtx_recon_particles; //->
+        TClonesArray* fs_particles;        //->
+        TClonesArray* uc_vtx_particles;    //->
+        TClonesArray* bsc_vtx_particles;   //->
+        TClonesArray* tc_vtx_particles;    //->
         TClonesArray* mc_particles; 	   //->
-        TClonesArray *gbl_tracks;     //->
-        TClonesArray *gbl_tracks_data;     //->
-        TClonesArray *gbl_strips_data;     //->
+        TClonesArray* gbl_tracks;          //->
+        TClonesArray* gbl_tracks_data;     //->
+        TClonesArray* gbl_strips_data;     //->
 
         int event_number;
         int run_number;
@@ -100,15 +105,21 @@ class HpsEvent : public TObject {
         int n_ecal_clusters;
         int n_ecal_hits;
         int n_muon_clusters;
-        int n_fs_recon_particles;
-        int n_vtx_recon_particles;
+        int n_fs_particles;
+        int n_uc_vtx_particles;
+        int n_bsc_vtx_particles;
+        int n_tc_vtx_particles;
         int n_mc_particles;
         int n_gbl_tracks;
         int n_gbl_tracks_data;
         int n_gbl_strips_data;
 
-        static const int fs_type;
-        static const int vtx_type;
+        // Index of unconstrained vertexed particles
+        static const int UC_VTX_PARTICLES_INDEX;  
+        // Index of beamspot constrained vertexed particles
+        static const int BSC_VTX_PARTICLES_INDEX;
+        // Index of target constrained vertexed particles
+        static const int TC_VTX_PARTICLES_INDEX;
 
         std::vector<int> trigger_bits;
 };
