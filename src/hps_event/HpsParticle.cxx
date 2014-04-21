@@ -4,7 +4,6 @@
  * @section institution
  * 				Santa Cruz Institute for Particle Physics
  * 				University of California, Santa Cruz
- * @version:    v 0.1
  * @date:       March 29, 2013
  */
 
@@ -50,33 +49,12 @@ void HpsParticle::Clear(Option_t* /* option */)
 	TObject::Clear(); 
 }
 
-void HpsParticle::setTrack(SvtTrack* svt_track)
-{
-	this->svt_track = svt_track;
-}
-
-void HpsParticle::setCluster(EcalCluster* ecal_cluster)
-{
-	this->ecal_cluster = ecal_cluster;
-}
-
 void HpsParticle::setVertexPosition(const double *vtx_pos)
 {
 	vtx_x = vtx_pos[0];
 	vtx_y = vtx_pos[1];
 	vtx_z = vtx_pos[2];
 }
-
-SvtTrack* HpsParticle::getTrack() const
-{
-	return (SvtTrack*) svt_track.GetObject();
-}
-
-EcalCluster* HpsParticle::getEcalCluster() const
-{
-	return (EcalCluster*) ecal_cluster.GetObject();
-}
-
 
 std::vector<double> HpsParticle::getVertexPosition() const
 {
