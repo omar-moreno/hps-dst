@@ -13,6 +13,7 @@
 //--- C++ ---//
 //-----------//
 #include <string>
+#include <map>
 
 //--- LCIO ---//
 //------------//
@@ -26,6 +27,7 @@
 //--- HPS Event ---//
 //-----------------//
 #include <HpsParticle.h>
+#include <Exceptions.h>
 
 class HpsParticleDataWriter : public DataWriter { 
 
@@ -36,6 +38,7 @@ class HpsParticleDataWriter : public DataWriter {
 
         //
         void writeData(EVENT::LCEvent*, HpsEvent*);
+		void writeParticleData(int, std::string); 
 
 	private:
 
@@ -48,6 +51,10 @@ class HpsParticleDataWriter : public DataWriter {
 		IMPL::ReconstructedParticleImpl* particle; 
 
 		HpsParticle* hps_particle; 
+
+		std::map<int, std::string> particle_collections;
+
+		void writeData(int, IMPL::LCCollectionVec*, HpsEvent*);
 
 }; // HpsParticleWriter
 
