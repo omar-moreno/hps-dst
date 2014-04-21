@@ -16,7 +16,10 @@ HpsParticleDataWriter::HpsParticleDataWriter()
 	  tc_vtx_particles_collection_name("AprimeTargetConstrained"),
 	  particles(NULL), particle(NULL), hps_particle(NULL)
 {
-
+	particle_collections.insert(std::pair<int, std::string>(0, fs_particles_collection_name)); 
+	particle_collections.insert(std::pair<int, std::string>(1, uc_vtx_particles_collection_name)); 
+	particle_collections.insert(std::pair<int, std::string>(2, bsc_vtx_particles_collection_name)); 
+	particle_collections.insert(std::pair<int, std::string>(3, tc_vtx_particles_collection_name)); 
 }
 
 HpsParticleDataWriter::~HpsParticleDataWriter()
@@ -28,80 +31,72 @@ HpsParticleDataWriter::~HpsParticleDataWriter()
 
 void HpsParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
-    // Get the collection of particles from the event. If the event doesn't 
-    // have particles, return;
-    try { 
-    
-		particles = (IMPL::LCCollectionVec*) event->getCollection(fs_particles_collection_name);
-		
-		for(int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n){
-		
-			particle = (IMPL::ReconstructedParticleImpl*) particles->getElementAt(particle_n); 
-
-			hps_particle = hps_event->addFSParticle();
-
-			if(particle->getClusters().size() > 0){
-				for(int cluster_n = 0; cluster_n < hps_event->getNumberOfEcalClusters(); ++cluster_n){
-					if(particle->getClusters()[0]->getEnergy() == hps_event->getEcalCluster(cluster_n)->getClusterEnergy()){
-						hps_particle->setEcalCluster(hps_event->getEcalCluster(cluster_n)); 
-					}
-				}
-			}
-
-			if(particle->getTracks().size() > 0){
-				
-				for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n){
-					if(particle->getTracks()[0]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
-						hps_particle->setTrack(hps_event->geTrack(track_n));
-					}
-				}
-			}	
-		}
-		
-	} catch(DataNotAvailableException std::exception) { 
-			
-	}
-	
 	try { 
-	
-		particles = (IMPL::LCCollectionVec*) event->getCollection(uc_vtx_particles_collection_name);
-		
-		for(int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n){
-		
-			particle = (IMPL::ReconstructedParticleImpl*) particles->getElementAt(particle_n); 
 
-			hps_particle = hps_event->addVtxParticle(HpsEvent::UC_VTX_PARTICLES_INDEX);	
-		}
-	
-	} catch(DataNotAvailableException std::exception) { 
-			
-	}
+		// Iterate through all of the collections of particles.  If the collection 
+		// is empty, skip it.
+		std::map<int, std::string>::iterator particle_collection; 
+		for(particle_collection = particle_collections.begin(); 
+				particle_collection != particle_collections.end(); ++particle_collection){
 
-	try {	
-		particles = (IMPL::LCCollectionVec*) event->getCollection(bsc_vtx_particles_collection_name);
-		
-		for(int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n){
-		
-			particle = (IMPL::ReconstructedParticleImpl*) particles->getElementAt(particle_n); 
+			// Get the collection from the event
+			particles = (IMPL::LCCollectionVec*) event->getCollection(particle_collection->second);
+			if(particle_collection->first == 0 && particles->getNumberOfElements() == 0) return;
+			else if(particles->getNumberOfElements() == 0) continue;
 
-			hps_particle = hps_event->addVtxParticle(HpsEvent::BSC_VTX_PARTICLES_INDEX);	
-		}
-		
-	} catch(DataNotAvailableException std::exception) { 
-	
-	}
-
-	try {
-		particles = (IMPL::LCCollectionVec*) event->getCollection(tc_vtx_particles_collection_name);
-		
-		for(int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n){
-		
-			particle = (IMPL::ReconstructedParticleImpl*) particles->getElementAt(particle_n); 
-
-			hps_particle = hps_event->addVtxParticle(HpsEvent::TC_VTX_PARTICLES_INDEX);	
+			// Write the particle data to the event
+			writeData(particle_collection->first, particles, hps_event); 
 		}
 
-	} catch(DataNotAvailableException std::exception) { 
-	
-    }
+	} catch(EVENT::DataNotAvailableException e){
+		// For now, don't do anything.  Once the HPS reconstruction is
+		// verified to place a collection for every single event, then the
+		// exception will be handled properly.
+	}	
+}
+
+void HpsParticleDataWriter::writeData(int collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event)
+{
+	// Loop through all of the particles in the event
+	for(int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n){
+
+		// Get a particle from the LCEvent
+		particle = (IMPL::ReconstructedParticleImpl*) particles->getElementAt(particle_n); 
+
+		// Get a particle from the HpsEvent
+		if(collection_type == 0) hps_particle = hps_event->addFSParticle();
+		else hps_particle = hps_event->addVtxParticle(collection_type); 	
+
+		// Only write particles that have clusters associated with them.  If a 
+		// particle only has a track and no cluster, there is an issue with 
+		// the HPS reconstruction.
+		if(particle->getClusters().size() == 0) continue;
+
+		// Loop through all of the clusters in the HpsEvent and find the one 
+		// that matches the cluster associated with the particle.
+		for(int cluster_n = 0; cluster_n < hps_event->getNumberOfEcalClusters(); ++cluster_n){
+
+			// Use the cluster energy to find the match
+			// TODO: Verify that the cluster enegy is enough to find a match
+			if(particle->getClusters()[0]->getEnergy() == hps_event->getEcalCluster(cluster_n)->getEnergy()){
+				hps_particle->setCluster(hps_event->getEcalCluster(cluster_n)); 
+				break;
+			}
+		}
+
+		// If there aren't any tracks associated with a particle, continue to the next particle
+		if(particle->getTracks().size() == 0) continue;
+
+		// Loop through all of the tracks in the HpsEvent and find the one
+		// that matches the track associated with the particle
+		for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n){
+
+			// Use the track chi^2 to find the match
+			// TODO: Verify that the chi^2 is enough to find the match
+			if(particle->getTracks()[0]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
+				hps_particle->setTrack(hps_event->getTrack(track_n));
+				break;
+			}
+		}
+	}	
 }
