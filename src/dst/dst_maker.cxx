@@ -47,10 +47,9 @@ int main(int argc, char **argv)
 	int n_events = -1; 	
 	double b_field = numeric_limits<double>::quiet_NaN();  
     bool do_gbl = false;
-    bool debug = false;
 	// Parse any command line arguments.  If an invalid argument is passed, 
 	// print the usage
-	while((option_char = getopt(argc, argv, "i:o:n:b:g:d:h")) != -1){
+	while((option_char = getopt(argc, argv, "i:o:n:b:g:h")) != -1){
 		switch(option_char){
 			case 'i': 
 				lcio_file_name = optarg; 
@@ -66,9 +65,6 @@ int main(int argc, char **argv)
 				break;	
 			case 'g':
               do_gbl = true;
-				break;	
-			case 'd':
-              debug = true;
 				break;	
 			case 'h': 
 				printUsage(); 
@@ -117,22 +113,20 @@ int main(int argc, char **argv)
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	event_builder->setBField(b_field); 
     event_builder->setGblFlag(do_gbl);
-    event_builder->setDebug(debug);
-    unsigned int events_processed = 0;
+	int event_number = 0;
 	while((event = lc_reader->readNextEvent()) != 0){
 		
-		if(events_processed >= n_events) break; 
+		++event_number; 
+		if((event_number - 1) == n_events) break; 
 
 		// Print the event number every 1000 events
-		if((events_processed > 0 && events_processed%1000 == 0) || debug){
-          cout << "Processing event nr: " << event->getEventNumber() << ", so far processed " << events_processed << " events." << endl;
+		if(event_number%1000 == 0 ){
+          cout << "Processing event number: " << event_number << endl;
 		}
 
 		event_builder->makeHpsEvent(event, hps_event); 
 		tree->Fill();
-
-        ++events_processed;
-	}
+	}	
 
 	cout << "Finished writing ROOT Tree!" << endl;
 	lc_reader->close();
@@ -156,5 +150,5 @@ void printUsage()
 		<< "\t -b The strength of the magnetic field in Tesla \n"
         << "\t -g Run GBL track fit \n"
         << "\t -h Display this help and exit \n"
-        << "\t -d debug mode \n" << endl;
+		<< endl;
 }	
