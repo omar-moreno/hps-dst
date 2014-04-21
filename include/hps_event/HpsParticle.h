@@ -33,12 +33,12 @@ class HpsParticle : public TObject {
 
 		void Clear(Option_t *option="");
 
-		void setTrack(SvtTrack*);
-		void setCluster(EcalCluster*);	
+		void setTrack(SvtTrack* svt_track){ this->svt_track = svt_track; };
+		void setCluster(EcalCluster*){ this->ecal_cluster = ecal_cluster; };	
 		void setVertexPosition(const double*);
 
-		SvtTrack* getTrack() const;
-		EcalCluster* getEcalCluster() const;
+		SvtTrack* getTrack() const { return (SvtTrack*) svt_track.GetObject(); };
+		EcalCluster* getCluster() const { return (EcalCluster*) ecal_cluster.GetObject(); };
         std::vector<double> getVertexPosition() const; 
 
 		ClassDef(HpsParticle, 1);
