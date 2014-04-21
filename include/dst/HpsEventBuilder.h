@@ -4,7 +4,6 @@
  *			 Santa Cruz Institute for Particle Physics
  *			 University of California, Santa Cruz
  *	@date: December 31, 2013
- *	@version: 1.0
  *
  */
 
@@ -19,26 +18,21 @@
 #include <MCParticleDataWriter.h>
 #include <GblDataWriter.h>
 #include <GblTrackWriter.h>
+#include <HpsParticleDataWriter.h>
 
 class HpsEventBuilder : public EventBuilder {
 
 	public: 
-        HpsEventBuilder(); 
+		HpsEventBuilder(); 
 		~HpsEventBuilder(); 
 
 		//
 		void makeHpsEvent(EVENT::LCEvent*, HpsEvent*); 
 
 		// 
-		void setBField(double);
-
-		// 
-		void setDebug(bool);
-
-		// 
-		void setGblFlag(bool);
-
-		// 
+		void setBField(const double);
+		void setGblFlag(const bool);
+		
 		bool getGblFlag() const;
 
 	private:
@@ -46,10 +40,11 @@ class HpsEventBuilder : public EventBuilder {
 		SvtDataWriter* svt_writer; 
 		EcalDataWriter* ecal_writer; 
 		MCParticleDataWriter* mc_particle_writer;
-        GblDataWriter* gbl_data_writer;
-        GblTrackWriter* gbl_track_writer;
-        bool m_run_gbl;
-        bool m_debug;
+		HpsParticleDataWriter* particle_writer; 
+		GblDataWriter* gbl_data_writer;
+		GblTrackWriter* gbl_track_writer;
+
+		bool m_run_gbl;
 };
 
 #endif // __HPS_EVENT_BUILDER_H__
