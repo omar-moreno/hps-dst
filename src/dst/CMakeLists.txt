@@ -10,14 +10,6 @@ find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 add_library(SvtDataWriter SvtDataWriter.cxx)
 target_link_libraries(SvtDataWriter ${LCIO_LIB} TrackUtils HpsEvent)
 
-# Create the GblDataWriter library
-add_library(GblDataWriter GblDataWriter.cxx)
-target_link_libraries(GblDataWriter ${LCIO_LIB})
-
-# Create the GblTrackWriter library
-add_library(GblTrackWriter GblTrackWriter.cxx)
-target_link_libraries(GblTrackWriter HpsGblFitter)
-
 # Create the EcalDataWriter library
 add_library(EcalDataWriter EcalDataWriter.cxx)
 target_link_libraries(EcalDataWriter ${LCIO_LIB} EcalUtils HpsEvent)
@@ -26,9 +18,21 @@ target_link_libraries(EcalDataWriter ${LCIO_LIB} EcalUtils HpsEvent)
 add_library(MCParticleDataWriter MCParticleDataWriter.cxx)
 target_link_libraries(MCParticleDataWriter ${LCIO_LIB} HpsEvent)
 
+# Create the HpsParticleDataWriter library
+add_library(HpsParticleDataWriter HpsParticleDataWriter.cxx)
+target_link_libraries(HpsParticleDataWriter ${LCIO_LIB} HpsEvent)
+
+# Create the GblDataWriter library
+add_library(GblDataWriter GblDataWriter.cxx)
+target_link_libraries(GblDataWriter ${LCIO_LIB} HpsEvent)
+
+# Create the GblTrackWriter library
+add_library(GblTrackWriter GblTrackWriter.cxx)
+target_link_libraries(GblTrackWriter HpsGblFitter HpsEvent)
+
 # Create the HpsEventBuilder library
 add_library(HpsEventBuilder HpsEventBuilder.cxx)
-target_link_libraries(HpsEventBuilder SvtDataWriter EcalDataWriter MCParticleDataWriter GblDataWriter GblTrackWriter)
+target_link_libraries(HpsEventBuilder SvtDataWriter EcalDataWriter MCParticleDataWriter HpsParticleDataWriter GblDataWriter GblTrackWriter)
 
 # Create the dst_writer executable
 add_executable(dst_maker dst_maker.cxx)
