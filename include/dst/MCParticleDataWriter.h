@@ -3,13 +3,16 @@
  *	@section institution
  *				Santa Cruz Institute for Particle Physics
  *				University of California, Santa Cruz
- *	@version:	v 1.0
  *	@date:		February 11, 2014
  *
  */
 
 #ifndef _MC_PARTICLE_DATA_WRITER_H_
 #define _MC_PARTICLE_DATA_WRITER_H_
+
+//--- C++ ---//
+//-----------//
+#include <math.h>
 
 //--- DST ---//
 //-----------//
@@ -48,8 +51,6 @@ class MCParticleDataWriter : public DataWriter {
 		IMPL::MCParticleImpl* mc_particle;
 
 		HpsMCParticle* hps_mc_particle;
-
-
 
 }; // MCParticleDataWriter
 
