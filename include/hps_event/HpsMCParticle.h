@@ -59,9 +59,9 @@ class HpsMCParticle : public TObject, public MCParticle {
 		double px;
 		double py;
 		double pz;
-		double epx;
-		double epy;
-		double epz;
+		double endpt_x;
+		double endpt_y;
+		double endpt_z;
 
 }; // HpsMCParticle
 

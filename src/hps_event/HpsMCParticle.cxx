@@ -16,7 +16,7 @@ ClassImp(HpsMCParticle)
 
 HpsMCParticle::HpsMCParticle()
 	: TObject(), pdg(0), charge(0), generator_status(0),
-	  energy(0), mass(0), px(0), py(0), pz(0), epx(0), epy(0), epz(0)
+	  energy(0), mass(0), px(0), py(0), pz(0), endpt_x(0), endpt_y(0), endpt_z(0)
 {}
 
 HpsMCParticle::HpsMCParticle(const HpsMCParticle &mcParticleObj)
@@ -24,7 +24,7 @@ HpsMCParticle::HpsMCParticle(const HpsMCParticle &mcParticleObj)
 	 generator_status(mcParticleObj.generator_status),
 	 energy(mcParticleObj.energy), mass(mcParticleObj.mass),
 	 px(mcParticleObj.px), py(mcParticleObj.py), pz(mcParticleObj.pz),
-	epx(mcParticleObj.epx), epy(mcParticleObj.epy), epz(mcParticleObj.epz)
+	endpt_x(mcParticleObj.endpt_x), endpt_y(mcParticleObj.endpt_y), endpt_z(mcParticleObj.endpt_z)
 {
 }
 
@@ -49,9 +49,9 @@ HpsMCParticle &HpsMCParticle::operator=(const HpsMCParticle &mcParticleObj)
 	this->px = mcParticleObj.px;
 	this->py = mcParticleObj.py;
 	this->pz = mcParticleObj.pz;
-	this->epx = mcParticleObj.epx;
-	this->epy = mcParticleObj.epy;
-	this->epz = mcParticleObj.epz;
+	this->endpt_x = mcParticleObj.endpt_x;
+	this->endpt_y = mcParticleObj.endpt_y;
+	this->endpt_z = mcParticleObj.endpt_z;
 
 	return *this;
 }
@@ -70,9 +70,9 @@ void HpsMCParticle::setMomentum(const double* momentum)
 
 void HpsMCParticle::setEndpoint(const double* end_point)
 {
-	epx = end_point[0];
-	epy = end_point[1];
-	epz = end_point[2];
+	endpt_x = end_point[0];
+	endpt_y = end_point[1];
+	endpt_z = end_point[2];
 }
 
 std::vector<double> HpsMCParticle::getMomentum() const
@@ -87,8 +87,8 @@ std::vector<double> HpsMCParticle::getMomentum() const
 std::vector<double> HpsMCParticle::getEndpoint() const
 {
 	std::vector<double> end_point(3, 0);
-	end_point[0] = epx;
-	end_point[1] = epy;
-	end_point[2] = epz;
+	end_point[0] = endpt_x;
+	end_point[1] = endpt_y;
+	end_point[2] = endpt_z;
 	return end_point;
 }
