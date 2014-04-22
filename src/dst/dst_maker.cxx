@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <limits>
+#include <time.h>
 
 //--- LCIO ---//
 //------------//
@@ -40,6 +41,8 @@ void printUsage();
 
 int main(int argc, char **argv)
 {
+
+	clock_t initial_time = clock();
 
 	string lcio_file_name;
 	string dst_file_name; 	
@@ -114,8 +117,12 @@ int main(int argc, char **argv)
 	event_builder->setBField(b_field); 
     event_builder->setGblFlag(do_gbl);
 	int event_number = 0;
+	clock_t initial_event_time;
+	clock_t total_time = 0;
 	while((event = lc_reader->readNextEvent()) != 0){
 		
+		initial_event_time = clock();
+
 		++event_number; 
 		if((event_number - 1) == n_events) break; 
 
@@ -126,6 +133,8 @@ int main(int argc, char **argv)
 
 		event_builder->makeHpsEvent(event, hps_event); 
 		tree->Fill();
+
+		total_time += clock() - initial_event_time;
 	}	
 
 	cout << "Finished writing " << event_number << " events to ROOT Tree!" << endl;
@@ -135,6 +144,11 @@ int main(int argc, char **argv)
 
 	delete hps_event;
 	delete event_builder;
+
+	cout << "Total run time: " << ((float) (clock() - initial_time))/CLOCKS_PER_SEC
+		 << " s" << endl;
+	cout << "Average time/event: " << (((float) total_time)/CLOCKS_PER_SEC)/event_number
+		 << " s" << endl;
 
 	return EXIT_SUCCESS;
 }
