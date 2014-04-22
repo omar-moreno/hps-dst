@@ -3,7 +3,6 @@
  *	@section institution
  *				Santa Cruz Institute for Particle Physics
  *				University of California, Santa Cruz
- *	@version:	v 1.0
  *	@date:		February 11, 2014
  *
  */
@@ -37,17 +36,22 @@ void MCParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		// Get an MC particle from the LCIO collection
 		mc_particle = (IMPL::MCParticleImpl*) mc_particles->getElementAt(mc_particle_n);
 
+		// Only add initial and final state particles to the DST
+		if(mc_particle->getGeneratorStatus() <= 0) continue;
+
 		// Add an MC particle to the HpsEvent
 		hps_mc_particle = hps_event->addHpsMCParticle();
+
+		// Set the generator status
+		hps_mc_particle->setGeneratorStatus(mc_particle->getGeneratorStatus());
 
 		// Set the PDG ID
 		hps_mc_particle->setPDG(mc_particle->getPDG());
 
-		// Set the charge
-		hps_mc_particle->setCharge(mc_particle->getCharge());
-
-		// Set the generator status
-		hps_mc_particle->setGeneratorStatus(mc_particle->getGeneratorStatus());
+		// Set the charge of the MC particle.  If the charge is equal to NaN,
+		// set the charge to 1000
+		if(isnan(mc_particle->getCharge())) hps_mc_particle->setCharge(1000);
+		else hps_mc_particle->setCharge(mc_particle->getCharge());
 
 		// Set the energy
 		hps_mc_particle->setEnergy(mc_particle->getEnergy());
