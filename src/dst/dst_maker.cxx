@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 		tree->Fill();
 	}	
 
-	cout << "Finished writing ROOT Tree!" << endl;
+	cout << "Finished writing " << event_number << " events to ROOT Tree!" << endl;
 	lc_reader->close();
 	root_file->Write();
 	root_file->Close();
