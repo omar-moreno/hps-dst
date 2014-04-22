@@ -23,11 +23,7 @@ HpsParticleDataWriter::HpsParticleDataWriter()
 }
 
 HpsParticleDataWriter::~HpsParticleDataWriter()
-{
-	delete particles;
-	delete particle;
-	delete hps_particle;
-}
+{}
 
 void HpsParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
@@ -65,8 +61,10 @@ void HpsParticleDataWriter::writeData(int collection_type, IMPL::LCCollectionVec
 
 		// Get a particle from the HpsEvent
 		if(collection_type == 0) hps_particle = hps_event->addFSParticle();
-		else hps_particle = hps_event->addVtxParticle(collection_type); 	
-
+		else {
+			hps_particle = hps_event->addVtxParticle(collection_type); 
+		}
+		
 		// Only write particles that have clusters associated with them.  If a 
 		// particle only has a track and no cluster, there is an issue with 
 		// the HPS reconstruction.
@@ -79,7 +77,7 @@ void HpsParticleDataWriter::writeData(int collection_type, IMPL::LCCollectionVec
 			// Use the cluster energy to find the match
 			// TODO: Verify that the cluster enegy is enough to find a match
 			if(particle->getClusters()[0]->getEnergy() == hps_event->getEcalCluster(cluster_n)->getEnergy()){
-				hps_particle->setCluster(hps_event->getEcalCluster(cluster_n)); 
+				hps_particle->addCluster(hps_event->getEcalCluster(cluster_n)); 
 				break;
 			}
 		}
@@ -94,7 +92,7 @@ void HpsParticleDataWriter::writeData(int collection_type, IMPL::LCCollectionVec
 			// Use the track chi^2 to find the match
 			// TODO: Verify that the chi^2 is enough to find the match
 			if(particle->getTracks()[0]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
-				hps_particle->setTrack(hps_event->getTrack(track_n));
+				hps_particle->addTrack(hps_event->getTrack(track_n));
 				break;
 			}
 		}
