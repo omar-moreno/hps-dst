@@ -10,8 +10,8 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(HPS_DST)
 
 # Set the current version
-set(HPS_DST_VERSION_MAJOR 1)
-set(HPS_DST_VERSION_MINOR 1)
+set(HPS_DST_VERSION_MAJOR 0)
+set(HPS_DST_VERSION_MINOR 5)
 
 # Set the output directories of the binaries, static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
