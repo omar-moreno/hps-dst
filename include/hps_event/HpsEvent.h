@@ -4,7 +4,6 @@
  * @section institution
  * 				Santa Cruz Institute for Particle Physics
  * 				University of California, Santa Cruz
- * @version:    v 0.1
  * @date:       February 19, 2013
  */
 
@@ -41,6 +40,13 @@ class HpsEvent : public TObject {
         virtual ~HpsEvent();    
         HpsEvent &operator=(const HpsEvent &hpsEventObj);
 
+		enum collection_t { 
+			FINAL_STATE_PARTICLES = 0,
+			UC_VTX_PARTICLES	  = 1, 
+			BSC_VTX_PARTICLES	  = 2, 
+			TC_VTX_PARTICLES	  = 3
+		};
+
         void Clear(Option_t *option="");
         SvtTrack* 		addTrack();
         SvtHit* 		addSvtHit();
@@ -48,7 +54,7 @@ class HpsEvent : public TObject {
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
         HpsParticle*    addFSParticle();
-        HpsParticle*    addVtxParticle(int); 
+        HpsParticle*    addVtxParticle(collection_t); 
         HpsMCParticle*  addHpsMCParticle();
         GblTrack*   	addGblTrack();
         GblTrackData* 	addGblTrackData();
@@ -75,7 +81,7 @@ class HpsEvent : public TObject {
         MuonCluster*   getMuonCluster(int);
         HpsMCParticle* getMCParticle(int);
         HpsParticle*   getFSParticle(int); 
-        HpsParticle*   getVtxParticle(int, int); 
+        HpsParticle*   getVtxParticle(collection_t, int); 
         GblTrack*      getGblTrack(int);
         GblTrackData*  getGblTrackData(int);
         GblStripData*  getGblStripData(int);
@@ -113,15 +119,8 @@ class HpsEvent : public TObject {
         int n_gbl_tracks;
         int n_gbl_tracks_data;
         int n_gbl_strips_data;
-
-        // Index of unconstrained vertexed particles
-        static const int UC_VTX_PARTICLES_INDEX;  
-        // Index of beamspot constrained vertexed particles
-        static const int BSC_VTX_PARTICLES_INDEX;
-        // Index of target constrained vertexed particles
-        static const int TC_VTX_PARTICLES_INDEX;
-
-        std::vector<int> trigger_bits;
+        
+		std::vector<int> trigger_bits;
 };
 
 #endif
