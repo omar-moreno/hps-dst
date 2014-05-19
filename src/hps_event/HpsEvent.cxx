@@ -4,7 +4,6 @@
  * @section institution
  * 				Santa Cruz Institute for Particle Physics
  * 				University of California, Santa Cruz
- * @version:    v 0.1
  * @date:       February 19, 2013
  */
 #include <HpsEvent.h>
@@ -219,20 +218,19 @@ HpsParticle* HpsEvent::addFSParticle()
     return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++);
 }
 
-HpsParticle* HpsEvent::addVtxParticle(int collection_type)
+HpsParticle* HpsEvent::addVtxParticle(collection_t collection_type)
 {
-	//
-	assert(collection_type == UC_VTX_PARTICLES_INDEX 
-            || collection_type == BSC_VTX_PARTICLES_INDEX
-            || collection_type == TC_VTX_PARTICLES_INDEX);
-
-	if(collection_type == UC_VTX_PARTICLES_INDEX){
-		return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
-	} else if(collection_type == BSC_VTX_PARTICLES_INDEX){
-		return (HpsParticle*) bsc_vtx_particles->ConstructedAt(n_bsc_vtx_particles++);
-	} else if(collection_type == TC_VTX_PARTICLES_INDEX){
-		return (HpsParticle*) tc_vtx_particles->ConstructedAt(n_tc_vtx_particles++);
-    }
+	switch(collection_type) { 
+		case UC_VTX_PARTICLES: 
+			return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
+		case BSC_VTX_PARTICLES:
+			return (HpsParticle*) bsc_vtx_particles->ConstructedAt(n_bsc_vtx_particles++);
+		case TC_VTX_PARTICLES:
+			return (HpsParticle*) tc_vtx_particles->ConstructedAt(n_tc_vtx_particles++);
+		default: 
+			// TODO: If a collection type is invalid, throw an exception instead
+			return NULL; 
+	}
 }
 
 HpsMCParticle* HpsEvent::addHpsMCParticle()
@@ -254,7 +252,6 @@ GblStripData* HpsEvent::addGblStripData()
 {
 	return (GblStripData*) gbl_strips_data->ConstructedAt(n_gbl_strips_data++);
 }
-
 
 SvtTrack* HpsEvent::getTrack(int track_n)
 {
@@ -306,25 +303,18 @@ HpsParticle* HpsEvent::getFSParticle(int fs_particle_n)
     return (HpsParticle*) fs_particles->At(fs_particle_n); 
 }
 
-HpsParticle* HpsEvent::getVtxParticle(int collection_type, int vtx_particle_n)
+HpsParticle* HpsEvent::getVtxParticle(collection_t collection_type,
+									  int vtx_particle_n)
 {
-	assert(collection_type == UC_VTX_PARTICLES_INDEX 
-            || collection_type == BSC_VTX_PARTICLES_INDEX
-            || collection_type == TC_VTX_PARTICLES_INDEX);
-
-	if(collection_type == UC_VTX_PARTICLES_INDEX){
-		return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
-	} else if(collection_type == BSC_VTX_PARTICLES_INDEX){
-		return (HpsParticle*) bsc_vtx_particles->ConstructedAt(n_bsc_vtx_particles++);
-	} else if(collection_type == TC_VTX_PARTICLES_INDEX){
-		return (HpsParticle*) tc_vtx_particles->ConstructedAt(n_tc_vtx_particles++);
-    }
+	switch(collection_type){ 
+		case UC_VTX_PARTICLES: 
+			return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
+		case BSC_VTX_PARTICLES: 
+			return (HpsParticle*) bsc_vtx_particles->ConstructedAt(n_bsc_vtx_particles++);
+		case TC_VTX_PARTICLES: 
+			return (HpsParticle*) tc_vtx_particles->ConstructedAt(n_tc_vtx_particles++);
+		default:
+			// TODO: If the collection type is invalid, throw an exception instead.	
+			return NULL; 
+	}
 }
-
-
-
-const int HpsEvent::UC_VTX_PARTICLES_INDEX = 1;
-
-const int HpsEvent::BSC_VTX_PARTICLES_INDEX = 2;
-
-const int HpsEvent::TC_VTX_PARTICLES_INDEX = 3;

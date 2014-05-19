@@ -28,6 +28,7 @@
 //-----------------//
 #include <HpsParticle.h>
 #include <Exceptions.h>
+#include <HpsEvent.h>
 
 class HpsParticleDataWriter : public DataWriter { 
 
@@ -38,10 +39,11 @@ class HpsParticleDataWriter : public DataWriter {
 
         //
         void writeData(EVENT::LCEvent*, HpsEvent*);
-		void writeParticleData(int, std::string); 
 
 	private:
 
+		void writeParticleData(HpsEvent::collection_t, IMPL::LCCollectionVec*, HpsEvent*); 
+		
 		std::string fs_particles_collection_name;
 		std::string uc_vtx_particles_collection_name; 
 		std::string bsc_vtx_particles_collection_name; 
@@ -52,9 +54,7 @@ class HpsParticleDataWriter : public DataWriter {
 
 		HpsParticle* hps_particle; 
 
-		std::map<int, std::string> particle_collections;
-
-		void writeData(int, IMPL::LCCollectionVec*, HpsEvent*);
+		std::map<HpsEvent::collection_t, std::string> particle_collections;
 
 }; // HpsParticleWriter
 
