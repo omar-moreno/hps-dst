@@ -15,14 +15,15 @@ ClassImp(EcalCluster)
 EcalCluster::EcalCluster()
 	: TObject(), ecal_hits(new TRefArray()),
 	  n_ecal_hits(0), x(0), y(0), z(0), energy(0),
-	  hit_time(0)
+	  hit_time(0), m2(0), m3(0)
 {}
 
 EcalCluster::EcalCluster(const EcalCluster &ecalClusterObj)
 	: TObject(), ecal_hits(new TRefArray()), 
-	  n_ecal_hits(ecalClusterObj.n_ecal_hits), seed_hit(ecalClusterObj.seed_hit), 
+	  seed_hit(ecalClusterObj.seed_hit), n_ecal_hits(ecalClusterObj.n_ecal_hits),
 	  x(ecalClusterObj.x), y(ecalClusterObj.y), z(ecalClusterObj.z),
-	  energy(ecalClusterObj.energy), hit_time(ecalClusterObj.hit_time)
+	  energy(ecalClusterObj.energy), hit_time(ecalClusterObj.hit_time), 
+	  m2(ecalClusterObj.m2), m3(ecalClusterObj.m3)
 {
 	*ecal_hits = *ecalClusterObj.ecal_hits; 
 }
@@ -47,6 +48,8 @@ EcalCluster &EcalCluster::operator=(const EcalCluster &ecalClusterObj)
 	this->z = ecalClusterObj.z;
 	this->energy = ecalClusterObj.energy;
 	this->hit_time = ecalClusterObj.hit_time;
+	this->m2 = ecalClusterObj.m2; 
+	this->m3 = ecalClusterObj.m3; 
 
 	ecal_hits = new TRefArray(); 
 	*ecal_hits = *ecalClusterObj.ecal_hits;

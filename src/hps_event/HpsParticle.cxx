@@ -12,15 +12,15 @@
 ClassImp(HpsParticle)
 
 HpsParticle::HpsParticle()
-	:	TObject(), vtx_x(0), vtx_y(0), vtx_z(0), n_daughters(0),
-		svt_tracks(new TRefArray()), ecal_clusters(new TRefArray())
+	: TObject(), svt_tracks(new TRefArray()), ecal_clusters(new TRefArray()),
+	  n_daughters(0), vtx_x(0), vtx_y(0), vtx_z(0)
+
 {}
 
 HpsParticle::HpsParticle(const HpsParticle &particleObj)
-	: TObject(), vtx_x(particleObj.vtx_x),
-	  vtx_y(particleObj.vtx_y), vtx_z(particleObj.vtx_z),
-	  n_daughters(particleObj.n_daughters),
-	  svt_tracks(new TRefArray()), ecal_clusters(new TRefArray())
+	: TObject(), svt_tracks(new TRefArray()), ecal_clusters(new TRefArray()),
+	  n_daughters(particleObj.n_daughters), vtx_x(particleObj.vtx_x),
+	  vtx_y(particleObj.vtx_y), vtx_z(particleObj.vtx_z)
 {
 	*svt_tracks = *particleObj.svt_tracks;
 	*ecal_clusters = *particleObj.ecal_clusters;	

@@ -13,8 +13,8 @@
 ClassImp(EcalHit)
 
 EcalHit::EcalHit() : TObject(),
-					 energy(0), index_x(0), index_y(0),
-					 x(0), y(0), z(0)
+					 index_x(0), index_y(0),
+					 x(0), y(0), z(0), energy(0)
 {}
 
 EcalHit::~EcalHit()
