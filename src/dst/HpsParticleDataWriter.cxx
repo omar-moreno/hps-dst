@@ -11,9 +11,9 @@
 
 HpsParticleDataWriter::HpsParticleDataWriter() 
 	: fs_particles_collection_name("FinalStateParticles"),
-	  uc_vtx_particles_collection_name("AprimeUnconstrained"),
-	  bsc_vtx_particles_collection_name("AprimeBeamspotConstrained"),
-	  tc_vtx_particles_collection_name("AprimeTargetConstrained"),
+	  uc_vtx_particles_collection_name("UnconstrainedV0Candidates"),
+	  bsc_vtx_particles_collection_name("BeamspotConstrainedV0Candidates"),
+	  tc_vtx_particles_collection_name("TargetConstrainedV0Candidates"),
 	  particles(NULL), particle(NULL), hps_particle(NULL)
 {
 	particle_collections.insert(std::pair<HpsEvent::collection_t, std::string>(HpsEvent::FINAL_STATE_PARTICLES, fs_particles_collection_name)); 
