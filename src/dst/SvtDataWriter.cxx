@@ -4,16 +4,13 @@
  *			 Santa Cruz Institute for Particle Physics
  *			 University of California, Santa Cruz
  *	@date: January 2, 2013
- *	@version: 1.0
  *
  */
 
 #include <SvtDataWriter.h>
 
 SvtDataWriter::SvtDataWriter() 
-	: tracks_collection_name("MatchedTracks"),
-	  hits_collection_name(""),
-	  b_field(std::numeric_limits<double>::quiet_NaN())
+	: tracks_collection_name("MatchedTracks")
 {}
 
 SvtDataWriter::~SvtDataWriter()
@@ -21,12 +18,7 @@ SvtDataWriter::~SvtDataWriter()
 
 void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 {
-	// Check if the B-field has been set. If is hasn't, throw
-	// an exception
-	if(std::isnan(b_field)) 
-		throw std::runtime_error("B field was not set!");
 	
-
 	// Get the collection of tracks from the event	
 	tracks = (IMPL::LCCollectionVec*) event->getCollection(tracks_collection_name);
 
@@ -37,24 +29,17 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 		track = (IMPL::TrackImpl*) tracks->getElementAt(track_n);
 	
 		// Add a track to the HpsEvent
-		hps_track = hps_event->addTrack(); 
+		svt_track = hps_event->addTrack(); 
 		
 		// Fill the track parameters
-		hps_track->setTrackParameters(track->getD0(), 
+		svt_track->setTrackParameters(track->getD0(), 
 									  track->getPhi(), 
 									  track->getOmega(), 
 									  track->getTanLambda(), 
 									  track->getZ0());
-
-		// Set the track momentum
-		std::vector<double> momentum = TrackUtils::getMomentumVector(track, b_field); 
-		hps_track->setMomentum(momentum[0], momentum[1], momentum[2]); 
 			
 		// Set the track fit chi^2
-		hps_track->setChi2(track->getChi2());
-
-		// Set the track charge
-		hps_track->setCharge(TrackUtils::getCharge(track)); 
+		svt_track->setChi2(track->getChi2());
 
 		// Get the hits associated with the track
 		EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
@@ -71,7 +56,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 			svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
 			svt_hit->setTime(tracker_hit->getTime());
 
-			hps_track->addHit(svt_hit); 
+			svt_track->addHit(svt_hit); 
 		}		
 	}
 }

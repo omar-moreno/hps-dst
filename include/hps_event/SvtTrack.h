@@ -4,22 +4,25 @@
  * @section institution
  * 				Santa Cruz Institute for Particle Physics
  * 				University of California, Santa Cruz
- * @version:    v 0.1
  * @date:       February 19, 2013
+ *
  */
 
-#ifndef _SVT_TRACK_H_
-#define _SVT_TRACK_H_
+#ifndef __SVT_TRACK_H__
+#define __SVT_TRACK_H__
 
 //--- C++ ---//
+//-----------//
 #include <iostream>
 
 //--- ROOT ---//
+//------------//
 #include <TObject.h>
 #include <TClonesArray.h>
-
-//---//
 #include <TRefArray.h>
+
+//--- HPS Event ---//
+//-----------------//
 #include <SvtHit.h>
 
 class SvtTrack : public TObject {
@@ -36,18 +39,14 @@ class SvtTrack : public TObject {
         void addHit(SvtHit*); 
 
         void setTrackParameters(double, double, double, double, double);
-        void setMomentum(double, double, double);
         void setChi2(double chi_squared){ this->chi_squared = chi_squared; };
-        void setCharge(double charge){ this->charge = charge; };
 
-        std::vector<double> getMomentum() const;
         double getD0() const { return d0; };
         double getPhi() const { return phi; };
         double getOmega() const { return omega; };
         double getTanLambda() const { return tan_lambda; };
         double getZ0() const { return z0; };
         double getChi2() const {return chi_squared; };
-        double getCharge() const {return charge; };
         TRefArray* getSvtHits() const;
 
         ClassDef(SvtTrack, 1);
@@ -58,17 +57,13 @@ class SvtTrack : public TObject {
 
         int n_hits; 
 
-        double px;
-        double py; 
-        double pz;
         double d0; 
         double phi;
         double omega;  
         double tan_lambda; 
         double z0;  
         double chi_squared;
-        double charge;
 
 }; // SvtTrack
 
-#endif // _SVT_TRACK_H_
+#endif // __SVT_TRACK_H__
