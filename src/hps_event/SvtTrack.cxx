@@ -14,16 +14,15 @@ ClassImp(SvtTrack)
 
 SvtTrack::SvtTrack()
 	: 	TObject(), svt_hits(new TRefArray()),
-	  	n_hits(0), px(0), py(0), pz(0), d0(0), phi(0), omega(0),
-	  	tan_lambda(0), z0(0), chi_squared(0), charge(0)
+	  	n_hits(0), d0(0), phi(0), omega(0),
+	  	tan_lambda(0), z0(0), chi_squared(0)
 {}
 
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
-	:	TObject(), svt_hits(new TRefArray()),
-		px(svtTrackObj.px), py(svtTrackObj.py), pz(svtTrackObj.pz), d0(svtTrackObj.d0),
+	:	TObject(), svt_hits(new TRefArray()), d0(svtTrackObj.d0),
 		phi(svtTrackObj.phi), omega(svtTrackObj.omega),
 		tan_lambda(svtTrackObj.tan_lambda), z0(svtTrackObj.z0),
-		chi_squared(svtTrackObj.chi_squared), charge(svtTrackObj.charge)
+		chi_squared(svtTrackObj.chi_squared)
 {
 	*svt_hits = *svtTrackObj.svt_hits;
 }
@@ -43,16 +42,12 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj)
 	Clear();
 	delete svt_hits;
 
-	this->px = svtTrackObj.px;
-	this->py = svtTrackObj.py;
-	this->pz = svtTrackObj.pz;
 	this->d0 = svtTrackObj.d0;
 	this->phi = svtTrackObj.phi;
 	this->omega = svtTrackObj.omega;
 	this->tan_lambda = svtTrackObj.tan_lambda;
 	this->z0 = svtTrackObj.z0;
 	this->chi_squared = svtTrackObj.chi_squared;
-	this->charge = svtTrackObj.charge;
 
 	svt_hits = new TRefArray();
 	*svt_hits = *svtTrackObj.svt_hits;
@@ -77,27 +72,10 @@ void SvtTrack::setTrackParameters(double d0, double phi, double omega,
     this->z0 		 = z0;
 }
 
-void SvtTrack::setMomentum(double px, double py, double pz)
-{
-	this->px = px;
-	this->py = py;
-	this->pz = pz;
-}
-
-
 void SvtTrack::addHit(SvtHit* hit)
 {
     ++n_hits; 
     svt_hits->Add(hit); 
-}
-
-std::vector<double> SvtTrack::getMomentum() const
-{
-	std::vector<double> momentum(3, 0);
-	momentum[0] = px;
-	momentum[1] = py;
-	momentum[2] = pz;
-	return momentum;
 }
 
 TRefArray* SvtTrack::getSvtHits() const

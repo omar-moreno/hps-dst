@@ -4,7 +4,6 @@
  *			 Santa Cruz Institute for Particle Physics
  *			 University of California, Santa Cruz
  *	@date: January 2, 2013
- *	@version: 1.0
  *
  */
 
@@ -51,28 +50,17 @@ class SvtDataWriter : public DataWriter {
 			this->tracks_collection_name = tracks_collection_name;
 		};
 
-		//
-		void setHitCollectionName(std::string hits_collection_name){
-			this->hits_collection_name = hits_collection_name; };
-
-		// 
-		void setBField(double b_field){
-			this->b_field = b_field;
-		}
-
 	private:
 	
 		std::string tracks_collection_name;
-		std::string hits_collection_name; 	
 
 		IMPL::LCCollectionVec* tracks;
 		IMPL::TrackImpl* track;
 		IMPL::TrackerHitImpl* tracker_hit;
 		
-		SvtTrack* hps_track;
+		SvtTrack* svt_track;
 		SvtHit* svt_hit; 		
-	
-		double b_field;
-};
+
+}; // SvtDataWriter
 
 #endif // __SVT_DATA_WRITER_H__
