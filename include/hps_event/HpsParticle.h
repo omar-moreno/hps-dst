@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef _HPS_PARTICLE_H_
-#define _HPS_PARTICLE_H_
+#ifndef __HPS_PARTICLE_H__
+#define __HPS_PARTICLE_H__
 
 //--- ROOT ---//
 //------------//
@@ -36,10 +36,14 @@ class HpsParticle : public TObject {
 		void addTrack(SvtTrack* svt_track);
 		void addCluster(EcalCluster* ecal_cluster);
 
+        void setCharge(const int charge){ this->charge = charge; };
+        void setMomentum(const double*); 
 		void setVertexPosition(const double*);
 		
 		TRefArray* getTracks() const; 
-		TRefArray* getClusters() const; 
+		TRefArray* getClusters() const;
+        int getCharge() const { return charge; };
+        std::vector<double> getMomentum() const;  
         std::vector<double> getVertexPosition() const; 
 
 		ClassDef(HpsParticle, 1);
@@ -50,7 +54,11 @@ class HpsParticle : public TObject {
 		TRefArray* ecal_clusters;
 		
 		int n_daughters;
+        int charge; 
 		
+        double px; 
+        double py; 
+        double pz; 
 		double vtx_x;
 		double vtx_y;
 		double vtx_z;
