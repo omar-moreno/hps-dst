@@ -44,7 +44,6 @@ int main(int argc, char **argv)
 
 	clock_t initial_time = clock();
 
-	string lcio_file_name;
 	string dst_file_name; 	
 	int option_char;
 	int n_events = -1; 	
@@ -52,7 +51,7 @@ int main(int argc, char **argv)
 	bool do_gbl = false;
 	// Parse any command line arguments.  If an invalid argument is passed, 
 	// print the usage
-	while((option_char = getopt(argc, argv, "o:n:b:g:h")) != -1){
+	while((option_char = getopt(argc, argv, "o:n:b:gh")) != -1){
 		switch(option_char){
 			case 'o': 
 				dst_file_name = optarg;
