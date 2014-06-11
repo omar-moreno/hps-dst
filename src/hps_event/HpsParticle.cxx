@@ -72,7 +72,8 @@ void HpsParticle::Clear(Option_t* /* option */)
 {
 	TObject::Clear();
 	svt_tracks->Delete();
-	ecal_clusters->Delete(); 	
+	ecal_clusters->Delete(); 
+    particles->Delete();     
 	n_daughters = 0; 	
 }
 
