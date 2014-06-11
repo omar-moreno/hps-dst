@@ -44,19 +44,15 @@ int main(int argc, char **argv)
 
 	clock_t initial_time = clock();
 
-	string lcio_file_name;
 	string dst_file_name; 	
 	int option_char;
 	int n_events = -1; 	
 	double b_field = numeric_limits<double>::quiet_NaN();  
-    bool do_gbl = false;
+	bool do_gbl = false;
 	// Parse any command line arguments.  If an invalid argument is passed, 
 	// print the usage
-	while((option_char = getopt(argc, argv, "i:o:n:b:g:h")) != -1){
+	while((option_char = getopt(argc, argv, "o:n:b:gh")) != -1){
 		switch(option_char){
-			case 'i': 
-				lcio_file_name = optarg; 
-				break;
 			case 'o': 
 				dst_file_name = optarg;
 				break; 
@@ -67,7 +63,7 @@ int main(int argc, char **argv)
 				b_field = atof(optarg);
 				break;	
 			case 'g':
-              do_gbl = true;
+				do_gbl = true;
 				break;	
 			case 'h': 
 				printUsage(); 
@@ -79,8 +75,8 @@ int main(int argc, char **argv)
 	}
 
 	// If an LCIO file is not specified, exit the program
-	if(lcio_file_name.length() == 0){
-		cerr << "Please specify an LCIO file to process."
+	if(argc-optind==0){
+		cerr << "Please specify at least one LCIO file to process."
 			<< "\nUse the -h flag for usage" << endl;
 		return EXIT_FAILURE; 	
 	}
@@ -94,7 +90,7 @@ int main(int argc, char **argv)
 	// If a B-field isn't set, exit the program
 	if(isnan(b_field)){ 
 		cerr << "Please specify the magnetic field strength in Tesla."
-			 << "\nUse the -h flag for usage" << endl;
+			<< "\nUse the -h flag for usage" << endl;
 		return EXIT_FAILURE;
 	}
 
@@ -109,36 +105,43 @@ int main(int argc, char **argv)
 
 	// Create the LCIO file reader
 	IO::LCReader* lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader(); 
-	lc_reader->open(lcio_file_name);
 
-	// Loop over all events in the LCIO file
 	EVENT::LCEvent* event = NULL;
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	event_builder->setBField(b_field); 
-    event_builder->setGblFlag(do_gbl);
+	event_builder->setGblFlag(do_gbl);
 	int event_number = 0;
 	clock_t initial_event_time;
 	clock_t total_time = 0;
-	while((event = lc_reader->readNextEvent()) != 0){
-		
-		initial_event_time = clock();
 
-		++event_number; 
-		if((event_number - 1) == n_events) break; 
+	while (optind<argc)
+	{
+		lc_reader->open(argv[optind]);
 
-		// Print the event number every 1000 events
-		if(event_number%1000 == 0 ){
-          cout << "Processing event number: " << event_number << endl;
-		}
+		// Loop over all events in the LCIO file
+		while((event = lc_reader->readNextEvent()) != 0){
 
-		event_builder->makeHpsEvent(event, hps_event); 
-		tree->Fill();
+			initial_event_time = clock();
 
-		total_time += clock() - initial_event_time;
-	}	
+			++event_number; 
+			if((event_number - 1) == n_events) break; 
+
+			// Print the event number every 1000 events
+			if(event_number%1000 == 0 ){
+				cout << "Processing event number: " << event_number << endl;
+			}
+
+			event_builder->makeHpsEvent(event, hps_event); 
+			tree->Fill();
+
+			total_time += clock() - initial_event_time;
+		}	
+
+		lc_reader->close();
+		optind++;
+	}
 
 	cout << "Finished writing " << event_number << " events to ROOT Tree!" << endl;
-	lc_reader->close();
 	root_file->Write();
 	root_file->Close();
 
@@ -146,23 +149,22 @@ int main(int argc, char **argv)
 	delete event_builder;
 
 	cout << "Total run time: " << ((float) (clock() - initial_time))/CLOCKS_PER_SEC
-		 << " s" << endl;
+		<< " s" << endl;
 	cout << "Average time/event: " << (((float) total_time)/CLOCKS_PER_SEC)/event_number
-		 << " s" << endl;
+		<< " s" << endl;
 
 	return EXIT_SUCCESS;
 }
 
 void printUsage()
 {
-	cout << "Usage: dst_maker [OPTIONS] -i [LCIO_INPUT_FILE]" << endl;
+	cout << "Usage: dst_maker [OPTIONS] LCIO_INPUT_FILE [additional input files]" << endl;
 	cout << "An LCIO_INPUT_FILE must be specified.\n" << endl;
 	cout << "OPTIONS:\n "
-		<< "\t -i Input LCIO file name \n"
 		<< "\t -o Output ROOT file name \n"
 		<< "\t -n The number of events to process \n"
 		<< "\t -b The strength of the magnetic field in Tesla \n"
-        << "\t -g Run GBL track fit \n"
-        << "\t -h Display this help and exit \n"
+		<< "\t -g Run GBL track fit \n"
+		<< "\t -h Display this help and exit \n"
 		<< endl;
 }	
