@@ -64,37 +64,83 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 		else {
 			hps_particle = hps_event->addVtxParticle(collection_type); 
 		}
+
+		// Set the charge of the HpsParticle	
+		hps_particle->setCharge(particle->getCharge()); 
 		
-		// Only write particles that have clusters associated with them.  If a 
-		// particle only has a track and no cluster, there is an issue with 
-		// the HPS reconstruction.
-		if(particle->getClusters().size() == 0) continue;
+		// Set the energy of the HpsParticle
+		hps_particle->setEnergy(particle->getEnergy());
 
-		// Loop through all of the clusters in the HpsEvent and find the one 
-		// that matches the cluster associated with the particle.
-		for(int cluster_n = 0; cluster_n < hps_event->getNumberOfEcalClusters(); ++cluster_n){
+		// Set the momentum of the HpsParticle
+		hps_particle->setMomentum(particle->getMomentum()); 
 
-			// Use the cluster energy to find the match
-			// TODO: Verify that the cluster enegy is enough to find a match
-			if(particle->getClusters()[0]->getEnergy() == hps_event->getEcalCluster(cluster_n)->getEnergy()){
-				hps_particle->addCluster(hps_event->getEcalCluster(cluster_n)); 
-				break;
+		// Set the mass of the HpsParticle
+		hps_particle->setMass(particle->getMass());	
+
+		// If a particle has SVT tracks, add all track info to the HpsParticle 
+		if(particle->getTracks().size() != 0){
+		
+			// Loop through all of the tracks associated with the particle 
+			for(int p_track_n = 0; p_track_n < particle->getTracks().size(); ++p_track_n){
+				
+				// Loop through all of the tracks in the HpsEvent and find the one
+				// that matches the track associated with the particle
+				for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n){
+
+					// Use the track chi^2 to find the match
+					// TODO: Verify that the chi^2 is enough to find the match
+					if(particle->getTracks()[p_track_n]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
+						hps_particle->addTrack(hps_event->getTrack(track_n));
+						break;
+					}
+				}
 			}
 		}
 
-		// If there aren't any tracks associated with a particle, continue to the next particle
-		if(particle->getTracks().size() == 0) continue;
+		// If a particle has Ecal clusters, add the cluster to the HpsParticle	
+		if(particle->getClusters().size() != 0){
 
-		// Loop through all of the tracks in the HpsEvent and find the one
-		// that matches the track associated with the particle
-		for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n){
+			// Loop through all of the clusters associated with the particle
+			for(int p_cluster_n = 0; p_cluster_n < particle->getClusters().size(); ++p_cluster_n){
+				// Loop through all of the clusters in the HpsEvent and find the one 
+				// that matches the cluster associated with the particle.
+				for(int cluster_n = 0; cluster_n < hps_event->getNumberOfEcalClusters(); ++cluster_n){
 
-			// Use the track chi^2 to find the match
-			// TODO: Verify that the chi^2 is enough to find the match
-			if(particle->getTracks()[0]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
-				hps_particle->addTrack(hps_event->getTrack(track_n));
-				break;
+					// Use the cluster energy to find the match
+					// TODO: Verify that the cluster enegy is enough to find a match
+					if(particle->getClusters()[p_cluster_n]->getEnergy() == hps_event->getEcalCluster(cluster_n)->getEnergy()){
+						hps_particle->addCluster(hps_event->getEcalCluster(cluster_n)); 
+						break;
+					}
+				}		
 			}
+		}
+
+		// Only add vertex information if the particle is not a final state particle
+		if(collection_type == HpsEvent::FINAL_STATE_PARTICLES) continue; 
+
+		// Set the vertex position of the particle
+		hps_particle->setVertexPosition(((IMPL::VertexImpl*) particle->getStartVertex())->getPosition()); 
+
+		// If the particle has daughter particles, add the daughters to the HpsParticle
+		if(particle->getParticles().size() != 0){
+	
+			//std::cout << "D particles: " << particle->getParticles().size() << std::endl;
+
+			// Loop through all of the daughter particles associated with the particle
+			for(int pd_particle_n = 0; pd_particle_n < particle->getParticles().size(); ++pd_particle_n){
+				
+				// Loop through all of the final state particles in the HpsEvent and
+				// find the one that matches the daughters associated with the particles
+				for(int d_particle_n = 0; d_particle_n < hps_event->getNumberOfParticles(HpsEvent::FINAL_STATE_PARTICLES); ++d_particle_n){
+					
+					//
+					if(particle->getParticles()[pd_particle_n]->getEnergy() == hps_event->getFSParticle(d_particle_n)->getEnergy()){
+						hps_particle->addParticle(hps_event->getFSParticle(d_particle_n));
+						break;	
+					}
+				}
+			}	
 		}
 	}	
 }

@@ -13,19 +13,22 @@ ClassImp(HpsParticle)
 
 HpsParticle::HpsParticle()
 	: TObject(), svt_tracks(new TRefArray()), ecal_clusters(new TRefArray()),
-	  n_daughters(0), charge(0), 
-      px(0), py(0), pz(0), vtx_x(0), vtx_y(0), vtx_z(0)
+	  particles(new TRefArray()), n_daughters(0), charge(0), 
+      px(0), py(0), pz(0), vtx_x(0), vtx_y(0), vtx_z(0), energy(0), mass(0)
 
 {}
 
 HpsParticle::HpsParticle(const HpsParticle &particleObj)
 	: TObject(), svt_tracks(new TRefArray()), ecal_clusters(new TRefArray()),
+	  particles(new TRefArray()),
 	  n_daughters(particleObj.n_daughters), charge(particleObj.charge),
       px(particleObj.px), py(particleObj.py), pz(particleObj.pz), 
-      vtx_x(particleObj.vtx_x), vtx_y(particleObj.vtx_y), vtx_z(particleObj.vtx_z)
+      vtx_x(particleObj.vtx_x), vtx_y(particleObj.vtx_y), vtx_z(particleObj.vtx_z),
+	  energy(particleObj.energy), mass(particleObj.mass)
 {
 	*svt_tracks = *particleObj.svt_tracks;
 	*ecal_clusters = *particleObj.ecal_clusters;	
+	*particles = *particleObj.particles; 
 }
 
 HpsParticle::~HpsParticle()
@@ -52,11 +55,15 @@ HpsParticle &HpsParticle::operator=(const HpsParticle &particleObj)
 	this->vtx_x = particleObj.vtx_x;
 	this->vtx_y = particleObj.vtx_y;
 	this->vtx_z = particleObj.vtx_z;
-	
+	this->energy = particleObj.energy;
+	this->mass = particleObj.mass; 
+
 	svt_tracks = new TRefArray();
 	*svt_tracks = *particleObj.svt_tracks;
 	ecal_clusters = new TRefArray(); 
-	*ecal_clusters = *particleObj.ecal_clusters;	
+	*ecal_clusters = *particleObj.ecal_clusters;
+	particles = new TRefArray(); 
+	*particles = *particleObj.particles; 	
 
 	return *this; 
 }
@@ -76,8 +83,13 @@ void HpsParticle::addTrack(SvtTrack* svt_track)
 
 void HpsParticle::addCluster(EcalCluster* ecal_cluster)
 {
-	n_daughters++;
 	ecal_clusters->Add(ecal_cluster);
+}
+
+void HpsParticle::addParticle(HpsParticle* particle)
+{
+	++n_daughters;
+	particles->Add(particle); 
 }
 
 void HpsParticle::setMomentum(const double* momentum)
@@ -87,11 +99,11 @@ void HpsParticle::setMomentum(const double* momentum)
     pz = momentum[2];
 }
 
-void HpsParticle::setVertexPosition(const double* vtx_pos)
+void HpsParticle::setVertexPosition(const float* vtx_pos)
 {
-	vtx_x = vtx_pos[0];
-	vtx_y = vtx_pos[1];
-	vtx_z = vtx_pos[2];
+	vtx_x = (double) vtx_pos[0];
+	vtx_y = (double) vtx_pos[1];
+	vtx_z = (double) vtx_pos[2];
 }
 
 TRefArray* HpsParticle::getTracks() const
@@ -102,6 +114,11 @@ TRefArray* HpsParticle::getTracks() const
 TRefArray* HpsParticle::getClusters() const
 {
 	return ecal_clusters;
+}
+
+TRefArray* HpsParticle::getParticles() const 
+{
+	return particles; 
 }
 
 std::vector<double> HpsParticle::getMomentum() const

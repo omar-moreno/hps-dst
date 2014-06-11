@@ -19,6 +19,7 @@
 //------------//
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/ReconstructedParticleImpl.h>
+#include <IMPL/VertexImpl.h>
 
 //--- DST ---//
 //-----------//
