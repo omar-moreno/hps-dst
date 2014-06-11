@@ -238,6 +238,24 @@ HpsMCParticle* HpsEvent::addHpsMCParticle()
 	return (HpsMCParticle*) mc_particles->ConstructedAt(n_mc_particles++);
 }
 
+
+int HpsEvent::getNumberOfParticles(collection_t collection_type) const
+{
+	switch(collection_type){
+		case FINAL_STATE_PARTICLES:
+			return n_fs_particles;
+		case UC_VTX_PARTICLES: 
+			return n_uc_vtx_particles;  
+		case BSC_VTX_PARTICLES:
+			return n_bsc_vtx_particles;
+		case TC_VTX_PARTICLES:
+			return n_tc_vtx_particles; 
+		default: 
+			// TODO: If a collection type is invalid, throw an exception instead
+			return -1; 
+	}
+}
+
 GblTrack* HpsEvent::addGblTrack()
 {
 	return (GblTrack*) gbl_tracks->ConstructedAt(n_gbl_tracks++);

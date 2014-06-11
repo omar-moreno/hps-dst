@@ -69,6 +69,7 @@ class HpsEvent : public TObject {
         int getNumberOfTracks()         const  { return n_tracks; };
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
         int getNumberOfMuonClusters()   const  { return n_muon_clusters; };
+		int getNumberOfParticles(collection_t)	const; 
         int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
         int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
         int getNumberOfGblStripData()   const  { return n_gbl_strips_data; };
