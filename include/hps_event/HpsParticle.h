@@ -38,15 +38,17 @@ class HpsParticle : public TObject {
 		void addParticle(HpsParticle* particle); 
 
         void setCharge(const int charge){ this->charge = charge; };
-		void setEnergy(const double energy){ this->energy = energy; };
+	    void setPDG(const int pdg){ this->pdg = pdg; }; 
+        void setEnergy(const double energy){ this->energy = energy; };
 		void setMass(const double mass){ this->mass = mass; }; 
 		void setVertexPosition(const float*);
         void setMomentum(const double*); 
-		
+	
 		TRefArray* getTracks() const; 
 		TRefArray* getClusters() const;
 		TRefArray* getParticles() const; 
         int getCharge() const { return charge; };
+        int getPDG() const { return pdg; }; 
 		double getEnergy() const { return energy; }; 
 		double Mass() const { return mass; }; 
         std::vector<double> getMomentum() const;  
@@ -62,7 +64,8 @@ class HpsParticle : public TObject {
 		
 		int n_daughters;
         int charge; 
-		
+	    int pdg; 
+
         double px; 
         double py; 
         double pz;
