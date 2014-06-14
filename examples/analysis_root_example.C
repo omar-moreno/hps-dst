@@ -7,10 +7,7 @@
  *              Santa Cruz Institute for Particle Physics
  *              University of California, Santa Cruz
  *  @date: March 19, 2013
- *  @version: v1.0
  */	
- 
-#include <cstdlib>
  
 void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 	
@@ -37,24 +34,32 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
  	//----------------------------//
 
 	// Create a canvas and set its characteristics
- 	TCanvas *canvas = new TCanvas("canvas", "Track Momentum", 700, 700);
+ 	TCanvas *canvas = new TCanvas("canvas", "Data Summary Tape Plots", 700, 700);
  	setupCanvas(canvas);
 
+    //
  	// Ecal
+    //
  	TH2F* h_hit_pos = new TH2F("h_hit_pos", "Ecal Hit Positions", 47, -23, 24, 12, -6, 6);
  	setup2DHistogram(h_hit_pos, "Ecal Hit Index - x", "Ecal Hit Index - y");
  	TH1F* h_cluster_energy = new TH1F("h_cluster_energy", "Ecal Cluster Energy", 100, 0, 5.5);
  	setup1DHistogram(h_cluster_energy, "Ecal Cluster Energy [GeV]");
 
+    //
  	// Tracking
- 	TH1F *h_p   = new TH1F("h_p",  "Momentum - All Tracks", 100, 0, 5.5);
- 	setup1DHistogram(h_p, "Momentum [GeV]");
- 	TH1F *h_px  = new TH1F("h_px", "p_{x} - All Tracks", 100, 0, 5.5);
- 	setup1DHistogram(h_px, "p_{x} [GeV]");
- 	TH1F *h_py  = new TH1F("h_py", "p_{y} - All Tracks", 40, -.2, .2);
- 	setup1DHistogram(h_py, "p_{y} Momentum [GeV]");
- 	TH1F *h_pz  = new TH1F("h_pz", "p_{z} - All Tracks", 40, -.2, .2);
- 	setup1DHistogram(h_pz, "p_{z} Momentum [GeV]");
+    //
+ 	TH1F *h_d0   = new TH1F("h_d0",  "Track D0", 64, -8, 8);
+ 	setup1DHistogram(h_d0, "D0 [mm]");
+ 	TH1F *h_tlambda   = new TH1F("h_tlambda",  "Track Tan(#lambda)", 64, -0.08, 0.08);
+ 	setup1DHistogram(h_d0, "Tan #lambda");
+    TH1F *h_chi2 = new TH1F("h_chi2", "Track #chi^{2}", 25, 0, 25);
+    setup1DHistogram(h_chi2, "#chi^{2}");
+
+    //
+    // Particles
+    //
+    TH1F *h_p = new TH1F("h_p", "Particle Momentum", 64, 0, 2.2);
+    setup1DHistogram(h_p, "Momentum [GeV]");  
 
  	//-----------------------------//
 
@@ -75,12 +80,16 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
     TBranch *b_hps_event = tree->GetBranch("Event");
     b_hps_event->SetAddress(&hps_event);
 
+    int index_x, index_y;
+	
+    double d0, tan_lambda, chi2;  
+    double cluster_energy;
+    vector<double> p;
+    
     SvtTrack *track = 0;
     EcalCluster* ecal_cluster = 0;
     EcalHit* ecal_hit = 0;
-	double pt, px, py, pz, p;
-	double cluster_energy;
-	int index_x, index_y;
+    HpsParticle* particle = 0; 
 
 	//--- Analysis ---//
 	//----------------//
@@ -134,17 +143,28 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
         	// Get a track from the event
         	track = hps_event->getTrack(track_n);
 
-        	// Calculate momentum
-        	px = track->getPx();
-        	py = track->getPy();
-        	pz = track->getPz();
-			p = sqrt(px*px + py*py + pz*pz);
-        	
+            d0 = track->getD0();
+            tan_lambda = track->getTanLambda(); 
+            chi2 = track->getChi2();  
+
             // Fill the plots
-			h_p->Fill(p);
-			h_px->Fill(px);
-			h_py->Fill(py);
-			h_pz->Fill(pz);
+			h_d0->Fill(d0);
+            h_tlambda->Fill(tan_lambda); 
+            h_chi2->Fill(chi2); 
+        }
+
+        // Loop over all final state particles in the event
+        for(int particle_n = 0; particle_n < hps_event->getNumberOfParticles(HpsEvent::FINAL_STATE_PARTICLES); ++particle_n){
+            
+            // Get a final state particle from the event
+            particle = hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, particle_n); 
+
+            //
+            if(particle->getPDG() == 22) continue; 
+
+            p = particle->getMomentum();
+            h_p->Fill(magnitude(p));             
+
         }
     }
 
@@ -153,14 +173,14 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 	canvas->Print( (pdf_file_name + "(").c_str());
 	h_cluster_energy->Draw("");
 	canvas->Print( (pdf_file_name + "(").c_str());
-	h_p->Draw("");
+	h_d0->Draw("");
 	canvas->Print( (pdf_file_name + "(").c_str());
-	h_px->Draw("");
+	h_tlambda->Draw(""); 
 	canvas->Print( (pdf_file_name + "(").c_str());
-	h_py->Draw("");
+    h_chi2->Draw("");
 	canvas->Print( (pdf_file_name + "(").c_str());
-	h_pz->Draw("");
-	canvas->Print( (pdf_file_name + ")").c_str());
+    h_p->Draw("");  
+    canvas->Print( (pdf_file_name + ")").c_str());
 
 }
 //--- Functions ---//
@@ -196,4 +216,9 @@ void setup2DHistogram(TH1* histo, string x_axis_title, string y_axis_title){
 	setup1DHistogram(histo, x_axis_title);
 }
  
+double magnitude(vector<double> vector)
+{
+    return sqrt(vector[0]*vector[0] + vector[1]*vector[1] + vector[2]*vector[2]); 
+}
+
 //---------------------//
