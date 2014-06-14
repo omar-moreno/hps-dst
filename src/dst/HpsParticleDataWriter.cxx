@@ -60,10 +60,12 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 		particle = (IMPL::ReconstructedParticleImpl*) particles->getElementAt(particle_n); 
 
 		// Get a particle from the HpsEvent
+        hps_particle = hps_event->addParticle(collection_type);
+       /* 
 		if(collection_type == HpsEvent::FINAL_STATE_PARTICLES) hps_particle = hps_event->addFSParticle();
 		else {
 			hps_particle = hps_event->addVtxParticle(collection_type); 
-		}
+		}*/
 
 		// Set the charge of the HpsParticle	
 		hps_particle->setCharge(particle->getCharge()); 
@@ -75,7 +77,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 		hps_particle->setMomentum(particle->getMomentum()); 
 
 		// Set the mass of the HpsParticle
-		hps_particle->setMass(particle->getMass());	
+		hps_particle->setMass(particle->getMass());
 
 		// If a particle has SVT tracks, add all track info to the HpsParticle 
 		if(particle->getTracks().size() != 0){
@@ -117,7 +119,12 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 		}
 
 		// Only add vertex information if the particle is not a final state particle
-		if(collection_type == HpsEvent::FINAL_STATE_PARTICLES) continue; 
+		if(collection_type == HpsEvent::FINAL_STATE_PARTICLES){
+            
+            // Set the PDG ID of the particle
+            hps_particle->setPDG(particle->getParticleIDUsed()->getPDG());    
+            continue;
+        } 
 
 		// Set the vertex position of the particle
 		hps_particle->setVertexPosition(((IMPL::VertexImpl*) particle->getStartVertex())->getPosition()); 
@@ -135,8 +142,8 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 				for(int d_particle_n = 0; d_particle_n < hps_event->getNumberOfParticles(HpsEvent::FINAL_STATE_PARTICLES); ++d_particle_n){
 					
 					//
-					if(particle->getParticles()[pd_particle_n]->getEnergy() == hps_event->getFSParticle(d_particle_n)->getEnergy()){
-						hps_particle->addParticle(hps_event->getFSParticle(d_particle_n));
+					if(particle->getParticles()[pd_particle_n]->getEnergy() == hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n)->getEnergy()){
+						hps_particle->addParticle(hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n));
 						break;	
 					}
 				}

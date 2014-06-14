@@ -53,8 +53,9 @@ class HpsEvent : public TObject {
         EcalCluster* 	addEcalCluster();
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
-        HpsParticle*    addFSParticle();
-        HpsParticle*    addVtxParticle(collection_t); 
+        HpsParticle*    addParticle(collection_t); 
+        //HpsParticle*    addFSParticle();
+        //HpsParticle*    addVtxParticle(collection_t); 
         HpsMCParticle*  addHpsMCParticle();
         GblTrack*   	addGblTrack();
         GblTrackData* 	addGblTrackData();
@@ -81,8 +82,9 @@ class HpsEvent : public TObject {
         EcalHit* 	   getEcalHit(int);
         MuonCluster*   getMuonCluster(int);
         HpsMCParticle* getMCParticle(int);
-        HpsParticle*   getFSParticle(int); 
-        HpsParticle*   getVtxParticle(collection_t, int); 
+        HpsParticle*   getParticle(collection_t, int); 
+        //HpsParticle*   getFSParticle(int); 
+        //HpsParticle*   getVtxParticle(collection_t, int); 
         GblTrack*      getGblTrack(int);
         GblTrackData*  getGblTrackData(int);
         GblStripData*  getGblStripData(int);

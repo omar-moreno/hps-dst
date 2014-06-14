@@ -213,14 +213,17 @@ MuonCluster* HpsEvent::addMuonCluster()
 	return (MuonCluster*) muon_clusters->ConstructedAt(n_muon_clusters++);
 }
 
-HpsParticle* HpsEvent::addFSParticle()
+/*HpsParticle* HpsEvent::addFSParticle()
 {
     return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++);
-}
+}*/
 
-HpsParticle* HpsEvent::addVtxParticle(collection_t collection_type)
+//HpsParticle* HpsEvent::addVtxParticle(collection_t collection_type)
+HpsParticle* HpsEvent::addParticle(collection_t collection_type)
 {
 	switch(collection_type) { 
+        case FINAL_STATE_PARTICLES:
+            return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++); 
 		case UC_VTX_PARTICLES: 
 			return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
 		case BSC_VTX_PARTICLES:
@@ -316,21 +319,25 @@ HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_n)
 	return (HpsMCParticle*) mc_particles->At(mc_particle_n);
 }
 
+/*
 HpsParticle* HpsEvent::getFSParticle(int fs_particle_n)
 {
     return (HpsParticle*) fs_particles->At(fs_particle_n); 
-}
+}*/
 
-HpsParticle* HpsEvent::getVtxParticle(collection_t collection_type,
-									  int vtx_particle_n)
+//HpsParticle* HpsEvent::getVtxParticle(collection_t collection_type,
+//									  int vtx_particle_n)
+HpsParticle* HpsEvent::getParticle(collection_t collection_type, int particle_n)
 {
 	switch(collection_type){ 
+        case FINAL_STATE_PARTICLES:
+            return (HpsParticle*) fs_particles->At(particle_n); 
 		case UC_VTX_PARTICLES: 
-			return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
+			return (HpsParticle*) uc_vtx_particles->At(particle_n);
 		case BSC_VTX_PARTICLES: 
-			return (HpsParticle*) bsc_vtx_particles->ConstructedAt(n_bsc_vtx_particles++);
+			return (HpsParticle*) bsc_vtx_particles->At(particle_n);
 		case TC_VTX_PARTICLES: 
-			return (HpsParticle*) tc_vtx_particles->ConstructedAt(n_tc_vtx_particles++);
+			return (HpsParticle*) tc_vtx_particles->ConstructedAt(particle_n);
 		default:
 			// TODO: If the collection type is invalid, throw an exception instead.	
 			return NULL; 
