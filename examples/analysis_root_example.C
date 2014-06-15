@@ -40,9 +40,9 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
     //
  	// Ecal
     //
- 	TH2F* h_hit_pos = new TH2F("h_hit_pos", "Ecal Hit Positions", 47, -23, 24, 12, -6, 6);
+ 	TH2F *h_hit_pos = new TH2F("h_hit_pos", "Ecal Hit Positions", 47, -23, 24, 12, -6, 6);
  	setup2DHistogram(h_hit_pos, "Ecal Hit Index - x", "Ecal Hit Index - y");
- 	TH1F* h_cluster_energy = new TH1F("h_cluster_energy", "Ecal Cluster Energy", 100, 0, 5.5);
+ 	TH1F *h_cluster_energy = new TH1F("h_cluster_energy", "Ecal Cluster Energy", 100, 0, 5.5);
  	setup1DHistogram(h_cluster_energy, "Ecal Cluster Energy [GeV]");
 
     //
@@ -60,6 +60,8 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
     //
     TH1F *h_p = new TH1F("h_p", "Particle Momentum", 64, 0, 2.2);
     setup1DHistogram(h_p, "Momentum [GeV]");  
+	TH1F *h_vertex_z = new TH1F("h_vertex_z", "Vertex - Z", 150, -150, 150); 
+	setup1DHistogram(h_vertex_z, "Vertex z [mm]"); 
 
  	//-----------------------------//
 
@@ -84,7 +86,8 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 	
     double d0, tan_lambda, chi2;  
     double cluster_energy;
-    vector<double> p;
+	double vertex_z; 
+	vector<double> p;
     
     SvtTrack *track = 0;
     EcalCluster* ecal_cluster = 0;
@@ -166,6 +169,16 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
             h_p->Fill(magnitude(p));             
 
         }
+
+		// Loop over all unconstrained vertexed particles in the event
+		for(int particle_n = 0; particle_n < hps_event->getNumberOfParticles(HpsEvent::UC_VTX_PARTICLES); ++particle_n){
+			
+			// Get a vertexed particle from the event
+			particle = hps_event->getParticle(HpsEvent::UC_VTX_PARTICLES, particle_n); 
+			
+			vertex_z = particle->getVertexPosition()[2];
+			h_vertex_z->Fill(vertex_z);
+		}
     }
 
 	// Save all plots to a single pdf file
@@ -179,7 +192,9 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 	canvas->Print( (pdf_file_name + "(").c_str());
     h_chi2->Draw("");
 	canvas->Print( (pdf_file_name + "(").c_str());
-    h_p->Draw("");  
+    h_p->Draw(""); 
+	canvas->Print( (pdf_file_name + "(").c_str());
+	h_vertex_z->Draw("");
     canvas->Print( (pdf_file_name + ")").c_str());
 
 }
