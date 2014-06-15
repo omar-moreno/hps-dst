@@ -1,7 +1,7 @@
 /**
  * 	@section purpose:
- *		A simple analysis demonstrating the use of a DST to make simple plots
- *		of Ecal and SVT physics objects
+ *		A simple ROOT analysis demonstrating the use of a DST to make simple
+ *		plots of Ecal, SVT and Particle physics objects
  *
  *  @author: 	Omar Moreno <omoreno1@ucsc.edu>
  *              Santa Cruz Institute for Particle Physics
@@ -51,7 +51,7 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
  	TH1F *h_d0   = new TH1F("h_d0",  "Track D0", 64, -8, 8);
  	setup1DHistogram(h_d0, "D0 [mm]");
  	TH1F *h_tlambda   = new TH1F("h_tlambda",  "Track Tan(#lambda)", 64, -0.08, 0.08);
- 	setup1DHistogram(h_d0, "Tan #lambda");
+ 	setup1DHistogram(h_tlambda, "Tan #lambda");
     TH1F *h_chi2 = new TH1F("h_chi2", "Track #chi^{2}", 25, 0, 25);
     setup1DHistogram(h_chi2, "#chi^{2}");
 
