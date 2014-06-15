@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 # Set the name of the project
 project(HPS_DST)
 
-# Set the current version
+# Set the project version
 set(HPS_DST_VERSION_MAJOR 0)
 set(HPS_DST_VERSION_MINOR 5)
 
@@ -18,7 +18,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib")
 
-# Set the path to additional CMake modules
+# Set the path where additional CMake modules are located
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 # Find ROOT
@@ -55,6 +55,7 @@ endif()
 # include the GBL headers
 include_directories("${GBL_INCLUDE_DIR}")
 
+#--------------------------------------------#
 #--- Create the HPS Event ROOT dictionary ---#
 #--------------------------------------------#
 
@@ -86,6 +87,18 @@ add_subdirectory("${HPS_DST_SOURCE_DIR}/src/utils")
 # Add dst directory to the build
 add_subdirectory("${HPS_DST_SOURCE_DIR}/src/dst")
 
+#------------------------------#
+#--- Generate Documentation ---#
+#------------------------------#
 
+# Find Doxygen
+find_package(Doxygen)
 
+# If Doxygen is found, add a target to generate the documentation
+if(DOXYGEN_FOUND)
+	configure_file(${HPS_DST_SOURCE_DIR}/doc/Doxyfile ${HPS_DST_BINARY_DIR}/doc/Doxyfile @ONLY)
+	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${HPS_DST_BINARY_DIR}/doc/Doxyfile WORKING_DIRECTORY ${HPS_DST_SOURCE_DIR}/doc COMMENT "Generating documentation" VERBATIM)
+else()
+	MESSAGE(STATUS "Doxygen was not found.  Documentation will not be generated.")
+endif(DOXYGEN_FOUND)
 
