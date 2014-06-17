@@ -5,7 +5,6 @@
  *			 Santa Cruz Institute for Particle Physics
  *			 University of California, Santa Cruz
  *	@date: December 20, 2013
- *	@version: 1.0
  *
  */
 
@@ -87,12 +86,6 @@ int main(int argc, char **argv)
 		dst_file_name = "hps_dst.root"; 
 	}
 
-	// If a B-field isn't set, exit the program
-	if(isnan(b_field)){ 
-		cerr << "Please specify the magnetic field strength in Tesla."
-			<< "\nUse the -h flag for usage" << endl;
-		return EXIT_FAILURE;
-	}
 
 	// Open a ROOT file
 	TFile* root_file = new TFile(dst_file_name.c_str(), "RECREATE");
@@ -108,8 +101,19 @@ int main(int argc, char **argv)
 
 	EVENT::LCEvent* event = NULL;
 	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
-	event_builder->setBField(b_field); 
-	event_builder->setGblFlag(do_gbl);
+	
+	if(do_gbl){
+		// Only require a b-field if the GBL output is enabled
+		if(isnan(b_field)){ 
+			cerr << "Please specify the magnetic field strength in Tesla."
+				 << "\nUse the -h flag for usage" << endl;
+			return EXIT_FAILURE;
+		}
+		
+		event_builder->setBField(b_field); 
+		event_builder->setGblFlag(do_gbl);
+	}
+	
 	int event_number = 0;
 	clock_t initial_event_time;
 	clock_t total_time = 0;
