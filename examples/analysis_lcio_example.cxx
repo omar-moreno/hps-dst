@@ -139,7 +139,7 @@ int main( int argc, char **argv)
 	IO::LCReader *lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader();
 	try{
 		lc_reader->open(lcio_file_name.c_str());
-	} catch(IO::IOException &exception){
+	} catch(IO::IOException &e){
 		cout << "File " << lcio_file_name << " cannot be opened!" << endl;
 		return EXIT_FAILURE;
 	}
@@ -176,7 +176,7 @@ int main( int argc, char **argv)
         // have the specified collection, skip the rest of the event.
         try{
         	clusters = (IMPL::LCCollectionVec*) event->getCollection(ecal_clusters_collection_name);
-        } catch(EVENT::DataNotAvailableException &exception){
+        } catch(EVENT::DataNotAvailableException &e){
         	cout << "Collection " << ecal_clusters_collection_name << " was not found. "
         	     << "Skipping event ..." << endl;
         	continue;
@@ -218,7 +218,7 @@ int main( int argc, char **argv)
 		// have the specified collection, skip the rest of the event.
 		try{
 			tracks = (IMPL::LCCollectionVec*) event->getCollection(tracks_collection_name);
-		} catch(EVENT::DataNotAvailableException &exception){
+		} catch(EVENT::DataNotAvailableException &e){
 			cout << "Collection " << tracks_collection_name << " was not found. "
 			     << "Skipping event ..." << endl;
 			continue;
@@ -255,7 +255,7 @@ int main( int argc, char **argv)
         // the event
         try{
         	recon_particles = (IMPL::LCCollectionVec*) event->getCollection(fs_recon_particles_collection_name);
-        } catch(EVENT::DataNotAvailableException &exception){
+        } catch(EVENT::DataNotAvailableException &e){
         	//cout << "Collection " << fs_recon_particles_collection_name << " was not found. "
         	//	 << "Skipping event ..." << endl;
         	continue;

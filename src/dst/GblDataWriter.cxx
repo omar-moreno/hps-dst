@@ -65,7 +65,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   // have the specified collection, skip the rest and just return
   try{
     tracks = (IMPL::LCCollectionVec*) event->getCollection(m_track_col_name);
-  } catch(EVENT::DataNotAvailableException exception){
+  } catch(EVENT::DataNotAvailableException e){
     if(m_debug) {
       cout << "Collection " << m_track_col_name << " was not found. "
            << "Skipping adding GBL data ..." << endl;
@@ -79,7 +79,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   IMPL::LCCollectionVec* trkToGblTrk = NULL;  
   try {
     trkToGblTrk = (IMPL::LCCollectionVec*) event->getCollection(m_rel_gbltrk_name);
-  } catch(EVENT::DataNotAvailableException exception) {
+  } catch(EVENT::DataNotAvailableException e) {
     if(m_debug) {
       cout << "Collection " << m_rel_gbltrk_name << " was not found. "
            << "Skipping adding GBL data ..." << endl;
@@ -93,7 +93,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   IMPL::LCCollectionVec* gblTrkToGblStrip = NULL;  
   try {
     gblTrkToGblStrip = (IMPL::LCCollectionVec*) event->getCollection(m_rel_toGblStrip_name);
-  } catch(EVENT::DataNotAvailableException exception) {
+  } catch(EVENT::DataNotAvailableException e) {
     cout << "Collection " << m_rel_toGblStrip_name << " was not found. "
          << "Skipping adding GBL data ..." << endl;
     return;
