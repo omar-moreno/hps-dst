@@ -217,6 +217,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         cout << "GblDataWriter: track data info \n" << gbl_track_data->toString() << endl;
       }
       
+      delete rel_gblStrip_nav;
     } // gbl tracks
   } // seed tracks
   
