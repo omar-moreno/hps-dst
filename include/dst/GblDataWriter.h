@@ -9,6 +9,12 @@
 #ifndef __GBL_DATA_WRITER_H__
 #define __GBL_DATA_WRITER_H__
 
+//--- C++ ---//
+//-----------//
+#include <cstdlib>
+#include <cmath>
+#include <iostream>
+
 //--- DST ---//
 //-----------//
 #include <DataWriter.h>
@@ -17,14 +23,20 @@
 //------------//
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/LCGenericObjectImpl.h>
+#include <IMPL/LCRelationImpl.h>
+#include <UTIL/LCRelationNavigator.h>
+#include <IMPL/TrackImpl.h>
 
+//--- HPS Event ---//
+//-----------------//
+#include <GblTrackData.h>
+#include <GblStripData.h>
 
 class GblDataWriter : public DataWriter {
 
     public:
 
         GblDataWriter();
-        GblDataWriter(bool debug);
         ~GblDataWriter();
 
         void setDebug(bool debug);
@@ -32,12 +44,21 @@ class GblDataWriter : public DataWriter {
 
     private:
 
-        bool m_debug;
         std::string m_track_col_name;
         std::string m_rel_gbltrk_name;
         std::string m_rel_toGblStrip_name;
 
-};
+        bool m_debug;
+		
+		IMPL::LCCollectionVec* tracks;
+		IMPL::LCCollectionVec* trk_to_gbltrk_relations;
+		IMPL::LCCollectionVec* gbltrk_to_gblstrip_relations;
+		IMPL::LCRelationImpl* trk_to_gbltrk_relation;
+		IMPL::LCGenericObjectImpl* gbl_track_data;
+		IMPL::TrackImpl* track; 
+	
+		GblTrackData* hps_gbl_track_data; 
 
+}; // GblDataWriter
 
 #endif // __GBL_DATA_WRITER_H__
