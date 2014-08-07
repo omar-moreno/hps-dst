@@ -6,6 +6,8 @@
 # Find the necessary LCIO libraries
 find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 
+find_library(GBL_LIB GBL ${GBL_DIR}/lib)
+
 # Create the SvtDataWriter library
 add_library(SvtDataWriter SvtDataWriter.cxx)
 target_link_libraries(SvtDataWriter ${LCIO_LIB} TrackUtils HpsEvent)
@@ -36,4 +38,4 @@ target_link_libraries(HpsEventBuilder SvtDataWriter EcalDataWriter MCParticleDat
 
 # Create the dst_writer executable
 add_executable(dst_maker dst_maker.cxx)
-target_link_libraries(dst_maker ${LCIO_LIB} ${ROOT_TREE_LIBRARY} ${ROOT_CORE_LIBRARY} ${ROOT_RIO_LIBRARY} ${ROOT_PHYSICS_LIBRARY} HpsEvent HpsEventBuilder)
+target_link_libraries(dst_maker ${GBL_LIB} ${LCIO_LIB} ${ROOT_TREE_LIBRARY} ${ROOT_CORE_LIBRARY} ${ROOT_RIO_LIBRARY} ${ROOT_PHYSICS_LIBRARY} HpsEvent HpsEventBuilder)
