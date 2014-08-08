@@ -1,11 +1,14 @@
 /**
  *	@section purpose: write GBL input data to DST
  *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	         SLAC
+ *	@author: Omar Moreno <omoreno1@ucsc.edu>
+ *	         Santa Cruz Institute for Particle Physics
+ *	         University of California, Santa Cruz
  *	@date: Feb. 12, 2014
- *	@version: 1.0
- *  @author Per Hansson Adrian <phansson@slac.stanford.edu>
  *
  */
+
 #ifndef __GBL_DATA_WRITER_H__
 #define __GBL_DATA_WRITER_H__
 
@@ -55,9 +58,11 @@ class GblDataWriter : public DataWriter {
 		IMPL::LCCollectionVec* gbltrk_to_gblstrip_relations;
 		IMPL::LCRelationImpl* trk_to_gbltrk_relation;
 		IMPL::LCGenericObjectImpl* gbl_track_data;
+        IMPL::LCGenericObjectImpl* gbl_strip;  
 		IMPL::TrackImpl* track; 
 	
-		GblTrackData* hps_gbl_track_data; 
+		GblTrackData* hps_gbl_track_data;
+        GblStripData* hps_gbl_strip; 
 
 }; // GblDataWriter
 

@@ -1,6 +1,10 @@
 /**
  *	@section purpose: write GBL input data to DST
  *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	         SLAC
+ *	@author: Omar Moreno <omoreno1@ucsc.edu>
+ *	         Santa Cruz Institute for Particle Physics
+ *	         University of California, Santa Cruz
  *	@date: Feb. 12, 2014
  *
  */
@@ -18,7 +22,9 @@ static const unsigned int n_prjPerToCl = 9; // n matrix elements in projection m
 GblDataWriter::GblDataWriter() 
 	: m_track_col_name("MatchedTracks"), m_rel_gbltrk_name("TrackToGBLTrack"), 
 	  m_rel_toGblStrip_name("GBLTrackToStripData"), m_debug(false),
-	  tracks(NULL)
+	  tracks(NULL), trk_to_gbltrk_relations(NULL), gbltrk_to_gblstrip_relations(NULL),
+      trk_to_gbltrk_relation(NULL), gbl_track_data(NULL), gbl_strip(NULL),
+      track(NULL), hps_gbl_track_data(NULL), hps_gbl_strip(NULL)
 {}
 
 GblDataWriter::~GblDataWriter() 
@@ -127,96 +133,82 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 		}   
 
 		// Add all GblStrips to the GblTrackData object	
-		UTIL::LCRelationNavigator* rel_gblStrip_nav = new UTIL::LCRelationNavigator(gbltrk_to_gblstrip_relations);
+		UTIL::LCRelationNavigator* rel_gbl_strip_nav = new UTIL::LCRelationNavigator(gbltrk_to_gblstrip_relations);
 		
 		// Get the list of GblStrips that are related to the GblTrackData object
-		EVENT::LCObjectVec gbl_strips = rel_gblStrip_nav->getRelatedToObjects(gbl_track_data);
+		EVENT::LCObjectVec gbl_strips = rel_gbl_strip_nav->getRelatedToObjects(gbl_track_data);
 			
 		if(m_debug) {
 			std::cout << "GblDataWriter: found " << gbl_strips.size() 
 					  << " GBL strips for this GBL track data object" << std::endl;
 		}
 
-		// Loop over all of the strips and add them to both the HpsEvent and GblTrackData
-	}
-
-
-	/*
-	for(unsigned int itrack = 0; itrack != tracks->getNumberOfElements(); ++itrack) {
-
-		for(unsigned int igbl = 0 ; igbl != n_gblTracks; ++ igbl) {
-
-			// find the GBL hits
-
-			UTIL::LCRelationNavigator* rel_gblStrip_nav = new UTIL::LCRelationNavigator(gbltrk_to_gblstrip_relations);
-			const EVENT::LCObjectVec gblStrips = rel_gblStrip_nav->getRelatedToObjects(gblTrackGeneric);
-			const EVENT::LCObjectVec::size_type n_gblStrips = gblStrips.size();
-
-			for(EVENT::LCObjectVec::size_type istrip = 0; istrip < n_gblStrips; ++ istrip) {
-
-				if(m_debug) {
-					std::cout << "GblDataWriter: processing GBLStrip " << istrip << std::endl;
-				}
-
-				EVENT::LCGenericObject* gblStripGeneric = (EVENT::LCGenericObject*) gblStrips.at(istrip);
-
-				GblStripData* gbl_strip_data = hps_event->addGblStripData();
-				gbl_track_data->addStrip(gbl_strip_data);
-
-				// Check that the data structure is the correct length
-				if( gblStripGeneric->getNInt() ==  n_gblStripGenericIntDST ) {
-					gbl_strip_data->SetId(gblStripGeneric->getIntVal(0));
-				} 
-				else {
-					std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
-					std::cout << gblStripGeneric->getNInt() 
-						<< " ints. => check the DST maker" << std::endl;
-					exit(1);
-				}
-
-				// Check that the data structure is the correct length
-				if( gblStripGeneric->getNDouble() == n_gblStripGenericDoubleDST ) {
-					gbl_strip_data->SetPath3D(gblStripGeneric->getDoubleVal(0));
-					gbl_strip_data->SetPath(gblStripGeneric->getDoubleVal(1));
-					gbl_strip_data->SetU(gblStripGeneric->getDoubleVal(2),gblStripGeneric->getDoubleVal(3),gblStripGeneric->getDoubleVal(4));
-					gbl_strip_data->SetV(gblStripGeneric->getDoubleVal(5),gblStripGeneric->getDoubleVal(6),gblStripGeneric->getDoubleVal(7));
-					gbl_strip_data->SetW(gblStripGeneric->getDoubleVal(8),gblStripGeneric->getDoubleVal(9),gblStripGeneric->getDoubleVal(10));
-
-
-					gbl_strip_data->SetGlobalTrackDir(gblStripGeneric->getDoubleVal(11),gblStripGeneric->getDoubleVal(12),gblStripGeneric->getDoubleVal(13));
-					gbl_strip_data->SetPhi(gblStripGeneric->getDoubleVal(14));
-					gbl_strip_data->SetUmeas(gblStripGeneric->getDoubleVal(15));
-					gbl_strip_data->SetTrackPos(gblStripGeneric->getDoubleVal(16),gblStripGeneric->getDoubleVal(17),gblStripGeneric->getDoubleVal(18));
-					gbl_strip_data->SetUmeasErr(gblStripGeneric->getDoubleVal(19));
-					gbl_strip_data->SetMSAngle(gblStripGeneric->getDoubleVal(20));
-					gbl_strip_data->SetLambda(gblStripGeneric->getDoubleVal(21));
-				}
-				else {
-					std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
-					std::cout << gblStripGeneric->getNDouble() 
-						<< " doubles. => check the DST maker" << std::endl;
-					exit(1);
-				}
-
-
-
-			}
-
+        for(int gbl_strip_n = 0; gbl_strip_n < gbl_strips.size(); ++gbl_strip_n){
+            
 			if(m_debug) {
-				std::cout << "GblDataWriter: track data info \n" << gbl_track_data->toString() << std::endl;
+			    std::cout << "GblDataWriter: processing GBLStrip " << gbl_strip_n << std::endl;
 			}
 
-		} // gbl tracks
-	} // seed tracks
+            gbl_strip = (IMPL::LCGenericObjectImpl*) gbl_strips.at(gbl_strip_n);
 
+            hps_gbl_strip = hps_event->addGblStripData();
 
-	delete rel_gbltrk_nav;
+            hps_gbl_track_data->addStrip(hps_gbl_strip); 
+				
+            // Check that the data structure is the correct length
+			if( gbl_strip->getNInt() ==  n_gblStripGenericIntDST ) {
+				hps_gbl_strip->SetId(gbl_strip->getIntVal(0));
+			} 
+			else {
+				std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
+				std::cout << gbl_strip->getNInt() << " ints. => check the DST maker" << std::endl;
+				exit(1);
+			}
+				
+            // Check that the data structure is the correct length
+			if( gbl_strip->getNDouble() == n_gblStripGenericDoubleDST ) {
+
+				hps_gbl_strip->SetPath3D(gbl_strip->getDoubleVal(0));
+				hps_gbl_strip->SetPath(gbl_strip->getDoubleVal(1));
+				hps_gbl_strip->SetU(gbl_strip->getDoubleVal(2),
+                                    gbl_strip->getDoubleVal(3),
+                                    gbl_strip->getDoubleVal(4));
+				hps_gbl_strip->SetV(gbl_strip->getDoubleVal(5),
+                                    gbl_strip->getDoubleVal(6),
+                                    gbl_strip->getDoubleVal(7));
+				hps_gbl_strip->SetW(gbl_strip->getDoubleVal(8),
+                                    gbl_strip->getDoubleVal(9),
+                                    gbl_strip->getDoubleVal(10));
+				hps_gbl_strip->SetGlobalTrackDir(gbl_strip->getDoubleVal(11),
+                                                 gbl_strip->getDoubleVal(12),
+                                                 gbl_strip->getDoubleVal(13));
+				hps_gbl_strip->SetPhi(gbl_strip->getDoubleVal(14));
+				hps_gbl_strip->SetUmeas(gbl_strip->getDoubleVal(15));
+				hps_gbl_strip->SetTrackPos(gbl_strip->getDoubleVal(16),
+                                           gbl_strip->getDoubleVal(17),
+                                           gbl_strip->getDoubleVal(18));
+				hps_gbl_strip->SetUmeasErr(gbl_strip->getDoubleVal(19));
+				hps_gbl_strip->SetMSAngle(gbl_strip->getDoubleVal(20));
+				hps_gbl_strip->SetLambda(gbl_strip->getDoubleVal(21));
+			}
+			else {
+				std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
+				std::cout << gbl_strip->getNDouble() << " doubles. => check the DST maker" << std::endl;
+				exit(1);
+	    	}
+        }  // GBLStripData
+
+		if(m_debug) {
+			std::cout << "GblDataWriter: track data info \n" << hps_gbl_track_data->toString() << std::endl;
+		}
+
+        delete rel_gbl_strip_nav;
+
+	} // GBLTrackData
 
 	if(m_debug) {
 		std::cout << "GblDataWriter: write data end " << std::endl;
 	}
-	*/
-
 }
 
 
