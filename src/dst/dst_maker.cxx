@@ -126,6 +126,7 @@ int main(int argc, char **argv)
 		// Loop over all events in the LCIO file
 		while((event = lc_reader->readNextEvent()) != 0){
 
+            Int_t ObjectNumber = TProcessID::GetObjectCount();
 			initial_event_time = clock();
 
 			++event_number; 
@@ -139,6 +140,8 @@ int main(int argc, char **argv)
 			event_builder->makeHpsEvent(event, hps_event); 
 			tree->Fill();
 
+            //Reset object count so we don't run out of TRef IDs
+            TProcessID::SetObjectCount(ObjectNumber);
 			total_time += clock() - initial_event_time;
 		}	
 

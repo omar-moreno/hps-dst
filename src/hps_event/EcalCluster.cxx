@@ -63,6 +63,7 @@ void EcalCluster::Clear(Option_t* /*option*/)
 {
     TObject::Clear();
     ecal_hits->Delete();
+    seed_hit = NULL;
     n_ecal_hits = 0;
 }
 
