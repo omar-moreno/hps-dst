@@ -1,5 +1,6 @@
 /**
- *	@section purpose: write GBL input data to DST
+ *	@section
+ *		purpose: write GBL input data to DST
  *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
  *	         SLAC
  *	@author: Omar Moreno <omoreno1@ucsc.edu>
@@ -21,7 +22,7 @@ static const unsigned int n_prjPerToCl = 9; // n matrix elements in projection m
 
 GblDataWriter::GblDataWriter() 
 	: m_track_col_name("MatchedTracks"), m_rel_gbltrk_name("TrackToGBLTrack"), 
-	  m_rel_toGblStrip_name("GBLTrackToStripData"), m_debug(false),
+	  m_rel_toGblStrip_name("GBLTrackToStripData"), m_debug(true),
 	  tracks(NULL), trk_to_gbltrk_relations(NULL), gbltrk_to_gblstrip_relations(NULL),
       trk_to_gbltrk_relation(NULL), gbl_track_data(NULL), gbl_strip(NULL),
       track(NULL), hps_gbl_track_data(NULL), hps_gbl_strip(NULL)
@@ -113,17 +114,18 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 			}
 		}
 
-
-		// Fill the seed track parameters 
-		// TODO: Other than theta, these are the same track parameters as the 
-		//		 seed track.  Should a reference to the seed track be stored 
-		//		 instead?
-		/*hps_gbl_track_data->setTrackParameters(gblTrackGeneric->getDoubleVal(0),
-										  gblTrackGeneric->getDoubleVal(1),
-										  gblTrackGeneric->getDoubleVal(2),
-										  gblTrackGeneric->getDoubleVal(3),
-										  gblTrackGeneric->getDoubleVal(4));
-		 */
+		// TODO: Assure that the track parameters calculated directly from the SvtTrack
+		//		 are within some epsilon of those retrieved from the GblTrackData
+		//		 generic object.  Throw an exception if they aren't. 
+		/*if((hps_gbl_track_data->getKappa() - gbl_track_data->getDoubleVal(0)) != 0){
+		   (hps_gbl_track_data->getTheta() - gbl_track_data->getDoubleVal(1)) ||
+		   (hps_gbl_track_data->getPhi()   != gbl_track_data->getDoubleVal(2)) ||
+		   (hps_gbl_track_data->getD0()	  != gbl_track_data->getDoubleVal(3)) ||
+		   (hps_gbl_track_data->getZ0()	  != gbl_track_data->getDoubleVal(4)){
+	
+			std::cout << "Track data does not match!" << std::endl;
+			std::cout << "hps: " << hps_gbl_track_data->getKappa() - gbl_track_data->getDoubleVal(0) << std::endl;	
+		}*/	
 
 		for(unsigned int idx = 0; idx < n_prjPerToCl; ++idx) {
 			unsigned int row = static_cast<unsigned int>(floor(static_cast<double>(idx)/3.0));
@@ -198,8 +200,18 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 	    	}
         }  // GBLStripData
 
-		if(m_debug) {
-			std::cout << "GblDataWriter: track data info \n" << hps_gbl_track_data->toString() << std::endl;
+		if(m_debug){
+	
+			std::cout << "GblDataWriter: Track parameters from LCIO GblTrackData collection: " << std::endl;
+			std::cout << "kappa: " << gbl_track_data->getDoubleVal(0) << "\n"
+					  << "theta: " << gbl_track_data->getDoubleVal(1) << "\n"
+					  << "phi:   " << gbl_track_data->getDoubleVal(2) << "\n"
+					  << "d0:    " << gbl_track_data->getDoubleVal(3) << "\n"
+					  << "z0:    " << gbl_track_data->getDoubleVal(4) << std::endl;
+
+			std::cout << "GblDataWriter: Track parameters calculated by DST GblTrackData\n" 
+				      << hps_gbl_track_data->toString() << std::endl;
+		
 		}
 
         delete rel_gbl_strip_nav;
