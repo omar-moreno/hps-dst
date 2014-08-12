@@ -69,7 +69,6 @@ bool HpsGblFitter::GetDebug() {
 	return m_debug;
 }
 
-
 HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 
 	// Time the fits
@@ -79,7 +78,7 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 
 	// path length along trajectory
 	double s = 0.;
-	
+
 	// jacobian to transport errors between points along the path
 	TMatrixD jacPointToPoint(5, 5);
 	jacPointToPoint.UnitMatrix();
@@ -166,14 +165,6 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 			uvDir.Print();
 		}
 
-		// if(m_debug) std::cout << "HpsGblFitter: " << "test" <<std::endl;
-		// TMatrixD a(2,3);
-		// TMatrixD b(3,2);
-		// a.Print();
-		// b.Print();
-		// (a*b).Print();
-		// if(m_debug) std::cout << "HpsGblFitter: " << "end test" << std::endl;
-
 		// projection from  measurement to local (curvilinear uv) directions (duv/dm)
 		//TMatrixD proM2l(uvDir,TMatrixD::kMult,mDirT);
 		//TMatrixD proM2l(uvDir);
@@ -221,10 +212,8 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 			measPrec.Print();
 		}
 
-
 		//Find the Jacobian to be able to propagate the covariance matrix to this strip position
-		jacPointToPoint = gblSimpleJacobianLambdaPhi(step, cosLambda, abs(m_bfac));
-
+		jacPointToPoint = gblSimpleJacobianLambdaPhi(step, cosLambda, fabs(m_bfac));
 
 		if (m_debug) {
 			std::cout << "HpsGblFitter: " << "jacPointToPoint to extrapolate to this point:" << std::endl;
@@ -253,8 +242,6 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 
 		//Add measurement to the point
 		point.addMeasurement(proL2m,meas,measPrec);
-
-
 
 		//Add scatterer in curvilinear frame to the point
 		// no direction in this frame
@@ -331,11 +318,7 @@ point.addGlobals(labGlobal, addDer)
 
 		// save strip and label map
 		stripLabelMap[strip] = iLabel;
-
-
-
-
-
+	
 	} //strips
 
 
@@ -495,9 +478,5 @@ void HpsGblFitter::SetTrackProperties(GblTrack* track, const GblTrackData* track
 		track->print();
 
 	}
-
-
-
-
 }
 
