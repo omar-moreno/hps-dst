@@ -35,12 +35,9 @@ void GblTrackWriter::setDebug(bool debug) {
 
 void GblTrackWriter::writeData(HpsEvent* hps_event) {
 
-   m_debug = false;
-
   // Do the GBL refit of the existing track
   
   // Check if relevant information is available in the event
-  
   if( hps_event->getNumberOfGblTracksData() == 0 ) {
     if(m_debug) {
       cout << "GblTrackWriter: There are no GBL Track Data in this event. " 
@@ -78,8 +75,7 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
 
   HpsGblFitter gblFitter(m_b_field);
   gblFitter.SetDebug(m_debug);
-  
-  
+   
   // Loop over the GBL tracks
 
   if(m_debug) {
