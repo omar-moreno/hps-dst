@@ -22,7 +22,7 @@ static const unsigned int n_prjPerToCl = 9; // n matrix elements in projection m
 
 GblDataWriter::GblDataWriter() 
 	: m_track_col_name("MatchedTracks"), m_rel_gbltrk_name("TrackToGBLTrack"), 
-	  m_rel_toGblStrip_name("GBLTrackToStripData"), m_debug(true),
+	  m_rel_toGblStrip_name("GBLTrackToStripData"), m_debug(false),
 	  tracks(NULL), trk_to_gbltrk_relations(NULL), gbltrk_to_gblstrip_relations(NULL),
       trk_to_gbltrk_relation(NULL), gbl_track_data(NULL), gbl_strip(NULL),
       track(NULL), hps_gbl_track_data(NULL), hps_gbl_strip(NULL)
