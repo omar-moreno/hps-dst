@@ -89,6 +89,8 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 	bool useUncorrMS = false;
 	TMatrixD msCov(5, 5);
 	msCov.Zero();
+	TMatrixD measMsCov(2, 2);
+	measMsCov.Zero();
 	// Vector of the strip clusters used for the GBL fit
 	std::vector<gbl::GblPoint> listOfPoints;
 
@@ -220,19 +222,26 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 			jacPointToPoint.Print();
 		}
 
-		//propagate MS covariance matrix (in the curvilinear frame) to this strip position
-		//msCov = np.dot(jacPointToPoint, np.dot(msCov, jacPointToPoint.T))
-		//measMsCov = np.dot(proL2m, np.dot(msCov[3:, 3:], proL2m.T))
+		// Get the transpose of the Jacobian
+        TMatrixD jacPointToPointTransposed(TMatrixD::kTransposed, jacPointToPoint);
+		
+		// Propagate the MS covariance matrix (in the curvilinear frame) to this strip position
+		msCov = msCov*jacPointToPointTransposed;
+		msCov = jacPointToPoint*msCov;
+
+		// Get the MS covariance for the measurements in the measurement frame
+		TMatrixD proL2mTransposed(TMatrixD::kTransposed, proL2m);
+		measMsCov = proL2m*msCov.GetSub(3,4,3,4)*proL2mTransposed;
 
 		if (m_debug) {
 			std::cout << "HpsGblFitter: " << " msCov at this point:" << std::endl;
 			msCov.Print();
-			//std::cout << "HpsGblFitter: " << "measMsCov at this point:" << std::endl;
-			//measMsCov.Print();
+			std::cout << "HpsGblFitter: " << "measMsCov at this point:" << std::endl;
+			measMsCov.Print();
 		}
 
-		//Option to blow up measurement error according to multiple scattering
-		//if useUncorrMS:
+		// Option to blow up measurement error according to multiple scattering
+		// if useUncorrMS:
 		//measPrec[0] = 1.0 / (measErr[0] ** 2 + measMsCov[0, 0])
 		//  if debug:
 		//print 'Adding measMsCov ', measMsCov[0,0]
@@ -273,8 +282,8 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::Fit(const GblTrackData* track) {
 
 
 		// Update MS covariance matrix 
-		msCov[1, 1] += scatErr[0]*scatErr[0];
-		msCov[2, 2] += scatErr[1]*scatErr[1];
+        msCov(1, 1) += scatErr[0]*scatErr[0];
+        msCov(2, 2) += scatErr[1]*scatErr[1];
 
 		/*
 
