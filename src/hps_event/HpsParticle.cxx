@@ -36,6 +36,7 @@ HpsParticle::~HpsParticle()
 	Clear();
     delete svt_tracks; 
 	delete ecal_clusters; 
+    delete particles;
 }
 
 HpsParticle &HpsParticle::operator=(const HpsParticle &particleObj)
