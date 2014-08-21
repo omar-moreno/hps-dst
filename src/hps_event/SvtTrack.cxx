@@ -15,14 +15,16 @@ ClassImp(SvtTrack)
 SvtTrack::SvtTrack()
 	: 	TObject(), svt_hits(new TRefArray()),
 	  	n_hits(0), d0(0), phi(0), omega(0),
-	  	tan_lambda(0), z0(0), chi_squared(0)
+	  	tan_lambda(0), z0(0), chi_squared(0),
+        l1_isolation(0), l2_isolation(0)
 {}
 
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
 	:	TObject(), svt_hits(new TRefArray()), d0(svtTrackObj.d0),
 		phi(svtTrackObj.phi), omega(svtTrackObj.omega),
 		tan_lambda(svtTrackObj.tan_lambda), z0(svtTrackObj.z0),
-		chi_squared(svtTrackObj.chi_squared)
+		chi_squared(svtTrackObj.chi_squared),
+        l1_isolation(svtTrackObj.l1_isolation), l2_isolation(svtTrackObj.l2_isolation)
 {
 	*svt_hits = *svtTrackObj.svt_hits;
 }
@@ -48,6 +50,8 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj)
 	this->tan_lambda = svtTrackObj.tan_lambda;
 	this->z0 = svtTrackObj.z0;
 	this->chi_squared = svtTrackObj.chi_squared;
+	this->l1_isolation = svtTrackObj.l1_isolation;
+	this->l2_isolation = svtTrackObj.l2_isolation;
 
 	svt_hits = new TRefArray();
 	*svt_hits = *svtTrackObj.svt_hits;
