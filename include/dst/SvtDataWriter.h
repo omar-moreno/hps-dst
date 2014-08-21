@@ -27,6 +27,9 @@
 //--- LCIO ---//
 //------------//
 #include <IMPL/LCCollectionVec.h>
+#include <IMPL/LCGenericObjectImpl.h>
+#include <IMPL/LCRelationImpl.h>
+#include <UTIL/LCRelationNavigator.h>
 #include <IMPL/TrackImpl.h>
 #include <IMPL/TrackerHitImpl.h>
 
@@ -53,6 +56,8 @@ class SvtDataWriter : public DataWriter {
 	private:
 	
 		std::string tracks_collection_name;
+		std::string trackquality_collection_name;
+		std::string trackquality_rel_collection_name;
 
 		IMPL::LCCollectionVec* tracks;
 		IMPL::TrackImpl* track;
