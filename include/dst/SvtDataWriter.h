@@ -10,16 +10,19 @@
 #ifndef __SVT_DATA_WRITER_H__
 #define __SVT_DATA_WRITER_H__
 
+//-----------//
 //--- C++ ---//
 //-----------//
 #include <limits>
 #include <cmath>
 #include <stdexcept>
 
+//-----------//
 //--- DST ---//
 //-----------//
 #include <DataWriter.h>
 
+//-------------//
 //--- Utils ---//
 //-------------//
 #include <TrackUtils.h>
@@ -33,6 +36,7 @@
 #include <IMPL/TrackImpl.h>
 #include <IMPL/TrackerHitImpl.h>
 
+//-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <SvtTrack.h>
@@ -54,17 +58,21 @@ class SvtDataWriter : public DataWriter {
 		};
 
 	private:
-	
-		std::string tracks_collection_name;
-		std::string trackquality_collection_name;
-		std::string trackquality_rel_collection_name;
 
 		IMPL::LCCollectionVec* tracks;
 		IMPL::TrackImpl* track;
 		IMPL::TrackerHitImpl* tracker_hit;
+		IMPL::LCCollectionVec* quality_data; 
 		
 		SvtTrack* svt_track;
 		SvtHit* svt_hit; 		
+
+		std::string tracks_collection_name;
+		std::string trackquality_collection_name;
+		std::string trackquality_rel_collection_name;
+
+		double l1_isolation; 
+		double l2_isolation; 
 
 }; // SvtDataWriter
 
