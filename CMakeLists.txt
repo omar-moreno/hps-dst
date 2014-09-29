@@ -30,6 +30,16 @@ include_directories(${ROOT_INCLUDE_DIRS})
 # Include the LCIO headers
 include_directories("$ENV{LCIO}/include")
 
+# Find the LCIO libraries
+find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
+if(NOT LCIO_LIB)
+	message(FATAL_ERROR
+		"\nThe library liblcio was not found.  Either LCIO hasn't been "
+		"installed or the environmental variable LCIO has not been set. "
+		"See documentation for details.")
+endif()
+message(STATUS "LCIO: ${LCIO_LIB}")
+
 # Include the HPS Event headers
 set(HPS_EVENT_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/hps_event")
 include_directories("${HPS_EVENT_HDR_DIR}")
@@ -102,3 +112,16 @@ else()
 	MESSAGE(STATUS "Doxygen was not found.  Documentation will not be generated.")
 endif(DOXYGEN_FOUND)
 
+#-------------------------------------------------#
+#--- Add a custom target to build the examples ---#
+#-------------------------------------------------#
+add_custom_target(examples COMMENT "HPS DST examples have been built")
+set(EXAMPLES_DIR "${HPS_DST_SOURCE_DIR}/examples")
+add_subdirectory("${EXAMPLES_DIR}")
+file(GLOB EXAMPLES_SRC "${EXAMPLES_DIR}/*.cxx")
+foreach(EXAMPLE ${EXAMPLES_SRC})
+	message(STATUS "Found source: ${EXAMPLE}")
+	get_filename_component(EXAMPLE_NAME "${EXAMPLE}" NAME_WE)
+	message(STATUS "Source name: ${EXAMPLE_NAME}")
+	add_dependencies(examples "${EXAMPLE_NAME}")
+endforeach(EXAMPLE)
