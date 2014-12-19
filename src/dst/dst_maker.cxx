@@ -1,36 +1,41 @@
 /**
- *	@section purpose: 
- *		Creates an HPS Data Summary Tape
- *	@author: Omar Moreno <omoreno1@ucsc.edu>
- *			 Santa Cruz Institute for Particle Physics
- *			 University of California, Santa Cruz
- *	@date: December 20, 2013
- *
+ *	@file   dst_maker.cxx
+ *	@brief  Creates an HPS Data Summary Tape
+ *	@author Omar Moreno <omoreno1@ucsc.edu>
+ *			Santa Cruz Institute for Particle Physics
+ *			University of California, Santa Cruz
+ *	@date   December 20, 2013
  */
 
-//--- C++ ---//
-//-----------//
+//------------------//
+//--- C++ StdLib ---//
+//------------------//
 #include <cstdlib>
 #include <cmath>
+#include <ctime>
 #include <limits>
-#include <time.h>
+#include <getopt.h>
 #include <unistd.h>
 
+//------------//
 //--- LCIO ---//
 //------------//
 #include <IO/LCReader.h>
 #include <IOIMPL/LCFactory.h>
 #include <EVENT/LCEvent.h>
 
+//------------//
 //--- ROOT ---//
 //------------//
 #include <TTree.h>
 #include <TFile.h>
 
+//-----------//
 //--- DST ---//
 //-----------//
 #include <HpsEventBuilder.h>
 
+//-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <HpsEvent.h>
@@ -39,31 +44,39 @@ using namespace std;
 
 void printUsage(); 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
 	clock_t initial_time = clock();
 
-	string dst_file_name; 	
-	int option_char;
-	int n_events = -1; 	
+	string dst_file_name = ""; 	
 	double b_field = numeric_limits<double>::quiet_NaN();  
-	bool do_gbl = false;
-	// Parse any command line arguments.  If an invalid argument is passed, 
-	// print the usage
-	while((option_char = getopt(argc, argv, "o:n:b:gh")) != -1){
-		switch(option_char){
+	int total_events = -1; 	
+	bool run_gbl = false;
+	// Parse any command line arguments.  If there are no valid command line 
+    // arguments passed, print the usage and exit.  
+	static struct option long_options[] = { 
+        {"output",        required_argument, 0, 'o' },
+        {"total_events",  required_argument, 0, 'n' },
+        {"b_field",       required_argument, 0, 'b' }, 
+        {"gbl",           no_argument,       0, 'g' },
+        {"help",          no_argument,       0, 'h' },
+        {0, 0, 0, 0}
+    };
+    int option_index = 0; 
+    int option_char = 0; 
+    while ((option_char = getopt_long(argc, argv, "o:n:b:gh", long_options, &option_index)) != -1) {
+		switch (option_char) {
 			case 'o': 
 				dst_file_name = optarg;
 				break; 
 			case 'n': 
-				n_events = atoi(optarg); 
+				total_events = atoi(optarg); 
 				break; 
 			case 'b':
 				b_field = atof(optarg);
 				break;	
 			case 'g':
-				do_gbl = true;
+				run_gbl = true;
 				break;	
 			case 'h': 
 				printUsage(); 
@@ -74,78 +87,90 @@ int main(int argc, char **argv)
 		}
 	}
 
-	// If an LCIO file is not specified, exit the program
-	if(argc-optind==0){
-		cerr << "Please specify at least one LCIO file to process."
-			<< "\nUse the -h flag for usage" << endl;
+	// If an LCIO file is not specified, warn the user and exit the application
+	if (argc-optind==0) {
+		cerr << "[ DST MAKER ]: Please specify at least one LCIO file to process." << endl;
+	    cerr << "[ DST MAKER ]: Use the --help flag for usage" << endl;
 		return EXIT_FAILURE; 	
 	}
 
-	// If a DST file name is not specified, set a default name
-	if(dst_file_name.length() == 0){
-		cout << "Setting DST name to default value: hps_dst.root" << endl;
-		dst_file_name = "hps_dst.root"; 
+	// If a DST file name is not specified, set it to one matching the first input 
+    // file
+	if (dst_file_name.empty()) {
+        dst_file_name =  argv[optind];
+        dst_file_name.replace(dst_file_name.begin() + dst_file_name.find(".lcsim"),
+                dst_file_name.end(), ".root");
 	}
+    cout << "[ DST MAKER ]: Setting DST file name to " << dst_file_name << endl;
 
 
 	// Open a ROOT file
 	TFile* root_file = new TFile(dst_file_name.c_str(), "RECREATE");
 
-	// Create a ROOT tree along with the HPS Event branch which
-	// will encapsulate all event information
+	// Instantiate a ROOT tree along with the HPS Event branch which will 
+    // encapsulate all event information
 	TTree *tree = new TTree("HPS_Event", "HPS event tree"); 
 	HpsEvent* hps_event = new HpsEvent();  
 	tree->Branch("Event", "HpsEvent", &hps_event, 32000, 3); 
 
-	// Create the LCIO file reader
+	// Instantiate the LCIO file reader
 	IO::LCReader* lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader(); 
 
-	EVENT::LCEvent* event = NULL;
-	HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
+
+	// Instntiate the event builder which will be used to create HpsEvent 
+    // objects
+    HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
 	
-	if(do_gbl){
+	if (run_gbl) {
 		// Only require a b-field if the GBL output is enabled
 		if(isnan(b_field)){ 
-			cerr << "Please specify the magnetic field strength in Tesla."
-				 << "\nUse the -h flag for usage" << endl;
+			cerr << "[ DST MAKER ]: Please specify the B field strength in Tesla." << endl;
+	        cerr << "[ DST MAKER ]: Use the --help flag for usage" << endl;
 			return EXIT_FAILURE;
 		}
 		
-		event_builder->setBField(b_field); 
-		event_builder->setGblFlag(do_gbl);
+        // Set the B field
+        event_builder->setBField(b_field); 
+        
+        // Set the GBL flag to true
+		event_builder->setGblFlag(run_gbl);
 	}
 	
+	EVENT::LCEvent* event = NULL;
 	int event_number = 0;
-	clock_t initial_event_time;
-	clock_t total_time = 0;
+    // Loop over all of the input LCIO files
+	while (optind<argc) {
 
-	while (optind<argc)
-	{
+        // Open the LCIO file.  If it can't be opened, throw an exception.
 		lc_reader->open(argv[optind]);
 
 		// Loop over all events in the LCIO file
-		while((event = lc_reader->readNextEvent()) != 0){
+		while ((event = lc_reader->readNextEvent()) != 0) {
 
             Int_t ObjectNumber = TProcessID::GetObjectCount();
-			initial_event_time = clock();
-
-			++event_number; 
-			if((event_number - 1) == n_events) break; 
+			
+            ++event_number; 
+			if ((event_number - 1) == total_events) break; 
 
 			// Print the event number every 1000 events
-			if(event_number%1000 == 0 ){
-				cout << "Processing event number: " << event_number << endl;
+			if (event_number%1000 == 0 ) {
+				cout << "[ DST MAKER ]: Processing event number: " << event_number << endl;
 			}
 
+            // Create an HPS Event object 
 			event_builder->makeHpsEvent(event, hps_event); 
+
+            // Write the HPS Event object to the ROOT tree
 			tree->Fill();
 
             //Reset object count so we don't run out of TRef IDs
             TProcessID::SetObjectCount(ObjectNumber);
-			total_time += clock() - initial_event_time;
 		}	
 
+        // Close the LCIO file that was being processed
 		lc_reader->close();
+
+        // Increase the file index
 		optind++;
 	}
 
@@ -156,23 +181,19 @@ int main(int argc, char **argv)
 	delete hps_event;
 	delete event_builder;
 
-	cout << "Total run time: " << ((float) (clock() - initial_time))/CLOCKS_PER_SEC
-		<< " s" << endl;
-	cout << "Average time/event: " << (((float) total_time)/CLOCKS_PER_SEC)/event_number
-		<< " s" << endl;
+	cout << "Total run time: " << ((float) (clock() - initial_time))/CLOCKS_PER_SEC << " s" << endl;
 
 	return EXIT_SUCCESS;
 }
 
-void printUsage()
-{
+void printUsage() {
 	cout << "Usage: dst_maker [OPTIONS] LCIO_INPUT_FILE [additional input files]" << endl;
 	cout << "An LCIO_INPUT_FILE must be specified.\n" << endl;
 	cout << "OPTIONS:\n "
-		<< "\t -o Output ROOT file name \n"
-		<< "\t -n The number of events to process \n"
-		<< "\t -b The strength of the magnetic field in Tesla \n"
-		<< "\t -g Run GBL track fit \n"
-		<< "\t -h Display this help and exit \n"
-		<< endl;
+		 << "\t -o Output ROOT file name \n"
+		 << "\t -n The number of events to process \n"
+		 << "\t -b The strength of the magnetic field in Tesla \n"
+		 << "\t -g Run GBL track fit \n"
+		 << "\t -h Display this help and exit \n"
+		 << endl;
 }	
