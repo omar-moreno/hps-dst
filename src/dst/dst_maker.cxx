@@ -52,19 +52,21 @@ int main(int argc, char **argv) {
 	double b_field = numeric_limits<double>::quiet_NaN();  
 	int total_events = -1; 	
 	bool run_gbl = false;
-	// Parse any command line arguments.  If there are no valid command line 
+	bool ecal_only = false;
+    // Parse any command line arguments.  If there are no valid command line 
     // arguments passed, print the usage and exit.  
 	static struct option long_options[] = { 
         {"output",        required_argument, 0, 'o' },
         {"total_events",  required_argument, 0, 'n' },
         {"b_field",       required_argument, 0, 'b' }, 
         {"gbl",           no_argument,       0, 'g' },
+        {"ecal_only",     no_argument,       0, 'e' },
         {"help",          no_argument,       0, 'h' },
         {0, 0, 0, 0}
     };
     int option_index = 0; 
     int option_char = 0; 
-    while ((option_char = getopt_long(argc, argv, "o:n:b:gh", long_options, &option_index)) != -1) {
+    while ((option_char = getopt_long(argc, argv, "o:n:b:geh", long_options, &option_index)) != -1) {
 		switch (option_char) {
 			case 'o': 
 				dst_file_name = optarg;
@@ -77,7 +79,10 @@ int main(int argc, char **argv) {
 				break;	
 			case 'g':
 				run_gbl = true;
-				break;	
+				break;
+            case 'e':
+                ecal_only = true;
+                break;    
 			case 'h': 
 				printUsage(); 
 				return EXIT_SUCCESS; 	
@@ -119,7 +124,9 @@ int main(int argc, char **argv) {
 
 	// Instntiate the event builder which will be used to create HpsEvent 
     // objects
-    HpsEventBuilder* event_builder = new HpsEventBuilder(); 	
+    HpsEventBuilder* event_builder = new HpsEventBuilder(); 
+    // Set whether the event builder should only write Ecal data
+    event_builder->writeEcalOnly(ecal_only);    
 	
 	if (run_gbl) {
 		// Only require a b-field if the GBL output is enabled
@@ -133,7 +140,7 @@ int main(int argc, char **argv) {
         event_builder->setBField(b_field); 
         
         // Set the GBL flag to true
-		event_builder->setGblFlag(run_gbl);
+		event_builder->runGbl(run_gbl);
 	}
 	
 	EVENT::LCEvent* event = NULL;
