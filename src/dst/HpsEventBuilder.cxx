@@ -12,7 +12,7 @@
 
 HpsEventBuilder::HpsEventBuilder() 
     : svt_writer(new SvtDataWriter()), ecal_writer(new EcalDataWriter()),
-      mc_particle_writer(new MCParticleDataWriter()), 
+      mc_particle_writer(new MCParticleDataWriter()),
       particle_writer(new HpsParticleDataWriter()),
       gbl_data_writer(new GblDataWriter()),
       gbl_track_writer(new GblTrackWriter()),
@@ -31,10 +31,17 @@ HpsEventBuilder::~HpsEventBuilder() {
 void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
 	
     // Clear the HpsEvent from all previous information
-    hps_event->Clear(); 
+    hps_event->Clear();
+
+    //  Check that the event contains more than just the trigger collection.
+    //  This is a temp solution to the recon not having an ECal collection
+    //  in every event.
+    //std::cout << event->getCollectionNames()->size() << std::endl;
+    if (event->getCollectionNames()->size() <= 2) return;  
 
 	// Set the event number
 	hps_event->setEventNumber(event->getEventNumber());
+    //std::cout << event->getEventNumber() << std::endl;
 
 	// Set the run number
 	hps_event->setRunNumber(event->getRunNumber());
