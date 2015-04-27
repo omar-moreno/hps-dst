@@ -150,7 +150,6 @@ int main( int argc, char **argv)
     IMPL::LCCollectionVec* clusters = 0;
     IMPL::ClusterImpl* cluster = 0;
     IMPL::CalorimeterHitImpl* calorimeter_hit;
-    IMPL::ReconstructedParticleImpl* recon_particle = 0;
     IMPL::LCCollectionVec* recon_particles = 0;
 	double pt, px, py, pz, p;
 	double cluster_energy;
@@ -264,7 +263,8 @@ int main( int argc, char **argv)
         // Loop over all final state recon particles in the event
         for(int particle_n = 0; particle_n < recon_particles->getNumberOfElements(); ++particle_n){
 
-        	recon_particle = (IMPL::ReconstructedParticleImpl*) recon_particles->getElementAt(particle_n);
+        	//IMPL::ReconstructedParticleImpl* recon_particle 
+            //    = (IMPL::ReconstructedParticleImpl*) recon_particles->getElementAt(particle_n);
         	// Get the recon particle from the LCIO collection
         }
 	}

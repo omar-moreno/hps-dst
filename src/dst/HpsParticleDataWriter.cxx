@@ -83,7 +83,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 		if(particle->getTracks().size() != 0){
 		
 			// Loop through all of the tracks associated with the particle 
-			for(int p_track_n = 0; p_track_n < particle->getTracks().size(); ++p_track_n){
+			for(uint p_track_n = 0; p_track_n < particle->getTracks().size(); ++p_track_n){
 				
 				// Loop through all of the tracks in the HpsEvent and find the one
 				// that matches the track associated with the particle
@@ -103,7 +103,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 		if(particle->getClusters().size() != 0){
 
 			// Loop through all of the clusters associated with the particle
-			for(int p_cluster_n = 0; p_cluster_n < particle->getClusters().size(); ++p_cluster_n){
+			for(uint p_cluster_n = 0; p_cluster_n < particle->getClusters().size(); ++p_cluster_n){
 				// Loop through all of the clusters in the HpsEvent and find the one 
 				// that matches the cluster associated with the particle.
 				for(int cluster_n = 0; cluster_n < hps_event->getNumberOfEcalClusters(); ++cluster_n){
@@ -135,7 +135,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 			//std::cout << "D particles: " << particle->getParticles().size() << std::endl;
 
 			// Loop through all of the daughter particles associated with the particle
-			for(int pd_particle_n = 0; pd_particle_n < particle->getParticles().size(); ++pd_particle_n){
+			for(uint pd_particle_n = 0; pd_particle_n < particle->getParticles().size(); ++pd_particle_n){
 				
 				// Loop through all of the final state particles in the HpsEvent and
 				// find the one that matches the daughters associated with the particles

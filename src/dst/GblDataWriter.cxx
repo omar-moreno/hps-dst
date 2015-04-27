@@ -145,7 +145,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 					  << " GBL strips for this GBL track data object" << std::endl;
 		}
 
-        for(int gbl_strip_n = 0; gbl_strip_n < gbl_strips.size(); ++gbl_strip_n){
+        for(uint gbl_strip_n = 0; gbl_strip_n < gbl_strips.size(); ++gbl_strip_n){
             
 			if(m_debug) {
 			    std::cout << "GblDataWriter: processing GBLStrip " << gbl_strip_n << std::endl;
