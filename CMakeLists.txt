@@ -14,18 +14,21 @@ project(HPS_DST)
 set(HPS_DST_VERSION_MAJOR 0)
 set(HPS_DST_VERSION_MINOR 6)
 
+# Set additional compiler flags
+set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
+
 # Set the output directories of the binaries, static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib")
 
-# Set the path where additional CMake modules are located
+# Set the path to additional CMake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-# Find ROOT
+# Find the ROOT Data Analysis Framework.  If it's not found, cmake will fail.
 find_package(ROOT REQUIRED)
 
-# Include the ROOT headers
+# Add the ROOT headers to the build
 include_directories(${ROOT_INCLUDE_DIRS})
 
 # Include the LCIO headers

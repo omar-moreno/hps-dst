@@ -83,12 +83,13 @@ namespace TrackUtils {
 	double getMomentum(IMPL::TrackImpl* track, double b_field){
 	
 		std::vector<double> p_vector = getMomentumVector(track, b_field); 
-		double p = 0; 
-		for(int index = 0; index < p_vector.size(); ++index){
-			p += p_vector[index]*p_vector[index]; 
-		}
-		
-		return sqrt(p); 
+		double p_sum = 0;
+        
+        for (double p : p_vector) { 
+            p_sum += p*p;  
+        } 
+
+		return sqrt(p_sum); 
 	};
 
 	int getCharge(IMPL::TrackImpl* track){

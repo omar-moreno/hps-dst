@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 	
 	if (run_gbl) {
 		// Only require a b-field if the GBL output is enabled
-		if(isnan(b_field)){ 
+		if(std::isnan(b_field)){ 
 			cerr << "[ DST MAKER ]: Please specify the B field strength in Tesla." << endl;
 	        cerr << "[ DST MAKER ]: Use the --help flag for usage" << endl;
 			return EXIT_FAILURE;
