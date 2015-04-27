@@ -3,7 +3,8 @@
 #	@date: December 06, 2013
 #
 
-# Specify the minimum CMake version required
+# Specify the minimum CMake version required.  If the cmake version 
+# minimum is not met, cmake will fail.
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 # Set the name of the project
@@ -11,7 +12,7 @@ project(HPS_DST)
 
 # Set the project version
 set(HPS_DST_VERSION_MAJOR 0)
-set(HPS_DST_VERSION_MINOR 5)
+set(HPS_DST_VERSION_MINOR 6)
 
 # Set the output directories of the binaries, static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
