@@ -15,7 +15,7 @@ set(HPS_DST_VERSION_MAJOR 0)
 set(HPS_DST_VERSION_MINOR 6)
 
 # Set additional compiler flags
-set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
 # Set the output directories of the binaries, static and shared libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
@@ -88,7 +88,7 @@ file(MAKE_DIRECTORY ${HPS_EVENT_DIC_DIR})
 
 file(GLOB HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/*.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
-execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR} "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
+execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c -I$ENV{LCIO}/include ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 
 message(STATUS "HpsEvent ROOT dictionary has been generated")
 
