@@ -1,11 +1,8 @@
-
 #
+#   @file: CMakeList.txt
 #   @author: Omar Moreno <omoreno1@ucsc.edu>
 #   @date: December 06, 2013
 #
-
-# Find the necessary LCIO libraries
-find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 
 set_source_files_properties(EcalHit.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
 add_library(EcalHit EcalHit.cxx)
@@ -30,7 +27,6 @@ set_source_files_properties(SvtTrack.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " 
 add_library(SvtTrack SvtTrack.cxx)
 target_link_libraries(SvtTrack
     ${ROOT_CORE_LIBRARY}
-    ${LCIO_LIB}    
     SvtHit
 )
 
