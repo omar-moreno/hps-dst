@@ -21,33 +21,9 @@ SvtTrack::SvtTrack()
       tan_lambda(0),
       z0(0),
       chi_squared(0),
+      track_time(0),
       l1_isolation(0),
       l2_isolation(0) {
-}
-
-SvtTrack::SvtTrack(const EVENT::Track* track)
-    : TObject(), 
-      svt_hits(new TRefArray()),
-      n_hits(0),
-      d0(0),
-      phi(0),
-      omega(0),
-      tan_lambda(0),
-      z0(0),
-      chi_squared(0),
-      l1_isolation(0),
-      l2_isolation(0) {
-
-
-    // Fill the track parameters
-    this->setTrackParameters(track->getD0(), 
-                             track->getPhi(), 
-                             track->getOmega(), 
-                             track->getTanLambda(), 
-                             track->getZ0());
-
-    // Set the track fit chi^2
-    this->setChi2(track->getChi2());
 }
 
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
@@ -59,6 +35,7 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       tan_lambda(svtTrackObj.tan_lambda),
       z0(svtTrackObj.z0),
       chi_squared(svtTrackObj.chi_squared),
+      track_time(svtTrackObj.track_time),
       l1_isolation(svtTrackObj.l1_isolation),
       l2_isolation(svtTrackObj.l2_isolation) {
     
@@ -81,6 +58,7 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
     this->tan_lambda = svtTrackObj.tan_lambda;
     this->z0 = svtTrackObj.z0;
     this->chi_squared = svtTrackObj.chi_squared;
+    this->track_time = svtTrackObj.track_time;
     this->l1_isolation = svtTrackObj.l1_isolation;
     this->l2_isolation = svtTrackObj.l2_isolation;
 

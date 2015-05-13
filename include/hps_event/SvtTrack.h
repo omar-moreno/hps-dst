@@ -22,11 +22,6 @@
 #include <TClonesArray.h>
 #include <TRefArray.h>
 
-//------------//
-//--- LCIO ---//
-//------------//
-#include <EVENT/Track.h>
-
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
@@ -42,13 +37,6 @@ class SvtTrack : public TObject {
          * Default Constructor
          */
         SvtTrack();
-
-        /**
-         * Constructor
-         *
-         * @param track : An LCIO Track object
-         */
-        SvtTrack(const EVENT::Track* track);
 
         /**
          * Copy constructor
@@ -95,17 +83,24 @@ class SvtTrack : public TObject {
          *
          * @param chi_squared : The chi^2 of the fit to the track.
          */
-        void setChi2(double chi_squared){ this->chi_squared = chi_squared; };
+        void setChi2(double chi_squared) { this->chi_squared = chi_squared; };
+       
+        /**
+         * Set the track time.
+         *
+         * @param track_time : The track time.
+         */
+        void setTrackTime(double track_time) { this->track_time = track_time; };
+
+        /**
+         *
+         */
+        void setL1Isolation(double l1_isolation) { this->l1_isolation = l1_isolation; };
         
         /**
          *
          */
-        void setL1Isolation(double l1_isolation) {this->l1_isolation = l1_isolation; };
-        
-        /**
-         *
-         */
-        void setL2Isolation(double l2_isolation) {this->l2_isolation = l2_isolation; };
+        void setL2Isolation(double l2_isolation) { this->l2_isolation = l2_isolation; };
 
         /**
          *
@@ -135,17 +130,17 @@ class SvtTrack : public TObject {
         /**
          *
          */
-        double getChi2() const {return chi_squared; };
+        double getChi2() const { return chi_squared; };
         
         /**
          *
          */
-        double getL1Isolation() const {return l1_isolation; };
+        double getL1Isolation() const { return l1_isolation; };
         
         /**
          *
          */
-        double getL2Isolation() const {return l2_isolation; };
+        double getL2Isolation() const { return l2_isolation; };
         
         /**
          *
@@ -169,6 +164,7 @@ class SvtTrack : public TObject {
         double tan_lambda; 
         double z0;  
         double chi_squared;
+        double track_time;
         double l1_isolation;
         double l2_isolation;
 
