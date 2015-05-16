@@ -10,11 +10,6 @@
 #ifndef __SVT_TRACK_H__
 #define __SVT_TRACK_H__
 
-//------------------//
-//--- C++ StdLib ---//
-//------------------//
-#include <iostream>
-
 //------------//
 //--- ROOT ---//
 //------------//
@@ -22,10 +17,8 @@
 #include <TClonesArray.h>
 #include <TRefArray.h>
 
-//-----------------//
-//--- HPS Event ---//
-//-----------------//
-#include <SvtHit.h>
+// Forward declarations
+class SvtHit;
 
 class SvtTrack : public TObject {
 
