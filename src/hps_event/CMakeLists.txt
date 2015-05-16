@@ -27,7 +27,6 @@ set_source_files_properties(SvtTrack.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " 
 add_library(SvtTrack SvtTrack.cxx)
 target_link_libraries(SvtTrack
     ${ROOT_CORE_LIBRARY}
-    SvtHit
 )
 
 set_source_files_properties(GblStripData.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")

@@ -90,7 +90,7 @@ void SvtTrack::setTrackParameters(double d0, double phi, double omega,
 
 void SvtTrack::addHit(SvtHit* hit) {
     ++n_hits; 
-    svt_hits->Add(hit); 
+    svt_hits->Add((TObject*) hit); 
 }
 
 TRefArray* SvtTrack::getSvtHits() const {
