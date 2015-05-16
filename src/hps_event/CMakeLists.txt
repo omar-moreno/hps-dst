@@ -50,6 +50,7 @@ target_link_libraries( GblTrackData
     ${ROOT_CORE_LIBRARY}
     ${ROOT_MATRIX_LIBRARY}
     ${ROOT_MATHCORE_LIBRARY}
+    SvtTrack
     GblStripData
     GblTrack
 )
@@ -64,8 +65,6 @@ set_source_files_properties(HpsParticle.cxx APPEND_STRING PROPERTY COMPILE_FLAGS
 add_library(HpsParticle HpsParticle.cxx)
 target_link_libraries(HpsParticle
     ${ROOT_CORE_LIBRARY}
-    SvtTrack
-    EcalCluster
 )
 
 set_source_files_properties(MuonCluster.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
