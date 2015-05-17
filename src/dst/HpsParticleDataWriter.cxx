@@ -93,6 +93,12 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
 					// TODO: Verify that the chi^2 is enough to find the match
 					if(particle->getTracks()[p_track_n]->getChi2() == hps_event->getTrack(track_n)->getChi2()){
 						hps_particle->addTrack(hps_event->getTrack(track_n));
+                        
+                        // If the particle is a final state particle, add a
+                        // reference from the corresponding track to the particle
+                        if (collection_type == HpsEvent::FINAL_STATE_PARTICLES) { 
+                            hps_event->getTrack(track_n)->setParticle(hps_particle); 
+                        }
 						break;
 					}
 				}

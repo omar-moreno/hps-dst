@@ -10,12 +10,23 @@
 #ifndef __SVT_TRACK_H__
 #define __SVT_TRACK_H__
 
+//------------------//
+//--- C++ StdLib ---//
+//------------------//
+#include<vector>
+
 //------------//
 //--- ROOT ---//
 //------------//
 #include <TObject.h>
 #include <TClonesArray.h>
 #include <TRefArray.h>
+#include <TRef.h>
+
+//-----------------//
+//--- HPS Event ---//
+//-----------------//
+#include <HpsParticle.h>
 
 // Forward declarations
 class SvtHit;
@@ -96,6 +107,14 @@ class SvtTrack : public TObject {
         void setL2Isolation(double l2_isolation) { this->l2_isolation = l2_isolation; };
 
         /**
+         * Set the HpsParticle associated with this track.  This can be used to
+         * retrieve additional track properties such as the momentum and charge.
+         *
+         * @param fs_particle : Final state HpsParticle associated with this track
+         */
+        void setParticle(HpsParticle* fs_particle) { this->fs_particle = (TObject*) fs_particle; };
+
+        /**
          *
          */
         double getD0() const { return d0; };
@@ -114,7 +133,7 @@ class SvtTrack : public TObject {
          *
          */
         double getTanLambda() const { return tan_lambda; };
-        
+
         /**
          *
          */
@@ -124,6 +143,16 @@ class SvtTrack : public TObject {
          *
          */
         double getChi2() const { return chi_squared; };
+
+        /**
+         *
+         */
+        int getCharge(); 
+
+        /**
+         *
+         */
+        std::vector<double> getMomentum(); 
         
         /**
          *
@@ -134,7 +163,7 @@ class SvtTrack : public TObject {
          *
          */
         double getL2Isolation() const { return l2_isolation; };
-        
+
         /**
          *
          */
@@ -147,7 +176,8 @@ class SvtTrack : public TObject {
 
     private:
 
-        TRefArray *svt_hits; 
+        TRefArray* svt_hits; 
+        TRef fs_particle;
 
         int n_hits; 
 
