@@ -14,6 +14,7 @@ ClassImp(SvtTrack)
 SvtTrack::SvtTrack()
     : TObject(), 
       svt_hits(new TRefArray()),
+      fs_particle(NULL),
       n_hits(0),
       d0(0),
       phi(0),
@@ -29,6 +30,7 @@ SvtTrack::SvtTrack()
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
     : TObject(),
       svt_hits(new TRefArray()),
+      fs_particle(NULL),
       d0(svtTrackObj.d0),
       phi(svtTrackObj.phi),
       omega(svtTrackObj.omega),
@@ -40,6 +42,7 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       l2_isolation(svtTrackObj.l2_isolation) {
     
     *svt_hits = *svtTrackObj.svt_hits;
+    fs_particle = svtTrackObj.fs_particle;
 }
 
 
@@ -54,9 +57,7 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
 
     this->d0 = svtTrackObj.d0;
     this->phi = svtTrackObj.phi;
-    this->omega = svtTrackObj.omega;
-    this->tan_lambda = svtTrackObj.tan_lambda;
-    this->z0 = svtTrackObj.z0;
+    this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
     this->chi_squared = svtTrackObj.chi_squared;
     this->track_time = svtTrackObj.track_time;
     this->l1_isolation = svtTrackObj.l1_isolation;
@@ -64,6 +65,7 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
 
     svt_hits = new TRefArray();
     *svt_hits = *svtTrackObj.svt_hits;
+    fs_particle = svtTrackObj.fs_particle;
 
     return *this;
 }
@@ -86,6 +88,16 @@ void SvtTrack::setTrackParameters(double d0, double phi, double omega,
     this->omega      = omega;
     this->tan_lambda = tan_lambda;
     this->z0         = z0;
+}
+
+int SvtTrack::getCharge() { 
+    if (fs_particle == NULL) return 9999;
+    return ((HpsParticle*) this->fs_particle.GetObject())->getCharge();
+}
+
+std::vector<double> SvtTrack::getMomentum() {
+    if (fs_particle == NULL) return {0, 0, 0}; 
+    return ((HpsParticle*) this->fs_particle.GetObject())->getMomentum();
 }
 
 void SvtTrack::addHit(SvtHit* hit) {
