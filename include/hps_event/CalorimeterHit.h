@@ -1,29 +1,40 @@
 /**
- *	@author:	Omar Moreno <omoreno1@ucsc.edu>
- *	@section institution
- *				Santa Cruz Institute for Particle Physics
- *				University of California, Santa Cruz
- *	@version:	v 1.0
- *	@date:		January 28, 2014
+ * @file: CalorimeterHit.h
+ * @author: Omar Moreno <omoreno1@ucsc.edu>
+ * @section Institution \n
+ *			Santa Cruz Institute for Particle Physics
+ *			University of California, Santa Cruz
+ * @date: January 28, 2014
  *
  */
 
-#ifndef _CALORIMETER_HIT_H_
-#define _CALORIMETER_HIT_H_
-
+#ifndef __CALORIMETER_HIT_H__
+#define __CALORIMETER_HIT_H__
 
 class CalorimeterHit { 
 
 	public: 
 
-		virtual ~CalorimeterHit(){}; 
+		virtual ~CalorimeterHit() {}; 
 
-		virtual std::vector<double> getPosition() const = 0;
+        /**
+         * Set the energy of the hit in GeV.
+         *
+         * @param energy : The energy of the hit
+         */
 		virtual double getEnergy() const = 0; 
 		
-		virtual void setPosition(const double*) = 0;
+        /**
+         * Get the energy of the hit in GeV.
+         *
+         * @return The energy of the hit
+         */
 		virtual void setEnergy(const double) = 0; 	
 
-};
+        // Comments these out for now until a need for them is demonstrated
+		//virtual void setPosition(const double*) = 0;
+		//virtual std::vector<double> getPosition() const = 0;
 
-#endif // _CALORIMETER_HIT_H_
+}; // CalorimeterHit
+
+#endif // __CALORIMETER_HIT_H__
