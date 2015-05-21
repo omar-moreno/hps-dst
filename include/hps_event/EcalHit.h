@@ -1,53 +1,111 @@
 /**
- *	@author:	Omar Moreno <omoreno1@ucsc.edu>
- *	@section institution
- *				Santa Cruz Institute for Particle Physics
- *				University of California, Santa Cruz
- *	@version:	v 1.0
- *	@date:		January 28, 2014
- *
+ * @file: EcalHit.h
+ * @author: Omar Moreno <omoreno1@ucsc.edu>
+ * @section Institution \n
+ *          Santa Cruz Institute for Particle Physics
+ *          University of California, Santa Cruz
+ * @date: January 28, 2014
  */
 
-#ifndef _ECAL_HIT_H_
-#define _ECAL_HIT_H_
+#ifndef __ECAL_HIT_H__
+#define __ECAL_HIT_H__
 
+//------------//
 //--- ROOT ---//
 //------------//
 #include <TObject.h>
 
+//-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <CalorimeterHit.h>
 
 class EcalHit : public TObject, public CalorimeterHit {
 
-	public:
+    public:
 
-		EcalHit(); 
-		~EcalHit();
-		
-		void Clear(Option_t* option=""); 
-		
-		void setEnergy(const double energy){ this->energy = energy; }; 
-		void setPosition(const double*);
-		void setCrystalIndices(int, int);
+        /**
+         * Default Constructor
+         */
+        EcalHit(); 
 
-		double getEnergy() const { return energy; };
- 		std::vector<double> getPosition() const;
-		int getXCrystalIndex() const { return index_x; };
-		int getYCrystalIndex() const { return index_y; };
+        /**
+         * Destructor
+         */
+        ~EcalHit();
 
-		ClassDef(EcalHit, 1);
+        /**
+         *
+         */
+        void Clear(Option_t* option=""); 
 
-	private: 
+        /**
+         * Set the energy of the hit in GeV.
+         *
+         * @param energy : The energy of the hit
+         */
+        void setEnergy(const double energy){ this->energy = energy; }; 
+       
+        /**
+         * Set the time of the hit
+         *
+         * @param hit_time : The time of the hit
+         */
+        void setTime(const double hit_time) { this->hit_time = hit_time; };
 
-		int index_x;
-		int index_y;
-		int x;
-		int y;
-		int z;
+        /**
+         * Set the indices of the crystal
+         *
+         * @param index_x : The index along x
+         * @param index_y : The index along y
+         */
+        void setCrystalIndices(int index_x, int index_y);
 
-		double energy;
+        /**
+         * Get the energy of the hit in GeV.
+         *
+         * @return The energy of the hit
+         */
+        double getEnergy() const { return energy; };
+       
+        /**
+         * Get the time of the hit.
+         *
+         * @return The time of the hit
+         */
+        double getTime() const { return hit_time; };
+
+        /**
+         * Get the crystal index along x.
+         *
+         * @return The index along x
+         */
+        int getXCrystalIndex() const { return index_x; };
+        
+        /**
+         * Get the crystal index along y.
+         *
+         * @return The index along y
+         */
+        int getYCrystalIndex() const { return index_y; };
+
+        ClassDef(EcalHit, 1);
+
+        // Comment these out until a need for it is demonstrated
+        //void setPosition(const double*);
+        //std::vector<double> getPosition() const;
+
+    private: 
+
+        int index_x;
+        int index_y;
+
+        //int x;
+        //int y;
+        //int z;
+
+        double energy;
+        double hit_time;
 
 }; // EcalHit
 
