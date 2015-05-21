@@ -1,30 +1,33 @@
 /**
- *	@section purpose: 
- *	@author: Omar Moreno <omoreno1@ucsc.edu>
- *			 Santa Cruz Institute for Particle Physics
- *			 University of California, Santa Cruz
- *	@date: January 2, 2013
- *	@version: 1.0
- *
+ * @file: EcalDataWriter.cxx
+ * @author: Omar Moreno <omoreno1@ucsc.edu>
+ * @section Institution \n
+ *          Santa Cruz Institute for Particle Physics
+ *          University of California, Santa Cruz
+ *  @date: January 7, 2013
  */
 
 #ifndef __ECAL_DATA_WRITER_H__
 #define __ECAL_DATA_WRITER_H__
 
+//-----------//
 //--- DST ---//
 //-----------//
 #include <DataWriter.h>
 
+//-------------//
 //--- Utils ---//
 //-------------//
 #include <EcalUtils.h>
 
+//------------//
 //--- LCIO ---//
 //------------//
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/ClusterImpl.h>
 #include <IMPL/CalorimeterHitImpl.h>
 
+//-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <EcalCluster.h>
@@ -32,28 +35,39 @@
 
 class EcalDataWriter : public DataWriter {
 
-	public: 
-		
-		EcalDataWriter(); 
-		~EcalDataWriter(); 
+    public: 
+        
+        /**
+         * Default constructor
+         */
+        EcalDataWriter();
 
-		// 
-		void writeData(EVENT::LCEvent*, HpsEvent*); 	
+        /**
+         * Destructor
+         */ 
+        ~EcalDataWriter(); 
 
-		void setClusterCollectionName(std::string clusters_collection_name){
-			this->clusters_collection_name = clusters_collection_name;
-		};
+        /**
+         * Make EcalClusters and EcalHits out of CalorimeterHits and Clusters
+         * and write them to an HpsEvent.
+         *
+         * @param lc_event : LCSim event from which the CalorimeterHit and 
+         *                   Cluster collection is retrieved.
+         * @param hps_event : HpsEvent to which the EcalClusters and EcalHits 
+         *                    will be written to 
+         */        
+        void writeData(EVENT::LCEvent* lc_event, HpsEvent* hps_event);     
+    
+    private:
 
-	private:
+        std::string clusters_collection_name;
 
-		std::string clusters_collection_name;
+        IMPL::LCCollectionVec* clusters;  
+        IMPL::ClusterImpl* cluster;
+        IMPL::CalorimeterHitImpl* calorimeter_hit;
 
-		IMPL::LCCollectionVec* clusters;  
-		IMPL::ClusterImpl* cluster;
-		IMPL::CalorimeterHitImpl* calorimeter_hit;
-
-		EcalCluster* ecal_cluster;
-		EcalHit* ecal_hit;
+        EcalCluster* ecal_cluster;
+        EcalHit* ecal_hit;
 
 };  // EcalDataWriter
 
