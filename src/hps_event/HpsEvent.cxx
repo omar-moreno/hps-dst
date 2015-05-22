@@ -16,7 +16,6 @@ HpsEvent::HpsEvent()
         svt_hits(new TClonesArray("SvtHit", 1000)),
         ecal_clusters(new TClonesArray("EcalCluster", 1000)),
         ecal_hits(new TClonesArray("EcalHit", 1000)),
-        muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_particles(new TClonesArray("HpsParticle", 1000)),
         uc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
         bsc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
@@ -38,7 +37,6 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
         svt_hits(new TClonesArray("SvtHit", 1000)),
         ecal_clusters(new TClonesArray("EcalCluster", 1000)),
         ecal_hits(new TClonesArray("EcalHit", 1000)),
-        muon_clusters(new TClonesArray("MuonCluster", 1000)),
         fs_particles(new TClonesArray("HpsParticle", 1000)),
         uc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
         bsc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
@@ -203,17 +201,6 @@ EcalHit* HpsEvent::addEcalHit()
 	return (EcalHit*) ecal_hits->ConstructedAt(n_ecal_hits++);
 }
 
-MuonCluster* HpsEvent::addMuonCluster()
-{
-	return (MuonCluster*) muon_clusters->ConstructedAt(n_muon_clusters++);
-}
-
-/*HpsParticle* HpsEvent::addFSParticle()
-{
-    return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++);
-}*/
-
-//HpsParticle* HpsEvent::addVtxParticle(collection_t collection_type)
 HpsParticle* HpsEvent::addParticle(collection_t collection_type)
 {
 	switch(collection_type) { 
@@ -269,18 +256,6 @@ GblStripData* HpsEvent::addGblStripData()
 	return (GblStripData*) gbl_strips_data->ConstructedAt(n_gbl_strips_data++);
 }
 
-
-/*void HpsEvent::setTriggerData(TriggerData* trigger_data) { 
-
-    trigger_time_stamp = trigger_data->getTime();
-
-    single0_trigger = (int) trigger_data->isSingle0Trigger();
-    single1_trigger = (int) trigger_data->isSingle1Trigger();
-    pair0_trigger = (int) trigger_data->isPair0Trigger();
-    pair1_trigger = (int) trigger_data->isPair1Trigger();
-    pulser_trigger = (int) trigger_data->isPulserTrigger();
-}*/
-
 SvtTrack* HpsEvent::getTrack(int track_n)
 {
 	return (SvtTrack*) tracks->At(track_n);
@@ -314,11 +289,6 @@ EcalCluster* HpsEvent::getEcalCluster(int ecal_cluster_n)
 EcalHit* HpsEvent::getEcalHit(int ecal_hit_n)
 {
 	return (EcalHit*) ecal_hits->At(ecal_hit_n);
-}
-
-MuonCluster* HpsEvent::getMuonCluster(int muon_cluster_n)
-{
-	return (MuonCluster*) muon_clusters->At(muon_cluster_n);
 }
 
 HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_n)
