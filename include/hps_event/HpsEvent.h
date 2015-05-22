@@ -10,14 +10,19 @@
 #ifndef _HPS_EVENT_H_
 #define	_HPS_EVENT_H_
 
+//-----------//
 //--- C++ ---//
+//-----------//
 #include <iostream>
 #include <assert.h>
 
+//-----------//
 //-- ROOT ---//
+//-----------//
 #include <TObject.h>
 #include <TClonesArray.h>
 
+//-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <SvtTrack.h>
@@ -30,6 +35,7 @@
 #include <GblTrackData.h>
 #include <GblStripData.h>
 #include <GblTrack.h>
+//#include <TriggerData.h>
 
 class HpsEvent : public TObject { 
 
@@ -54,19 +60,86 @@ class HpsEvent : public TObject {
         EcalHit* 		addEcalHit();
         MuonCluster* 	addMuonCluster();
         HpsParticle*    addParticle(collection_t); 
-        //HpsParticle*    addFSParticle();
-        //HpsParticle*    addVtxParticle(collection_t); 
         HpsMCParticle*  addHpsMCParticle();
         GblTrack*   	addGblTrack();
         GblTrackData* 	addGblTrackData();
         GblStripData* 	addGblStripData();
 
+        /**
+         *
+         */
         void setEventNumber(int event_number){ this->event_number = event_number; };
+        
+        /**
+         *
+         */
         void setRunNumber(int run_number){ this->run_number = run_number; };
-        void setTriggerBitInfo(std::vector<int> trigger_bits){ this->trigger_bits = trigger_bits; };
+       
+        /**
+         *
+         */
+        void setTriggerTimeStamp(const int trigger_time_stamp) { this->trigger_time_stamp = trigger_time_stamp; }; 
+        /**
+         *
+         */
+        void setSingle0Trigger(const int single0_trigger) { this->single0_trigger = single0_trigger; };
 
-        int getEventNumber()            const  { return event_number; };
-        int getRunNumber()              const  { return run_number; };
+        /**
+         *
+         */
+        void setSingle1Trigger(const int single1_trigger) { this->single1_trigger = single1_trigger; };
+
+        /**
+         *
+         */
+        void setPair0Trigger(const int pair0_trigger) { this->pair0_trigger = pair0_trigger; };
+        
+        /**
+         *
+         */
+        void setPair1Trigger(const int pair1_trigger) { this->pair1_trigger = pair1_trigger; };
+
+        /**
+         *
+         */
+        void setPulserTrigger(const int pulser_trigger) { this->pulser_trigger = pulser_trigger; };
+       
+        /**
+         *
+         */ 
+        int getEventNumber() const  { return event_number; };
+        
+        /**
+         *
+         */ 
+        int getRunNumber() const  { return run_number; };
+
+        /**
+         *
+         */
+        bool isSingle0Trigger() const { return (bool) single0_trigger; };
+
+        /**
+         *
+         */
+        bool isSingle1Trigger() const { return (bool) single0_trigger; };
+
+        /**
+         *
+         */
+        bool isPair0Trigger() const { return (bool) pair0_trigger; };
+        
+        /**
+         *
+         */
+        bool isPair1Trigger() const { return (bool) pair1_trigger; };
+
+        /**
+         *
+         */
+        bool isPulserTrigger() const { return (bool) pulser_trigger; };
+
+
         int getNumberOfTracks()         const  { return n_tracks; };
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
         int getNumberOfMuonClusters()   const  { return n_muon_clusters; };
@@ -74,7 +147,6 @@ class HpsEvent : public TObject {
         int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
         int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
         int getNumberOfGblStripData()   const  { return n_gbl_strips_data; };
-        std::vector<int> getTriggerBitInfo() const { return trigger_bits; };
 
         SvtTrack*      getTrack(int);
         SvtHit*        getSvtHit(int);
@@ -107,8 +179,16 @@ class HpsEvent : public TObject {
         TClonesArray* gbl_tracks_data;     //->
         TClonesArray* gbl_strips_data;     //->
 
+        // Event information
         int event_number;
         int run_number;
+        int trigger_time_stamp;
+        int single0_trigger;
+        int single1_trigger;
+        int pair0_trigger;
+        int pair1_trigger;
+        int pulser_trigger;
+
         int n_tracks;
         int n_svt_hits;
         int n_ecal_clusters;
@@ -123,7 +203,6 @@ class HpsEvent : public TObject {
         int n_gbl_tracks_data;
         int n_gbl_strips_data;
         
-		std::vector<int> trigger_bits;
 };
 
 #endif
