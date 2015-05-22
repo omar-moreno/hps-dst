@@ -21,6 +21,13 @@
 #include <GblDataWriter.h>
 #include <GblTrackWriter.h>
 #include <HpsParticleDataWriter.h>
+#include <TriggerData.h>
+
+//------------//
+//--- LCIO ---//
+//------------//
+#include <EVENT/LCGenericObject.h>
+#include <IMPL/LCCollectionVec.h>
 
 class HpsEventBuilder : public EventBuilder {
 
@@ -76,6 +83,10 @@ class HpsEventBuilder : public EventBuilder {
 		HpsParticleDataWriter* particle_writer; 
 		GblDataWriter* gbl_data_writer;
 		GblTrackWriter* gbl_track_writer;
+        TriggerData* hps_trigger_data;
+
+        IMPL::LCCollectionVec* trigger_data;
+        EVENT::LCGenericObject* trigger_datum;  
 
 		bool run_gbl;
         bool ecal_only;
