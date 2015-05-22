@@ -29,13 +29,11 @@
 #include <SvtHit.h>
 #include <EcalCluster.h> 
 #include <EcalHit.h>
-#include <MuonCluster.h>
 #include <HpsParticle.h>
 #include <HpsMCParticle.h>
 #include <GblTrackData.h>
 #include <GblStripData.h>
 #include <GblTrack.h>
-//#include <TriggerData.h>
 
 class HpsEvent : public TObject { 
 
@@ -58,7 +56,6 @@ class HpsEvent : public TObject {
         SvtHit* 		addSvtHit();
         EcalCluster* 	addEcalCluster();
         EcalHit* 		addEcalHit();
-        MuonCluster* 	addMuonCluster();
         HpsParticle*    addParticle(collection_t); 
         HpsMCParticle*  addHpsMCParticle();
         GblTrack*   	addGblTrack();
@@ -142,7 +139,6 @@ class HpsEvent : public TObject {
 
         int getNumberOfTracks()         const  { return n_tracks; };
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
-        int getNumberOfMuonClusters()   const  { return n_muon_clusters; };
 		int getNumberOfParticles(collection_t)	const; 
         int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
         int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
@@ -152,11 +148,8 @@ class HpsEvent : public TObject {
         SvtHit*        getSvtHit(int);
         EcalCluster*   getEcalCluster(int);
         EcalHit* 	   getEcalHit(int);
-        MuonCluster*   getMuonCluster(int);
         HpsMCParticle* getMCParticle(int);
         HpsParticle*   getParticle(collection_t, int); 
-        //HpsParticle*   getFSParticle(int); 
-        //HpsParticle*   getVtxParticle(collection_t, int); 
         GblTrack*      getGblTrack(int);
         GblTrackData*  getGblTrackData(int);
         GblStripData*  getGblStripData(int);
