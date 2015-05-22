@@ -55,7 +55,6 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_ecal_clusters  = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters  = hpsEventObj.n_muon_clusters;
-    this->trigger_bits = hpsEventObj.trigger_bits;
     this->n_fs_particles = hpsEventObj.n_fs_particles;
     this->n_uc_vtx_particles = hpsEventObj.n_uc_vtx_particles;
     this->n_bsc_vtx_particles = hpsEventObj.n_bsc_vtx_particles;
@@ -106,8 +105,6 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     
     TObject::operator=(hpsEventObj);
     this->~HpsEvent();
-    this->trigger_bits.clear();
-
     this->event_number = hpsEventObj.event_number; 
     this->run_number   = hpsEventObj.run_number; 
     this->n_tracks     = hpsEventObj.n_tracks; 
@@ -115,7 +112,6 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     this->n_ecal_clusters   = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_muon_clusters   = hpsEventObj.n_muon_clusters;
-    this->trigger_bits = hpsEventObj.trigger_bits;
     this->n_fs_particles = hpsEventObj.n_fs_particles;
     this->n_uc_vtx_particles = hpsEventObj.n_uc_vtx_particles;
     this->n_bsc_vtx_particles = hpsEventObj.n_bsc_vtx_particles;
@@ -184,7 +180,6 @@ void HpsEvent::Clear(Option_t * /*option*/)
     n_gbl_tracks = 0;
     n_gbl_tracks_data = 0;
     n_gbl_strips_data = 0;
-    trigger_bits.clear();
 }
 
 
@@ -274,6 +269,18 @@ GblStripData* HpsEvent::addGblStripData()
 	return (GblStripData*) gbl_strips_data->ConstructedAt(n_gbl_strips_data++);
 }
 
+
+/*void HpsEvent::setTriggerData(TriggerData* trigger_data) { 
+
+    trigger_time_stamp = trigger_data->getTime();
+
+    single0_trigger = (int) trigger_data->isSingle0Trigger();
+    single1_trigger = (int) trigger_data->isSingle1Trigger();
+    pair0_trigger = (int) trigger_data->isPair0Trigger();
+    pair1_trigger = (int) trigger_data->isPair1Trigger();
+    pulser_trigger = (int) trigger_data->isPulserTrigger();
+}*/
+
 SvtTrack* HpsEvent::getTrack(int track_n)
 {
 	return (SvtTrack*) tracks->At(track_n);
@@ -319,14 +326,6 @@ HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_n)
 	return (HpsMCParticle*) mc_particles->At(mc_particle_n);
 }
 
-/*
-HpsParticle* HpsEvent::getFSParticle(int fs_particle_n)
-{
-    return (HpsParticle*) fs_particles->At(fs_particle_n); 
-}*/
-
-//HpsParticle* HpsEvent::getVtxParticle(collection_t collection_type,
-//									  int vtx_particle_n)
 HpsParticle* HpsEvent::getParticle(collection_t collection_type, int particle_n)
 {
 	switch(collection_type){ 
