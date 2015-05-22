@@ -172,6 +172,11 @@ class SvtTrack : public TObject {
         /**
          *
          */
+        TRef getParticle() const { return fs_particle; }; 
+
+        /**
+         *
+         */
         ClassDef(SvtTrack, 1);
 
     private:
