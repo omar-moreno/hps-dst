@@ -4,6 +4,15 @@
 #   @date: December 06, 2013
 #
 
+
+# Find the necessary LCIO libraries
+find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
+
+add_library(TriggerData TriggerData.cxx)
+target_link_libraries(TriggerData
+    ${LCIO_LIB}
+)
+
 set_source_files_properties(EcalHit.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
 add_library(EcalHit EcalHit.cxx)
 target_link_libraries(EcalHit
