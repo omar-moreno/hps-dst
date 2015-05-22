@@ -11,12 +11,17 @@
 #include <HpsEventBuilder.h>
 
 HpsEventBuilder::HpsEventBuilder() 
-    : svt_writer(new SvtDataWriter()), ecal_writer(new EcalDataWriter()),
+    : svt_writer(new SvtDataWriter()), 
+      ecal_writer(new EcalDataWriter()),
       mc_particle_writer(new MCParticleDataWriter()),
       particle_writer(new HpsParticleDataWriter()),
       gbl_data_writer(new GblDataWriter()),
       gbl_track_writer(new GblTrackWriter()),
-      run_gbl(false), ecal_only(false)
+      hps_trigger_data(NULL),
+      trigger_data(NULL),
+      trigger_datum(NULL),
+      run_gbl(false),
+      ecal_only(false)
 {}
 
 HpsEventBuilder::~HpsEventBuilder() {
@@ -46,7 +51,35 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
 	// Set the run number
 	hps_event->setRunNumber(event->getRunNumber());
 
-	// Write Ecal data to the HpsEvent
+    // Set the trigger data
+    try { 
+        trigger_data = (IMPL::LCCollectionVec*) event->getCollection("TriggerBank"); 
+	} catch(EVENT::DataNotAvailableException e){
+    }
+
+    //std::cout << "Number of trigger elements: " << trigger_data->getNumberOfElements() << std::endl;
+    for (int trigger_datum_n = 0; trigger_datum_n < trigger_data->getNumberOfElements(); ++trigger_datum_n) { 
+       
+        trigger_datum = (EVENT::LCGenericObject*) trigger_data->getElementAt(trigger_datum_n); 
+        //std::cout << "Bank tag: " << trigger_datum->getIntVal(0) << std::endl;
+        if (trigger_datum->getIntVal(0) == 0xe10a) { 
+           
+            hps_trigger_data = new TriggerData(trigger_datum); 
+            //std::cout << "Trigger Time: " << hps_trigger_data->getTime() << std::endl; 
+            hps_event->setTriggerTimeStamp(hps_trigger_data->getTime());
+            hps_event->setSingle0Trigger((int) hps_trigger_data->isSingle0Trigger());
+            hps_event->setSingle1Trigger((int) hps_trigger_data->isSingle1Trigger());
+            hps_event->setPair0Trigger((int) hps_trigger_data->isPair0Trigger());
+            hps_event->setPair1Trigger((int) hps_trigger_data->isPair1Trigger());
+            hps_event->setPulserTrigger((int) hps_trigger_data->isPulserTrigger());
+
+            delete hps_trigger_data;
+            hps_trigger_data = NULL;
+            break;
+        }
+    }
+
+    // Write Ecal data to the HpsEvent
 	ecal_writer->writeData(event, hps_event); 
 
     // If only Ecal data is going to be written to the DST, skip the rest
