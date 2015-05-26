@@ -25,7 +25,7 @@ HpsEvent::HpsEvent()
         gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
         gbl_strips_data(new TClonesArray("GblStripData", 1000)),
         event_number(0), run_number(0), n_tracks(0), n_svt_hits(0),
-        n_ecal_clusters(0), n_ecal_hits(0), n_muon_clusters(0),
+        n_ecal_clusters(0), n_ecal_hits(0), 
         n_fs_particles(0), n_uc_vtx_particles(0), 
         n_bsc_vtx_particles(0), n_tc_vtx_particles(0), 
         n_mc_particles(0), n_gbl_tracks_data(0), n_gbl_strips_data(0)
@@ -52,7 +52,6 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_svt_hits       = hpsEventObj.n_svt_hits;
     this->n_ecal_clusters  = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
-    this->n_muon_clusters  = hpsEventObj.n_muon_clusters;
     this->n_fs_particles = hpsEventObj.n_fs_particles;
     this->n_uc_vtx_particles = hpsEventObj.n_uc_vtx_particles;
     this->n_bsc_vtx_particles = hpsEventObj.n_bsc_vtx_particles;
@@ -66,7 +65,6 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     *svt_hits  = *hpsEventObj.svt_hits;  
     *ecal_clusters = *hpsEventObj.ecal_clusters;
     *ecal_hits = *hpsEventObj.ecal_hits;
-    *muon_clusters = *hpsEventObj.muon_clusters;
     *fs_particles = *hpsEventObj.fs_particles;
     *uc_vtx_particles = *hpsEventObj.uc_vtx_particles;
     *bsc_vtx_particles = *hpsEventObj.bsc_vtx_particles;
@@ -85,7 +83,6 @@ HpsEvent::~HpsEvent()
     delete svt_hits;
     delete ecal_clusters; 
     delete ecal_hits;
-    delete muon_clusters;
     delete fs_particles;
     delete uc_vtx_particles;
     delete bsc_vtx_particles;
@@ -109,7 +106,6 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     this->n_svt_hits       = hpsEventObj.n_svt_hits;
     this->n_ecal_clusters   = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
-    this->n_muon_clusters   = hpsEventObj.n_muon_clusters;
     this->n_fs_particles = hpsEventObj.n_fs_particles;
     this->n_uc_vtx_particles = hpsEventObj.n_uc_vtx_particles;
     this->n_bsc_vtx_particles = hpsEventObj.n_bsc_vtx_particles;
@@ -136,7 +132,6 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     *svt_hits  = *hpsEventObj.svt_hits;  
     *ecal_clusters = *hpsEventObj.ecal_clusters;
     *ecal_hits = *hpsEventObj.ecal_hits;
-    *muon_clusters = *hpsEventObj.muon_clusters;
     *fs_particles = *hpsEventObj.fs_particles;
     *uc_vtx_particles = *hpsEventObj.uc_vtx_particles;
     *bsc_vtx_particles = *hpsEventObj.bsc_vtx_particles;
@@ -156,7 +151,6 @@ void HpsEvent::Clear(Option_t * /*option*/)
     svt_hits->Clear("C");
     ecal_clusters->Clear("C");
     ecal_hits->Clear("C");
-    muon_clusters->Clear("C");
     fs_particles->Clear("C");
     uc_vtx_particles->Clear("C");
     bsc_vtx_particles->Clear("C");
@@ -167,7 +161,6 @@ void HpsEvent::Clear(Option_t * /*option*/)
     gbl_strips_data->Clear("C");
     n_ecal_clusters = 0;
     n_ecal_hits = 0;
-    n_muon_clusters = 0;
     n_tracks = 0;  
     n_svt_hits = 0;
     n_fs_particles = 0;

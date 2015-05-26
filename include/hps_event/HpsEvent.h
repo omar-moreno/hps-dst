@@ -162,7 +162,6 @@ class HpsEvent : public TObject {
         TClonesArray* svt_hits;            //->
         TClonesArray* ecal_clusters;       //->
         TClonesArray* ecal_hits; 		   //->
-        TClonesArray* muon_clusters;       //->
         TClonesArray* fs_particles;        //->
         TClonesArray* uc_vtx_particles;    //->
         TClonesArray* bsc_vtx_particles;   //->
@@ -186,7 +185,6 @@ class HpsEvent : public TObject {
         int n_svt_hits;
         int n_ecal_clusters;
         int n_ecal_hits;
-        int n_muon_clusters;
         int n_fs_particles;
         int n_uc_vtx_particles;
         int n_bsc_vtx_particles;
