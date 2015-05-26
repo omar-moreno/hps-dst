@@ -16,6 +16,7 @@ SvtTrack::SvtTrack()
       svt_hits(new TRefArray()),
       fs_particle(NULL),
       n_hits(0),
+      track_volume(-1),
       d0(0),
       phi(0),
       omega(0),
@@ -31,6 +32,8 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
     : TObject(),
       svt_hits(new TRefArray()),
       fs_particle(NULL),
+      n_hits(svtTrackObj.n_hits),
+      track_volume(svtTrackObj.track_volume),
       d0(svtTrackObj.d0),
       phi(svtTrackObj.phi),
       omega(svtTrackObj.omega),
@@ -55,6 +58,8 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
     Clear();
     delete svt_hits;
 
+    this->n_hits = svtTrackObj.n_hits; 
+    this->track_volume = svtTrackObj.track_volume;
     this->d0 = svtTrackObj.d0;
     this->phi = svtTrackObj.phi;
     this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
