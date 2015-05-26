@@ -10,43 +10,34 @@
 #include <SvtDataWriter.h>
 
 SvtDataWriter::SvtDataWriter()	
-	: tracks(NULL), track(NULL), tracker_hit(NULL), quality_data(NULL),
-	  svt_track(NULL), svt_hit(NULL),
+	: tracks(NULL),
+      track(NULL),
+      tracker_hit(NULL),
+	  svt_track(NULL),
+      svt_hit(NULL),
 	  tracks_collection_name("MatchedTracks"),
-      trackquality_collection_name("TrackQualityData"),
-      trackquality_rel_collection_name("TrackQualityDataRelations"),
-	  l1_isolation(-9999), l2_isolation(-9999)
-{}
+      track_data_collection_name("TrackData"), 
+      track_data_rel_collection_name("TrackDataRelations"),
+	  l1_isolation(-9999),
+      l2_isolation(-9999) {
+}
 
-SvtDataWriter::~SvtDataWriter()
-{}
+SvtDataWriter::~SvtDataWriter() {
+}
 
-void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
-{
+void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 	
 	// Get the collection of tracks from the event	
-	tracks = (IMPL::LCCollectionVec*) event->getCollection(tracks_collection_name);
+    tracks = (IMPL::LCCollectionVec*) event->getCollection(tracks_collection_name);
 
-
-	// Get the collection of LCRelations between track quality variables 
-	// (TrackQualityData) and the corresponding track.  If the collection
-	// does not exist, continue and fill the track quality variables with defaults.
-	// TODO: Once the final recon output is set, the DST maker should fail 
-	//		 if the collection isn't found.
-	try {
-		quality_data = (IMPL::LCCollectionVec*) event->getCollection(trackquality_rel_collection_name);
-	} catch(EVENT::DataNotAvailableException e) {
-		std::cout << "Collection " << trackquality_rel_collection_name << " was not found."
-				  << "Hit isolation variables will be filled with defaults." << std::endl;
-	}
-
-    UTIL::LCRelationNavigator* quality_data_nav = NULL;
-	if(quality_data != NULL){
-		quality_data_nav = new UTIL::LCRelationNavigator(quality_data);
-	}
+	// Get the collection of LCRelations between track data variables 
+	// (TrackData) and the corresponding track.
+    track_data = (IMPL::LCCollectionVec*) event->getCollection(track_data_rel_collection_name);
+    
+    UTIL::LCRelationNavigator* track_data_nav = new UTIL::LCRelationNavigator(track_data);
 
 	// Loop over the tracks and fill the HpsEvent
-	for(int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n){
+	for (int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n) {
 
 		// Get a track from the LCIO collection
 		track = (IMPL::TrackImpl*) tracks->getElementAt(track_n);
@@ -60,39 +51,38 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 									  track->getOmega(), 
 									  track->getTanLambda(), 
 									  track->getZ0());
-			
+		
 		// Set the track fit chi^2
 		svt_track->setChi2(track->getChi2());
 
-        // If the track quality data relations are present in the event,  
-		// get the track quality data associated with this track.  Otherwise, 
-		// just fill the track quality variables with defaults.
-		if(quality_data_nav != NULL){
-			EVENT::LCObjectVec quality_data_list = quality_data_nav->getRelatedFromObjects(track);
-			if (quality_data_list.size()!=1) {
-				std::cout << "SvtDataWriter: ERROR! The data structure has the wrong format:\n";
-				std::cout << quality_data_list.size() << " TrackQualityData linked from a single track. => check the DST maker" << std::endl;
-				exit(1);
-			}
-			IMPL::LCGenericObjectImpl* quality_datum = (IMPL::LCGenericObjectImpl*) quality_data_list.at(0);
-			if (quality_datum->getNDouble()!=2) {
-				std::cout << "SvtDataWriter: ERROR! The data structure has the wrong format:\n";
-				std::cout << quality_datum->getNDouble() << " doubles in this TrackQualityData. => check the DST maker" << std::endl;
-				exit(1);
-			}
-			
-			l1_isolation = quality_datum->getDoubleVal(0); 
-			l2_isolation = quality_datum->getDoubleVal(1); 	
-		
-		}
-        svt_track->setL1Isolation(l1_isolation);
-        svt_track->setL2Isolation(l2_isolation);
+        // Get te track data associated with this track.
+        EVENT::LCObjectVec track_data_list = track_data_nav->getRelatedFromObjects(track);
+
+        // If the track data list should only contain a single object.  If not,
+        // throw an exception
+        if (track_data_list.size() != 1) { 
+            throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format.");
+        }
+
+        // Get the track data generic object
+        IMPL::LCGenericObjectImpl* track_datum = (IMPL::LCGenericObjectImpl*) track_data_list.at(0);
+        
+        if (track_datum->getNDouble() != 2 || track_datum->getNFloat() != 1 || track_datum->getNInt() != 1) {
+            throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format.");
+        }
+
+        svt_track->setL1Isolation(track_datum->getDoubleVal(0));
+        svt_track->setL1Isolation(track_datum->getDoubleVal(1));
+
+        svt_track->setTrackTime(track_datum->getFloatVal(0));
+
+        svt_track->setTrackVolume(track_datum->getIntVal(0));
 
 		// Get the hits associated with the track
 		EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
 
 		//
-		for(int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n){
+		for (int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n) {
 			
 			tracker_hit = (IMPL::TrackerHitImpl*) tracker_hits[hit_n];
 
@@ -103,8 +93,9 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 			svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
 			svt_hit->setTime(tracker_hit->getTime());
 
-			svt_track->addHit(svt_hit); 
-        }		
+			svt_track->addHit(svt_hit);
+        } 
+        		
     }
-    delete quality_data_nav;
+    delete track_data_nav;
 }
