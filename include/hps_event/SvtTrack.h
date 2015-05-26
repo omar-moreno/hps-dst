@@ -80,31 +80,40 @@ class SvtTrack : public TObject {
          * @param tan_lambda : 
          * @param z0 : 
          */
-        void setTrackParameters(double d0, double phi, double omega, double tan_lambda, double z0);
+        void setTrackParameters(const double d0, 
+                const double phi, 
+                const double omega, 
+                const double tan_lambda,
+                const double z0);
         
         /**
          * Set the chi^2 of the fit to the track.
          *
          * @param chi_squared : The chi^2 of the fit to the track.
          */
-        void setChi2(double chi_squared) { this->chi_squared = chi_squared; };
+        void setChi2(const double chi_squared) { this->chi_squared = chi_squared; };
        
         /**
          * Set the track time.
          *
          * @param track_time : The track time.
          */
-        void setTrackTime(double track_time) { this->track_time = track_time; };
+        void setTrackTime(const double track_time) { this->track_time = track_time; };
 
         /**
          *
          */
-        void setL1Isolation(double l1_isolation) { this->l1_isolation = l1_isolation; };
+        void setL1Isolation(const double l1_isolation) { this->l1_isolation = l1_isolation; };
         
         /**
          *
          */
-        void setL2Isolation(double l2_isolation) { this->l2_isolation = l2_isolation; };
+        void setL2Isolation(const double l2_isolation) { this->l2_isolation = l2_isolation; };
+
+        /**
+         *
+         */
+        void setTrackVolume(const int track_volume) { this->track_volume = track_volume; };
 
         /**
          * Set the HpsParticle associated with this track.  This can be used to
@@ -147,6 +156,11 @@ class SvtTrack : public TObject {
         /**
          *
          */
+        double getTrackTime() const { return track_time; }; 
+
+        /**
+         *
+         */
         int getCharge(); 
 
         /**
@@ -177,6 +191,16 @@ class SvtTrack : public TObject {
         /**
          *
          */
+        bool isTopTrack() const { return track_volume ? false : true; };
+
+        /**
+         *
+         */
+        bool isBottomTrack() const { return track_volume ? true : false; };
+
+        /**
+         *
+         */
         ClassDef(SvtTrack, 1);
 
     private:
@@ -185,6 +209,7 @@ class SvtTrack : public TObject {
         TRef fs_particle;
 
         int n_hits; 
+        int track_volume; 
 
         double d0; 
         double phi;
