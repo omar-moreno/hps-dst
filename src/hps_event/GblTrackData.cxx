@@ -47,7 +47,7 @@ double GblTrackData::getTheta() const {
 }
 
 double GblTrackData::getPhi() const {
-	return ((SvtTrack*) svt_track.GetObject())->getPhi();
+	return ((SvtTrack*) svt_track.GetObject())->getPhi0();
 }
 
 double GblTrackData::getD0() const {

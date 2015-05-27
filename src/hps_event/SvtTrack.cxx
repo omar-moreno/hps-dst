@@ -18,7 +18,7 @@ SvtTrack::SvtTrack()
       n_hits(0),
       track_volume(-1),
       d0(0),
-      phi(0),
+      phi0(0),
       omega(0),
       tan_lambda(0),
       z0(0),
@@ -35,7 +35,7 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       n_hits(svtTrackObj.n_hits),
       track_volume(svtTrackObj.track_volume),
       d0(svtTrackObj.d0),
-      phi(svtTrackObj.phi),
+      phi0(svtTrackObj.phi0),
       omega(svtTrackObj.omega),
       tan_lambda(svtTrackObj.tan_lambda),
       z0(svtTrackObj.z0),
@@ -61,7 +61,7 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
     this->n_hits = svtTrackObj.n_hits; 
     this->track_volume = svtTrackObj.track_volume;
     this->d0 = svtTrackObj.d0;
-    this->phi = svtTrackObj.phi;
+    this->phi0 = svtTrackObj.phi0;
     this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
     this->chi_squared = svtTrackObj.chi_squared;
     this->track_time = svtTrackObj.track_time;
@@ -86,10 +86,10 @@ void SvtTrack::Clear(Option_t* /* option */) {
     n_hits = 0; 
 }
 
-void SvtTrack::setTrackParameters(double d0, double phi, double omega,
+void SvtTrack::setTrackParameters(double d0, double phi0, double omega,
                                   double tan_lambda, double z0) {
     this->d0         = d0;
-    this->phi        = phi;
+    this->phi0        = phi0;
     this->omega      = omega;
     this->tan_lambda = tan_lambda;
     this->z0         = z0;
