@@ -75,13 +75,13 @@ class SvtTrack : public TObject {
          * Set the track parameters.
          *
          * @param d0 : Distance of closest approach
-         * @param phi : 
+         * @param phi0 : 
          * @param omega : 
          * @param tan_lambda : 
          * @param z0 : 
          */
         void setTrackParameters(const double d0, 
-                const double phi, 
+                const double phi0, 
                 const double omega, 
                 const double tan_lambda,
                 const double z0);
@@ -131,7 +131,7 @@ class SvtTrack : public TObject {
         /**
          *
          */
-        double getPhi() const { return phi; };
+        double getPhi0() const { return phi0; };
         
         /**
          *
@@ -212,7 +212,7 @@ class SvtTrack : public TObject {
         int track_volume; 
 
         double d0; 
-        double phi;
+        double phi0;
         double omega;  
         double tan_lambda; 
         double z0;  
