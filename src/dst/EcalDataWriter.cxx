@@ -10,7 +10,7 @@
 #include <EcalDataWriter.h>
 
 EcalDataWriter::EcalDataWriter()
-    : clusters_collection_name("EcalClusters") {
+    : clusters_collection_name("EcalClustersCorr") {
 }
 
 EcalDataWriter::~EcalDataWriter() {
