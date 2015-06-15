@@ -8,27 +8,66 @@
  *              University of California, Santa Cruz
  *  @date: March 19, 2013
  */	
+
+#include <iostream>
+
+#include <TCanvas.h>
+#include <TH1F.h>
+#include <TH2F.h>
+#include <TFile.h>
+#include <TTree.h>
+#include <TBranch.h>
+#include <TRefArray.h>
+
+
+#include <HpsEvent.h>
+#include <SvtTrack.h>
+#include <EcalCluster.h>
+#include <EcalHit.h>
+
+//
+//--- Functions ---//
+//-----------------//
+
+// Note: These functions will be placed in utility classes included with the
+//	     DST at some point.
+
+void setupCanvas(TCanvas* canvas){
+
+	canvas->SetFillColor(0);
+ 	canvas->SetBorderMode(0);
+ 	canvas->SetBorderSize(0);
+ 	canvas->SetFrameFillColor(0);
+ 	canvas->SetFrameBorderMode(0);
+
+}
+
+void setup1DHistogram(TH1 *histo, string x_axis_title){
+
+	histo->SetStats(0);
+	histo->GetXaxis()->SetTitle(x_axis_title.c_str());
+	histo->GetXaxis()->SetTitleSize(0.03);
+	histo->GetXaxis()->SetLabelSize(0.03);
+	histo->GetYaxis()->SetTitleSize(0.03);
+	histo->GetYaxis()->SetLabelSize(0.03);
+
+}
+
+void setup2DHistogram(TH1* histo, string x_axis_title, string y_axis_title){
+
+	histo->GetYaxis()->SetTitle(y_axis_title.c_str());
+	setup1DHistogram(histo, x_axis_title);
+}
  
+double magnitude(vector<double> vector)
+{
+    return sqrt(vector[0]*vector[0] + vector[1]*vector[1] + vector[2]*vector[2]); 
+}
+
+//---------------------//
 void runAnalysis(std::string root_file_name, std::string pdf_file_name){
 	
     const double param = 2.99792458e-04;
-
-    // Check if the path to hps-dst has been set
-	if(getenv("HPS_DST_HOME") == NULL){
-		std::err << "Error! Environmental variable HPS_DST_HOME is not set."
-				  << "\nExiting ..." << std::endl;
-		return EXIT_FAILURE;
-	} 
-
-	std::string hps_dst_path(getenv("HPS_DST_HOME"));
-	hps_dst_path += "/build/lib/libHpsEvent.so";
-	// Check if the classes (HpsEvent, Track, EcalCluster, ...) are in 
-	// the dictionary.  If not, load their definitions from libHpsEvent.so
-	if(!TClassTable::GetDict("HpsEvent")){
-		std::cout << "Class definitions were not found! Loading libHpsEvent.so"
-			      << std::endl;
-		gSystem->Load(hps_dst_path.c_str());
-	}
 
  	//-- Setup ROOT histograms ---//
  	//----------------------------//
@@ -198,42 +237,3 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
     canvas->Print( (pdf_file_name + ")").c_str());
 
 }
-//--- Functions ---//
-//-----------------//
-
-// Note: These functions will be placed in utility classes included with the
-//	     DST at some point.
-
-void setupCanvas(TCanvas* canvas){
-
-	canvas->SetFillColor(0);
- 	canvas->SetBorderMode(0);
- 	canvas->SetBorderSize(0);
- 	canvas->SetFrameFillColor(0);
- 	canvas->SetFrameBorderMode(0);
-
-}
-
-void setup1DHistogram(TH1 *histo, string x_axis_title){
-
-	histo->SetStats(0);
-	histo->GetXaxis()->SetTitle(x_axis_title.c_str());
-	histo->GetXaxis()->SetTitleSize(0.03);
-	histo->GetXaxis()->SetLabelSize(0.03);
-	histo->GetYaxis()->SetTitleSize(0.03);
-	histo->GetYaxis()->SetLabelSize(0.03);
-
-}
-
-void setup2DHistogram(TH1* histo, string x_axis_title, string y_axis_title){
-
-	histo->GetYaxis()->SetTitle(y_axis_title.c_str());
-	setup1DHistogram(histo, x_axis_title);
-}
- 
-double magnitude(vector<double> vector)
-{
-    return sqrt(vector[0]*vector[0] + vector[1]*vector[1] + vector[2]*vector[2]); 
-}
-
-//---------------------//
