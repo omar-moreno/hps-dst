@@ -119,7 +119,7 @@ class HpsEvent : public TObject {
         /**
          *
          */
-        bool isSingle1Trigger() const { return (bool) single0_trigger; };
+        bool isSingle1Trigger() const { return (bool) single1_trigger; };
 
         /**
          *
