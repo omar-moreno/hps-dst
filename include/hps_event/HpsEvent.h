@@ -138,6 +138,7 @@ class HpsEvent : public TObject {
 
 
         int getNumberOfTracks()         const  { return n_tracks; };
+        int getNumberOfSvtHits()        const  { return n_svt_hits; };
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
 		int getNumberOfParticles(collection_t)	const; 
         int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
