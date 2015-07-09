@@ -13,31 +13,50 @@ framework.
 Installation
 ------------
 
-###### Preliminaries
+##### Preliminaries #####
 
-The DST maker and HpsEvent API require the following packages before they can 
-built:
+In order to build the hps-dst package, the following build tools are required:
+* [GCC >= 4.8](https://gcc.gnu.org/install/)
+* [CMake >= 2.8](http://www.cmake.org/cmake/help/install.html)
+
+The hps-dst package has the following dependencies: 
 * [The LCIO C++ API](http://lcio.desy.de/v02-04-03/doc/manual_html/manual.html#SECTION00030000000000000000)
 * [ROOT data analysis framework](http://root.cern.ch/drupal/content/installing-root-source)
 * [Generalized Broken Lines](https://www.wiki.terascale.de/index.php/GeneralBrokenLines)
-* [CMake > 2.8](http://www.cmake.org/cmake/help/install.html)
-* [Doxygen](http://www.stack.nl/~dimitri/doxygen/manual/install.html) (Optional. Used to build the documentation.)
 
-###### Getting the source
+In order the build the documentation, the following package is also required:
+* [Doxygen](http://www.stack.nl/~dimitri/doxygen/manual/install.html) 
 
-The DST maker and HpsEvent API source code is stored in a public github 
-repository.  The code can be "cloned" i.e. copied to a users local machine
-by issuing the following commands from a terminal
+##### Getting the Source Code #####
+
+###### Getting a Tagged Release ######
+
+Unless you are an active developer on the project, it is best to use a tagged 
+release. A release can be downloaded from the projects 
+[release page](https://github.com/omar-moreno/hps-dst/releases).  The project
+can be downloaded as a zip file or tag.gz file.
+
+Alternatively, a release can be downloaded and untarred by issuing the 
+following commands from a terminal
+
+    wget https://github.com/omar-moreno/hps-dst/archive/v0.7.tar.gz
+    tar zxvf v0.7.tar.gz
+    cd hps-dst-0.7
+
+Once downloaded, the hps-dst package can be built in the usual way.
+
+###### Cloning the Repository from GitHub ######
+
+The hps-dst package is stored in a public github repository.  The code can be 
+"cloned" i.e. copied to a users local machine by issuing the following commands
+from a terminal
 
 	cd /path/to/workdir
 	git clone https://github.com/omar-moreno/hps-dst.git
 
 A github account is not required to clone the source code.
 
-__Note: If you want to contribute to the development of the HPS DST, please
-contact Omar Moreno.__
-
-###### Building the DST Maker and HpsEvent API
+##### Building the DST Maker and HpsEvent API
 
 Before the DST source can be build, the following environmental variables need to be set:
 
