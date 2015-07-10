@@ -59,7 +59,7 @@ from a terminal
 
 A github account is not required to clone the source code.
 
-###### Building the Project ######
+##### Building the Project #####
 
 Before building the project, the following environmental variables need to be set:
 
