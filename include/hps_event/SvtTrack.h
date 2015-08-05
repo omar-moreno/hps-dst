@@ -26,7 +26,7 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include "HpsParticle.h"
+#include <HpsParticle.h>
 
 // Forward declarations
 class SvtHit;

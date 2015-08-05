@@ -25,15 +25,15 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include "SvtTrack.h"
-#include "SvtHit.h"
-#include "EcalCluster.h" 
-#include "EcalHit.h"
-#include "HpsParticle.h"
-#include "HpsMCParticle.h"
-#include "GblTrackData.h"
-#include "GblStripData.h"
-#include "GblTrack.h"
+#include <SvtTrack.h>
+#include <SvtHit.h>
+#include <EcalCluster.h> 
+#include <EcalHit.h>
+#include <HpsParticle.h>
+#include <HpsMCParticle.h>
+#include <GblTrackData.h>
+#include <GblStripData.h>
+#include <GblTrack.h>
 
 class HpsEvent : public TObject { 
 
