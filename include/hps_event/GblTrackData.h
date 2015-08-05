@@ -35,34 +35,90 @@
 class GblTrackData : public TObject {
 
     public:
-    
+
+        /**
+         * Default construtor
+         */    
         GblTrackData();
-        virtual ~GblTrackData();
-        
+
+        /**
+         * Destructor
+         */
+        ~GblTrackData();
+       
+        /**
+         *
+         */ 
         void Clear(Option_t *option="");
         
+        /**
+         *
+         */
         void addStrip(GblStripData* strip);
 
-        void setTrack(SvtTrack* svt_track){ this->svt_track = svt_track; }; 
+        /**
+         *
+         */
+        void setTrack(SvtTrack* seed_track){ this->seed_track = seed_track; }; 
+        
+        /**
+         *
+         */
         void setPrjPerToCl(const unsigned int, const unsigned int, const double);
 
+        /**
+         *
+         */
         int getNStrips() const { return n_gbl_strip_hits; }
+        
+        /**
+         *
+         */
         GblStripData* getStrip(const int& i) const {
             return static_cast<GblStripData*>(m_gbl_strip_hits->At(i));
         }
+        
+        /**
+         *
+         */
         double getKappa() const;
+        
+        /**
+         *
+         */
         double getTheta() const;
+        
+        /**
+         *
+         */
         double getPhi()   const;
+        
+        /**
+         *
+         */
         double getD0()    const;
+        
+        /**
+         *
+         */
         double getZ0()    const;
+        
+        /**
+         *
+         */
         TMatrixD getPrjPerToCl() const { return m_prjPerToCl; }
+        
+        /**
+         *
+         */
         std::string toString() const;
 
         ClassDef(GblTrackData,1) //Track information needed by GBL
     
     private:
 
-        TRef svt_track; 
+        TRef seed_track; 
+        
         TRefArray* m_gbl_strip_hits;
         TMatrixD m_prjPerToCl;
         
