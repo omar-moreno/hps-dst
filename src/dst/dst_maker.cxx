@@ -108,6 +108,21 @@ int main(int argc, char **argv) {
     }
     cout << "[ DST MAKER ]: Setting DST file name to " << dst_file_name << endl;
 
+    // If GBL is enabled, check if the B-field has been set.  
+    // TODO: The B-field should be aquired from the event instead of it being
+    //       specified by the user.
+    if (run_gbl) {
+        cout << "[ DST MAKER ]: GBL has been enabled. "
+             << "Checking if B-field has been set ..."  << endl;
+        // Only require a b-field if the GBL output is enabled
+        if(std::isnan(b_field)){ 
+            cerr << "[ DST MAKER ]: Please specify the B field strength in Tesla." << endl;
+            cerr << "[ DST MAKER ]: Use the --help flag for usage" << endl;
+            return EXIT_FAILURE;
+        }
+        cout << "[ DST MAKER ]: B-field has been set to " << b_field << " Tesla" << endl;
+    }
+
     // Open a ROOT file
     TFile* root_file = new TFile(dst_file_name.c_str(), "RECREATE");
 
@@ -127,13 +142,6 @@ int main(int argc, char **argv) {
     event_builder->writeEcalOnly(ecal_only);    
     
     if (run_gbl) {
-        // Only require a b-field if the GBL output is enabled
-        if(std::isnan(b_field)){ 
-            cerr << "[ DST MAKER ]: Please specify the B field strength in Tesla." << endl;
-            cerr << "[ DST MAKER ]: Use the --help flag for usage" << endl;
-            return EXIT_FAILURE;
-        }
-        
         // Set the B field
         event_builder->setBField(b_field); 
         
@@ -181,8 +189,10 @@ int main(int argc, char **argv) {
 
     cout << "Finished writing " << event_number << " events to ROOT Tree!" << endl;
     root_file->Write();
-    root_file->Close();
-
+  
+    // Clean up!  
+    delete tree;  
+    delete root_file; 
     delete hps_event;
     delete event_builder;
 
