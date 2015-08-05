@@ -17,7 +17,7 @@
 
 //--- HPS Event ---//
 //-----------------//
-#include <MCParticle.h>
+#include "MCParticle.h"
 
 class HpsMCParticle : public TObject, public MCParticle {
 
