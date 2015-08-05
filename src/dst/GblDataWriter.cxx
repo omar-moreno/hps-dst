@@ -114,19 +114,6 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 			}
 		}
 
-		// TODO: Assure that the track parameters calculated directly from the SvtTrack
-		//		 are within some epsilon of those retrieved from the GblTrackData
-		//		 generic object.  Throw an exception if they aren't. 
-		/*if((hps_gbl_track_data->getKappa() - gbl_track_data->getDoubleVal(0)) != 0){
-		   (hps_gbl_track_data->getTheta() - gbl_track_data->getDoubleVal(1)) ||
-		   (hps_gbl_track_data->getPhi()   != gbl_track_data->getDoubleVal(2)) ||
-		   (hps_gbl_track_data->getD0()	  != gbl_track_data->getDoubleVal(3)) ||
-		   (hps_gbl_track_data->getZ0()	  != gbl_track_data->getDoubleVal(4)){
-	
-			std::cout << "Track data does not match!" << std::endl;
-			std::cout << "hps: " << hps_gbl_track_data->getKappa() - gbl_track_data->getDoubleVal(0) << std::endl;	
-		}*/	
-
 		for(unsigned int idx = 0; idx < n_prjPerToCl; ++idx) {
 			unsigned int row = static_cast<unsigned int>(floor(static_cast<double>(idx)/3.0));
 			unsigned int col = idx % 3;        
