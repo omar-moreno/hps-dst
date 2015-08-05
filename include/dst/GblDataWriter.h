@@ -47,15 +47,12 @@ class GblDataWriter : public DataWriter {
 
     private:
 
-        std::string m_track_col_name;
-        std::string m_rel_gbltrk_name;
-        std::string m_rel_toGblStrip_name;
+        std::string track_col_name;
+        std::string trk_to_gbltrk_rel_col_name;
+        std::string gbltrk_to_gblstrip_rel_col_name;
 
         bool m_debug;
 		
-		IMPL::LCCollectionVec* tracks;
-		IMPL::LCCollectionVec* trk_to_gbltrk_relations;
-		IMPL::LCCollectionVec* gbltrk_to_gblstrip_relations;
 		IMPL::LCRelationImpl* trk_to_gbltrk_relation;
 		IMPL::LCGenericObjectImpl* gbl_track_data;
         IMPL::LCGenericObjectImpl* gbl_strip;  
