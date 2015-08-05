@@ -9,7 +9,7 @@
 ClassImp(GblTrackData)
 
 GblTrackData::GblTrackData() 
-	: TObject(), svt_track(NULL), m_gbl_strip_hits(new TRefArray()),
+	: TObject(), seed_track(NULL), m_gbl_strip_hits(new TRefArray()),
 	  m_prjPerToCl(3,3), n_gbl_strip_hits(0), m_kappa(0), m_theta(0), m_phi(0),
       m_d0(0), m_z0(0) 
 {}
@@ -38,24 +38,24 @@ void GblTrackData::setPrjPerToCl(const unsigned int row,
 double GblTrackData::getKappa() const {
 	// Note: Omega and Kappa both refer to the track
 	//		 curvature.
-	return ((SvtTrack*) svt_track.GetObject())->getOmega(); 
+	return ((SvtTrack*) seed_track.GetObject())->getOmega(); 
 }
 
 double GblTrackData::getTheta() const {
-	double tan_lambda = ((SvtTrack*) svt_track.GetObject())->getTanLambda();
+	double tan_lambda = ((SvtTrack*) seed_track.GetObject())->getTanLambda();
 	return TMath::PiOver2() - atan(tan_lambda);
 }
 
 double GblTrackData::getPhi() const {
-	return ((SvtTrack*) svt_track.GetObject())->getPhi0();
+	return ((SvtTrack*) seed_track.GetObject())->getPhi0();
 }
 
 double GblTrackData::getD0() const {
-	return ((SvtTrack*) svt_track.GetObject())->getD0(); 
+	return ((SvtTrack*) seed_track.GetObject())->getD0(); 
 }
 
 double GblTrackData::getZ0() const {
-	return ((SvtTrack*) svt_track.GetObject())->getZ0();
+	return ((SvtTrack*) seed_track.GetObject())->getZ0();
 }
 
 std::string GblTrackData::toString() const {
