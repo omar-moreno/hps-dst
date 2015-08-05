@@ -25,6 +25,10 @@
 #include <TClonesArray.h>
 #include <TRefArray.h>
 #include <TMatrixD.h>
+#include <TRef.h>
+
+// Forward declarations
+class SvtTrack;
 
 class GblTrack : public TObject {
 
@@ -40,13 +44,16 @@ class GblTrack : public TObject {
          */
         ~GblTrack();
 
-        /**
-         *
-         */
         void setSeedTrackParameters(double kappa, double theta, double phi, double d0, double z0);
         
         /**
+         * Set the track parameters.
          *
+         * @param d0 : Distance of closest approach
+         * @param phi0 : 
+         * @param kappa : 
+         * @param theta : 
+         * @param z0 : 
          */
         void setTrackParameters(double C, double th, double phi0, double dca, double z);
         
@@ -69,6 +76,13 @@ class GblTrack : public TObject {
          *
          */
         void setCov(const TMatrixD& mat);
+
+        /**
+         * Set the seed track associated with this GBL track.
+         *
+         * @param track : seed track associated with this GBL track
+         */
+        void setSeedTrack(SvtTrack* seed_track) { this->seed_track = (TObject*) seed_track; }; 
 
         /**
          *
@@ -144,7 +158,14 @@ class GblTrack : public TObject {
          *
          */
         double getSeedZ0() const { return seed_z0; }
-        
+
+        /**
+         * Get the seed track associated with this GBL track.
+         *
+         * @return seed track associated with this GBL track
+         */
+        TRef getSeedTrack() const { return seed_track; }; 
+
         /**
          *
          */
@@ -153,7 +174,9 @@ class GblTrack : public TObject {
         ClassDef(GblTrack,1) //Track class for use with GBL
 
     private:
-           
+            
+            TRef seed_track;
+
             double kappa;
             double theta;
             double phi;
