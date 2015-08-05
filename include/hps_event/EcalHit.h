@@ -18,7 +18,7 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include "CalorimeterHit.h"
+#include <CalorimeterHit.h>
 
 class EcalHit : public TObject, public CalorimeterHit {
 

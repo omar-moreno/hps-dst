@@ -26,8 +26,8 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include "Cluster.h"
-#include "EcalHit.h"
+#include <Cluster.h>
+#include <EcalHit.h>
 
 class EcalCluster : public TObject, public Cluster {
 
