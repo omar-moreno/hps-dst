@@ -16,7 +16,6 @@ HpsEventBuilder::HpsEventBuilder()
       mc_particle_writer(new MCParticleDataWriter()),
       particle_writer(new HpsParticleDataWriter()),
       gbl_data_writer(new GblDataWriter()),
-      gbl_track_writer(new GblTrackWriter()),
       hps_trigger_data(NULL),
       trigger_data(NULL),
       trigger_datum(NULL),
@@ -30,7 +29,6 @@ HpsEventBuilder::~HpsEventBuilder() {
 	delete mc_particle_writer;
 	delete particle_writer; 
 	delete gbl_data_writer;
-	delete gbl_track_writer;
 }
 
 void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
@@ -102,11 +100,8 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
 	// Write info used for GBL to the HpsEvent
 	gbl_data_writer->writeData(event, hps_event);
 
-	// Write GBL track refit to the HpsEvent    
-	gbl_track_writer->writeData(hps_event);
 }
 
 void HpsEventBuilder::setBField(const double b_field) {
-	gbl_track_writer->setBField(b_field);
     gbl_data_writer->setBField(b_field);
 }
