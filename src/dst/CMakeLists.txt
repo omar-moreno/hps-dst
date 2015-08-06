@@ -26,7 +26,11 @@ target_link_libraries(HpsParticleDataWriter ${LCIO_LIB} HpsEvent)
 
 # Create the GblDataWriter library
 add_library(GblDataWriter GblDataWriter.cxx)
-target_link_libraries(GblDataWriter ${LCIO_LIB} HpsEvent)
+target_link_libraries(GblDataWriter 
+    ${LCIO_LIB} 
+    HpsEvent
+    HpsGblFitter
+)
 
 # Create the GblTrackWriter library
 add_library(GblTrackWriter GblTrackWriter.cxx)
