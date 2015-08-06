@@ -73,8 +73,9 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
     exit(-1);
   }
 
-  HpsGblFitter gblFitter(m_b_field);
-  gblFitter.SetDebug(m_debug);
+  HpsGblFitter gblFitter; 
+  gblFitter.setBField(m_b_field);
+  gblFitter.setDebug(m_debug);
    
   // Loop over the GBL tracks
 
@@ -87,7 +88,7 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
     
 
     // clear the fitter
-    gblFitter.Clear();
+    gblFitter.clear();
     
     // find the GBL data object
     const GblTrackData* gblTrackData = hps_event->getGblTrackData(i_gbl_track);
@@ -102,7 +103,7 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
     }
 
     // do the GBL refit    
-    HpsGblFitter::HpsGblFitStatus fit_status = gblFitter.Fit(gblTrackData);
+    HpsGblFitter::HpsGblFitStatus fit_status = gblFitter.fit(gblTrackData);
     
     if( fit_status == HpsGblFitter::OK) {
 
@@ -112,7 +113,7 @@ void GblTrackWriter::writeData(HpsEvent* hps_event) {
 
       // add a track to the event
       GblTrack* gblTrack = hps_event->addGblTrack();
-      gblFitter.SetTrackProperties(gblTrack, gblTrackData);
+      gblFitter.setTrackProperties(gblTrack, gblTrackData);
 
     } else {
 
