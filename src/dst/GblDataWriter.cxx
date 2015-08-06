@@ -78,6 +78,12 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
                   + gbltrk_to_gblstrip_rel_col_name + " couldn't be found");
     }
 
+    // Create a relation navigator between GblTrackData and GblStrips.  
+    // This allows for quick retrieval of GblStrips associated with a 
+    // GblTrackData object.
+    // TODO: Should this move outside of this loop?
+    UTIL::LCRelationNavigator* rel_gbl_strip_nav = new UTIL::LCRelationNavigator(gbltrk_to_gblstrip_relations);
+
     // Loop over all Track to GblTrackData relations
     for (int rel_n = 0; rel_n < trk_to_gbltrk_relations->getNumberOfElements(); ++rel_n) {
 
@@ -132,13 +138,7 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             //          << gblTrackGeneric->getDoubleVal(5+idx) << std::endl;
             hps_gbl_track_data->setPrjPerToCl(row, col, gbl_track_data->getDoubleVal(5+idx));
         }   
-
-        // Create a relation navigator between GblTrackData and GblStrips.  
-        // This allows for quick retrieval of GblStrips associated with a 
-        // GblTrackData object.
-        // TODO: Should this move outside of this loop?
-        UTIL::LCRelationNavigator* rel_gbl_strip_nav = new UTIL::LCRelationNavigator(gbltrk_to_gblstrip_relations);
-        
+ 
         // Get the list of GblStrips that are related to the GblTrackData object
         EVENT::LCObjectVec gbl_strips = rel_gbl_strip_nav->getRelatedToObjects(gbl_track_data);
             
@@ -221,8 +221,6 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
                       << hps_gbl_track_data->toString() << std::endl;
         }
 
-        delete rel_gbl_strip_nav;
-
         //--- GBL refit ---//
         //-----------------//
 
@@ -254,6 +252,8 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         }
 
     } // GBLTrackData
+
+    delete rel_gbl_strip_nav;
 
     if (debug) {
         std::cout << "GblDataWriter: write data end " << std::endl;
