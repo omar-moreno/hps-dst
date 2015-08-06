@@ -1,61 +1,42 @@
 /**
- *  @section
- *      purpose: write GBL input data to DST
- *  @author: Per Hansson Adrian <phansson@slac.stanford.edu>
- *           SLAC
- *  @author: Omar Moreno <omoreno1@ucsc.edu>
- *           Santa Cruz Institute for Particle Physics
- *           University of California, Santa Cruz
- *  @date: Feb. 12, 2014
- *
+ *	@file GblDataWriter.cxx
+ *	@brief Class used to write GBL collections to the DST.
+ *	@author Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	         SLAC
+ *	@author Omar Moreno <omoreno1@ucsc.edu>
+ *	         Santa Cruz Institute for Particle Physics
+ *	         University of California, Santa Cruz
+ *	@date Feb. 12, 2014
  */
 
 #include <GblDataWriter.h>
 
 // definition of generic collection sizes
 // these will need to be matched to the input DST
-static const unsigned int n_gblTrackGenericDoubleDST = 14;
-static const unsigned int n_gblTrackGenericIntDST = 1;
-static const unsigned int n_gblStripGenericDoubleDST = 22;
-static const unsigned int n_gblStripGenericIntDST = 1;
-static const unsigned int n_prjPerToCl = 9; // n matrix elements in projection matrix
+static const unsigned int GBL_TRACK_DATA_DOUBLES = 14;
+static const unsigned int GBL_TRACK_DATA_INTS = 1;
+static const unsigned int GBL_STRIP_DATA_DOUBLES = 22;
+static const unsigned int GBL_STRIP_DATA_INTS = 1;
+static const unsigned int PRJ_PER_TO_CL_N_ELEMENTS = 9; // n matrix elements in projection matrix
 
 GblDataWriter::GblDataWriter() 
     : track_col_name("MatchedTracks"), 
       trk_to_gbltrk_rel_col_name("TrackToGBLTrack"), 
       gbltrk_to_gblstrip_rel_col_name("GBLTrackToStripData"),
-      m_debug(false),
-      trk_to_gbltrk_relation(NULL),
-      gbl_track_data(NULL),
-      gbl_strip(NULL),
-      track(NULL),
-      hps_gbl_track_data(NULL),
-      hps_gbl_strip(NULL) {
+      debug(false) { 
 }
 
 GblDataWriter::~GblDataWriter() {
 }
 
 void GblDataWriter::setDebug(bool debug) {
-    m_debug = debug;
+    debug = debug;
 }
 
 void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
-    if (m_debug) {
+    if (debug) {
         std::cout << "GblDataWriter: write data start " << std::endl;
-    }
-
-    // Get the collection of tracks from the event. If the event doesn't
-    // have the specified collection, throw an exception.  Usually, if
-    // this collection is missing, something went wrong at the recon 
-    // stage.
-    // Is this collection being used? If not, it needs to be deleted! 
-    IMPL::LCCollectionVec* tracks = NULL;
-    try {
-		tracks = (IMPL::LCCollectionVec*) event->getCollection(track_col_name);
-    } catch(EVENT::DataNotAvailableException e) {
-        throw std::runtime_error("[ GblDataWriter ]: The collection " + track_col_name + " couldn't be found");
     }
 
     // Get the collection of LCRelations between a GblTrackData and the 
@@ -84,36 +65,42 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
                   + gbltrk_to_gblstrip_rel_col_name + " couldn't be found");
     }
 
-    for(int rel_n = 0; rel_n < trk_to_gbltrk_relations->getNumberOfElements(); ++rel_n) {
+    // Loop over all Track to GblTrackData relations
+    for (int rel_n = 0; rel_n < trk_to_gbltrk_relations->getNumberOfElements(); ++rel_n) {
+
+        // Get a Track to GblTrackData relation from the event        
+		IMPL::LCRelationImpl* trk_to_gbltrk_relation 
+            = (IMPL::LCRelationImpl*) trk_to_gbltrk_relations->getElementAt(rel_n);
+
         
-        trk_to_gbltrk_relation = (IMPL::LCRelationImpl*) trk_to_gbltrk_relations->getElementAt(rel_n);
-        
-        // Get the GblTrackData
-        gbl_track_data = (IMPL::LCGenericObjectImpl*) trk_to_gbltrk_relation->getTo();
+        // Get the GblTrackData from the relation
+		IMPL::LCGenericObjectImpl* gbl_track_data 
+            = (IMPL::LCGenericObjectImpl*) trk_to_gbltrk_relation->getTo();
 
         // Get the track related to the GblTrackData
-        track = (IMPL::TrackImpl*) trk_to_gbltrk_relation->getFrom(); 
+		IMPL::TrackImpl* track = (IMPL::TrackImpl*) trk_to_gbltrk_relation->getFrom(); 
         
-        // Check that the data structure is the correct length
-        if ( gbl_track_data->getNInt() !=  n_gblTrackGenericIntDST ) {
-            std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
-            std::cout << gbl_track_data->getNInt() << " ints. => check the DST maker" << std::endl;
-            exit(1);
+        // Check that the data structure is the correct length.  If it's not, throw a 
+        // runtime exception.  
+        // Should this only be checked a few times?  What kind of perfomance hit is this
+        // causing?
+        if (gbl_track_data->getNInt() !=  GBL_TRACK_DATA_INTS) {
+            throw std::runtime_error("[ GblDataWriter ]: Error! The data structure has the wrong number of ints");
         }
 
         // Check that the data structure is the correct length
-        if ( gbl_track_data->getNDouble() != n_gblTrackGenericDoubleDST ) {
-            std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
-            std::cout << gbl_track_data->getNDouble() << " doubles. => check the DST maker" << std::endl;
-            exit(1);
+        if (gbl_track_data->getNDouble() != GBL_TRACK_DATA_DOUBLES) {
+            throw std::runtime_error("[ GblDataWriter ]: Error! The data structure has the wrong number of doubles");
         }
         
         // Add a GblTrackData object to the HpsEvent
-        hps_gbl_track_data = hps_event->addGblTrackData();
+		GblTrackData* hps_gbl_track_data = hps_event->addGblTrackData();
 
         // Loop through all of the tracks in the HpsEvent and find the one
         // that matches the track associated with the GblTrackData
-        for(int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n) {
+        // TODO: The seed track shouldn't be associated with a GblTrack instead
+        //       of a GblTrackData object.
+        for (int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n) { 
             
             // Use the track fit chi^2 to find the match
             // TODO: Verify that the track fit chit^2 is enough to conclude
@@ -124,98 +111,108 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             }
         }
 
-        for(unsigned int idx = 0; idx < n_prjPerToCl; ++idx) {
-            unsigned int row = static_cast<unsigned int>(floor(static_cast<double>(idx)/3.0));
-            unsigned int col = idx % 3;        
-            //std::cout << "prjmat " << idx << "," << row << "," << col << " -> " << gblTrackGeneric->getDoubleVal(5+idx) << std::endl;
+        // Add the elements of the projection matrix
+        for (unsigned int idx = 0; idx < PRJ_PER_TO_CL_N_ELEMENTS; ++idx) {
+             unsigned int row = static_cast<unsigned int>(floor(static_cast<double>(idx)/3.0));
+             unsigned int col = idx % 3;        
+            //std::cout << "prjmat " << idx << "," << row << "," << col << " -> " 
+            //          << gblTrackGeneric->getDoubleVal(5+idx) << std::endl;
             hps_gbl_track_data->setPrjPerToCl(row, col, gbl_track_data->getDoubleVal(5+idx));
         }   
 
-        // Add all GblStrips to the GblTrackData object 
+        // Create a relation navigator between GblTrackData and GblStrips.  
+        // This allows for quick retrieval of GblStrips associated with a 
+        // GblTrackData object.
+        // TODO: Should this move outside of this loop?
         UTIL::LCRelationNavigator* rel_gbl_strip_nav = new UTIL::LCRelationNavigator(gbltrk_to_gblstrip_relations);
         
         // Get the list of GblStrips that are related to the GblTrackData object
         EVENT::LCObjectVec gbl_strips = rel_gbl_strip_nav->getRelatedToObjects(gbl_track_data);
             
-        if (m_debug) {
+        if (debug) {
             std::cout << "GblDataWriter: found " << gbl_strips.size() 
                       << " GBL strips for this GBL track data object" << std::endl;
         }
-
-        for(uint gbl_strip_n = 0; gbl_strip_n < gbl_strips.size(); ++gbl_strip_n) {
+       
+        // Add all GblStrips to the GblTrackData object 
+        for (uint gbl_strip_n = 0; gbl_strip_n < gbl_strips.size(); ++gbl_strip_n) {
             
-            if (m_debug) {
+            if (debug) {
                 std::cout << "GblDataWriter: processing GBLStrip " << gbl_strip_n << std::endl;
             }
 
-            gbl_strip = (IMPL::LCGenericObjectImpl*) gbl_strips.at(gbl_strip_n);
+            // Get the nth GblStrip from the collection
+            IMPL::LCGenericObjectImpl* gbl_strip = (IMPL::LCGenericObjectImpl*) gbl_strips.at(gbl_strip_n);
 
-            hps_gbl_strip = hps_event->addGblStripData();
+            // Add the GblStrip to the HpsEvent
+            GblStripData* hps_gbl_strip = hps_event->addGblStripData();
 
+            if ( gbl_strip->getNInt() !=  GBL_STRIP_DATA_INTS ) {
+                throw std::runtime_error("[ GblDataWriter ]: Error! The data structure has the wrong number of ints");
+            }
+
+            if ( gbl_strip->getNDouble() != GBL_STRIP_DATA_DOUBLES ) {
+                throw std::runtime_error("[ GblDataWriter ]: Error! The data structure has the wrong number of doubles");
+            }
+            
+            // Set the GBL strip ID
+            hps_gbl_strip->SetId(gbl_strip->getIntVal(0));
+
+            hps_gbl_strip->SetPath3D(gbl_strip->getDoubleVal(0));
+            
+            hps_gbl_strip->SetPath(gbl_strip->getDoubleVal(1));
+            
+            hps_gbl_strip->SetU(gbl_strip->getDoubleVal(2),
+                    gbl_strip->getDoubleVal(3),
+                    gbl_strip->getDoubleVal(4));
+            
+            hps_gbl_strip->SetV(gbl_strip->getDoubleVal(5),
+                    gbl_strip->getDoubleVal(6),
+                    gbl_strip->getDoubleVal(7));
+            
+            hps_gbl_strip->SetW(gbl_strip->getDoubleVal(8),
+                    gbl_strip->getDoubleVal(9),
+                    gbl_strip->getDoubleVal(10));
+            
+            hps_gbl_strip->SetGlobalTrackDir(gbl_strip->getDoubleVal(11),
+                    gbl_strip->getDoubleVal(12),
+                    gbl_strip->getDoubleVal(13));
+            
+            hps_gbl_strip->SetPhi(gbl_strip->getDoubleVal(14));
+            
+            hps_gbl_strip->SetUmeas(gbl_strip->getDoubleVal(15));
+            
+            hps_gbl_strip->SetTrackPos(gbl_strip->getDoubleVal(16),
+                    gbl_strip->getDoubleVal(17),
+                    gbl_strip->getDoubleVal(18));
+            
+            hps_gbl_strip->SetUmeasErr(gbl_strip->getDoubleVal(19));
+            
+            hps_gbl_strip->SetMSAngle(gbl_strip->getDoubleVal(20));
+            
+            hps_gbl_strip->SetLambda(gbl_strip->getDoubleVal(21));
+
+            // Add a reference to the GblTrackData object
             hps_gbl_track_data->addStrip(hps_gbl_strip); 
-                
-            // Check that the data structure is the correct length
-            if ( gbl_strip->getNInt() ==  n_gblStripGenericIntDST ) {
-                hps_gbl_strip->SetId(gbl_strip->getIntVal(0));
-            } 
-            else {
-                std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
-                std::cout << gbl_strip->getNInt() << " ints. => check the DST maker" << std::endl;
-                exit(1);
-            }
-                
-            // Check that the data structure is the correct length
-            if ( gbl_strip->getNDouble() == n_gblStripGenericDoubleDST ) {
-
-                hps_gbl_strip->SetPath3D(gbl_strip->getDoubleVal(0));
-                hps_gbl_strip->SetPath(gbl_strip->getDoubleVal(1));
-                hps_gbl_strip->SetU(gbl_strip->getDoubleVal(2),
-                                    gbl_strip->getDoubleVal(3),
-                                    gbl_strip->getDoubleVal(4));
-                hps_gbl_strip->SetV(gbl_strip->getDoubleVal(5),
-                                    gbl_strip->getDoubleVal(6),
-                                    gbl_strip->getDoubleVal(7));
-                hps_gbl_strip->SetW(gbl_strip->getDoubleVal(8),
-                                    gbl_strip->getDoubleVal(9),
-                                    gbl_strip->getDoubleVal(10));
-                hps_gbl_strip->SetGlobalTrackDir(gbl_strip->getDoubleVal(11),
-                                                 gbl_strip->getDoubleVal(12),
-                                                 gbl_strip->getDoubleVal(13));
-                hps_gbl_strip->SetPhi(gbl_strip->getDoubleVal(14));
-                hps_gbl_strip->SetUmeas(gbl_strip->getDoubleVal(15));
-                hps_gbl_strip->SetTrackPos(gbl_strip->getDoubleVal(16),
-                                           gbl_strip->getDoubleVal(17),
-                                           gbl_strip->getDoubleVal(18));
-                hps_gbl_strip->SetUmeasErr(gbl_strip->getDoubleVal(19));
-                hps_gbl_strip->SetMSAngle(gbl_strip->getDoubleVal(20));
-                hps_gbl_strip->SetLambda(gbl_strip->getDoubleVal(21));
-            }
-            else {
-                std::cout << "GblDataWriter: ERROR! The data structure has the wrong format:\n";
-                std::cout << gbl_strip->getNDouble() << " doubles. => check the DST maker" << std::endl;
-                exit(1);
-            }
+        
         }  // GBLStripData
 
-        if (m_debug) {
-    
+        if (debug) {
             std::cout << "GblDataWriter: Track parameters from LCIO GblTrackData collection: " << std::endl;
             std::cout << "kappa: " << gbl_track_data->getDoubleVal(0) << "\n"
                       << "theta: " << gbl_track_data->getDoubleVal(1) << "\n"
                       << "phi:   " << gbl_track_data->getDoubleVal(2) << "\n"
                       << "d0:    " << gbl_track_data->getDoubleVal(3) << "\n"
                       << "z0:    " << gbl_track_data->getDoubleVal(4) << std::endl;
-
             std::cout << "GblDataWriter: Track parameters calculated by DST GblTrackData\n" 
                       << hps_gbl_track_data->toString() << std::endl;
-        
         }
 
         delete rel_gbl_strip_nav;
 
     } // GBLTrackData
 
-    if (m_debug) {
+    if (debug) {
         std::cout << "GblDataWriter: write data end " << std::endl;
     }
 }

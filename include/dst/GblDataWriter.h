@@ -1,27 +1,30 @@
 /**
- *	@section purpose: write GBL input data to DST
- *	@author: Per Hansson Adrian <phansson@slac.stanford.edu>
+ *	@file GblDataWriter.h
+ *	@brief Class used to write GBL collections to the DST.
+ *	@author Per Hansson Adrian <phansson@slac.stanford.edu>
  *	         SLAC
- *	@author: Omar Moreno <omoreno1@ucsc.edu>
+ *	@author Omar Moreno <omoreno1@ucsc.edu>
  *	         Santa Cruz Institute for Particle Physics
  *	         University of California, Santa Cruz
- *	@date: Feb. 12, 2014
- *
+ *	@date Feb. 12, 2014
  */
 
 #ifndef __GBL_DATA_WRITER_H__
 #define __GBL_DATA_WRITER_H__
 
-//--- C++ ---//
-//-----------//
+//------------------//
+//--- C++ StdLib ---//
+//------------------//
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
 
-//--- DST ---//
-//-----------//
+//---------------//
+//--- HPS DST ---//
+//---------------//
 #include <DataWriter.h>
 
+//------------//
 //--- LCIO ---//
 //------------//
 #include <IMPL/LCCollectionVec.h>
@@ -30,6 +33,7 @@
 #include <UTIL/LCRelationNavigator.h>
 #include <IMPL/TrackImpl.h>
 
+//-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <GblTrackData.h>
@@ -39,11 +43,31 @@ class GblDataWriter : public DataWriter {
 
     public:
 
+        /**
+         * Default constructor.
+         */
         GblDataWriter();
+
+        /**
+         * Destructor.
+         */
         ~GblDataWriter();
 
+        /**
+         * Enable/Disable debug output.
+         *
+         * @param debug : true to enable debug, false to disable it.
+         */
         void setDebug(bool debug);
-        void writeData(EVENT::LCEvent*, HpsEvent*);
+        
+        /**
+         * Main processing method used to read GBL collections from an LCEvent
+         * and write them to an HpsEvent.
+         *
+         * @param event : LCEvent object to read GBL LCIO collection from
+         * @pram hps_event : HpsEvent object that the collections will be written to
+         */
+        void writeData(EVENT::LCEvent* event, HpsEvent* hps_event);
 
     private:
 
@@ -51,15 +75,8 @@ class GblDataWriter : public DataWriter {
         std::string trk_to_gbltrk_rel_col_name;
         std::string gbltrk_to_gblstrip_rel_col_name;
 
-        bool m_debug;
-		
-		IMPL::LCRelationImpl* trk_to_gbltrk_relation;
-		IMPL::LCGenericObjectImpl* gbl_track_data;
-        IMPL::LCGenericObjectImpl* gbl_strip;  
-		IMPL::TrackImpl* track; 
-	
-		GblTrackData* hps_gbl_track_data;
-        GblStripData* hps_gbl_strip; 
+        bool debug;
+			
 
 }; // GblDataWriter
 
