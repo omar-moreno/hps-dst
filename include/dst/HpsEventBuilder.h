@@ -19,7 +19,7 @@
 #include <EcalDataWriter.h>
 #include <MCParticleDataWriter.h>
 #include <GblDataWriter.h>
-#include <GblTrackWriter.h>
+//#include <GblTrackWriter.h>
 #include <HpsParticleDataWriter.h>
 #include <TriggerData.h>
 
@@ -82,7 +82,6 @@ class HpsEventBuilder : public EventBuilder {
 		MCParticleDataWriter* mc_particle_writer;
 		HpsParticleDataWriter* particle_writer; 
 		GblDataWriter* gbl_data_writer;
-		GblTrackWriter* gbl_track_writer;
         TriggerData* hps_trigger_data;
 
         IMPL::LCCollectionVec* trigger_data;
