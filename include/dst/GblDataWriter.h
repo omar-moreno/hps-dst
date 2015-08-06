@@ -18,11 +18,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
-
-//---------------//
-//--- HPS DST ---//
-//---------------//
-#include <DataWriter.h>
+#include <limits>
 
 //------------//
 //--- LCIO ---//
@@ -33,11 +29,21 @@
 #include <UTIL/LCRelationNavigator.h>
 #include <IMPL/TrackImpl.h>
 
+//---------------//
+//--- HPS DST ---//
+//---------------//
+#include <DataWriter.h>
+
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
 #include <GblTrackData.h>
 #include <GblStripData.h>
+
+//-------------//
+//--- Utils ---//
+//-------------//
+#include <HpsGblFitter.h>
 
 class GblDataWriter : public DataWriter {
 
@@ -69,7 +75,18 @@ class GblDataWriter : public DataWriter {
          */
         void writeData(EVENT::LCEvent* event, HpsEvent* hps_event);
 
+        /**
+         * Set the magnetic field strength in Tesla
+         *
+         * @param b_field : The magnetic field strength
+         */
+        void setBField(const double b_field) { this->b_field = b_field; };
+
     private:
+
+        HpsGblFitter* gbl_fitter; 
+
+        double b_field;
 
         std::string track_col_name;
         std::string trk_to_gbltrk_rel_col_name;
