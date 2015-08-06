@@ -108,4 +108,5 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
 void HpsEventBuilder::setBField(const double b_field) {
 	gbl_track_writer->setBField(b_field);
+    gbl_data_writer->setBField(b_field);
 }
