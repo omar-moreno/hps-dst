@@ -20,7 +20,8 @@ static const unsigned int GBL_STRIP_DATA_INTS = 1;
 static const unsigned int PRJ_PER_TO_CL_N_ELEMENTS = 9; // n matrix elements in projection matrix
 
 GblDataWriter::GblDataWriter() 
-    : b_field(std::numeric_limits<double>::quiet_NaN()),
+    : gbl_fitter(new HpsGblFitter()),
+      b_field(std::numeric_limits<double>::quiet_NaN()),
       track_col_name("MatchedTracks"), 
       trk_to_gbltrk_rel_col_name("TrackToGBLTrack"), 
       gbltrk_to_gblstrip_rel_col_name("GBLTrackToStripData"),
@@ -28,6 +29,7 @@ GblDataWriter::GblDataWriter()
 }
 
 GblDataWriter::~GblDataWriter() {
+    delete gbl_fitter;
 }
 
 void GblDataWriter::setDebug(bool debug) {
@@ -41,6 +43,10 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
     if (std::isnan(b_field)) { 
         throw std::runtime_error("[ GblDataWriter ]: The b-field has not been set.");
     }
+   
+    // Set the B-field that will be used by the fitter 
+    gbl_fitter->setBField(b_field);
+    gbl_fitter->setDebug(debug);
 
     if (debug) {
         std::cout << "GblDataWriter: write data start " << std::endl;
@@ -216,6 +222,36 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         }
 
         delete rel_gbl_strip_nav;
+
+        //--- GBL refit ---//
+        //-----------------//
+
+        // Clear any previous fit information
+        gbl_fitter->clear();
+
+        // Do the GBL refit
+        HpsGblFitter::HpsGblFitStatus fit_status = gbl_fitter->fit(hps_gbl_track_data);
+
+        // If the fit was successful, add a GBL track to the event
+        if (fit_status == HpsGblFitter::OK) { 
+            
+            if (debug) { 
+                std::cout << "[ GblDataWriter ]: Fit was successful!" << std::endl;
+                std::cout << "[ GblDataWriter ]: Adding a GBL track to the event." << std::endl;
+            }
+
+            // Add a GBL track to the HpsEvent
+            GblTrack* hps_gbl_track = hps_event->addGblTrack(); 
+
+            // Set the GBL track properties
+            gbl_fitter->setTrackProperties(hps_gbl_track, hps_gbl_track_data); 
+       
+        } else { 
+            
+            if (debug) { 
+                std::cout << "[ GblDataWriter ]: Fit failed!" << std::endl;
+            }
+        }
 
     } // GBLTrackData
 
