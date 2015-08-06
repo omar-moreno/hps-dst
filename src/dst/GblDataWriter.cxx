@@ -20,7 +20,8 @@ static const unsigned int GBL_STRIP_DATA_INTS = 1;
 static const unsigned int PRJ_PER_TO_CL_N_ELEMENTS = 9; // n matrix elements in projection matrix
 
 GblDataWriter::GblDataWriter() 
-    : track_col_name("MatchedTracks"), 
+    : b_field(std::numeric_limits<double>::quiet_NaN()),
+      track_col_name("MatchedTracks"), 
       trk_to_gbltrk_rel_col_name("TrackToGBLTrack"), 
       gbltrk_to_gblstrip_rel_col_name("GBLTrackToStripData"),
       debug(false) { 
@@ -34,6 +35,12 @@ void GblDataWriter::setDebug(bool debug) {
 }
 
 void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
+
+    // Check that the b-field has been set.  If it hasn't, throw a runtime 
+    // exception. The b-field is needed by the GBL fitter.
+    if (std::isnan(b_field)) { 
+        throw std::runtime_error("[ GblDataWriter ]: The b-field has not been set.");
+    }
 
     if (debug) {
         std::cout << "GblDataWriter: write data start " << std::endl;
