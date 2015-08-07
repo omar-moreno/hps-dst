@@ -32,10 +32,6 @@ target_link_libraries(GblDataWriter
     HpsGblFitter
 )
 
-# Create the GblTrackWriter library
-#add_library(GblTrackWriter GblTrackWriter.cxx)
-#target_link_libraries(GblTrackWriter HpsGblFitter HpsEvent)
-
 # Create the HpsEventBuilder library
 add_library(HpsEventBuilder HpsEventBuilder.cxx)
 target_link_libraries(HpsEventBuilder 
