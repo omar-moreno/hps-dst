@@ -1,24 +1,25 @@
 /**
- *
- * @author: 	phansson@slac.stanford.edu
- * @section purpose: GBL track information
- * @version:    v1.0
- * @date:       February 3, 2014
+ * @file GblTrack.cxx
+ * @brief Class used to encapsulate GBL track information.
+ * @author Per Hansson Adrian <phansson@slac.stanford.edu>
+ *          SLAC
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date February 3, 2014
  */
 
-//-- HPS EVENT --//
 #include <GblTrack.h>
-
-using namespace std;
 
 ClassImp(GblTrack)
 
-GblTrack::GblTrack() : TObject(), chi2(-1.), cov(5,5)
-{}
+GblTrack::GblTrack() 
+    : TObject(),
+      cov(5, 5),
+      chi2(-1.) {
+}
 
-
-GblTrack::~GblTrack()
-{
+GblTrack::~GblTrack() {
 }
 
 void GblTrack::setSeedTrackParameters(double kappa, double theta, double phi, double d0, double z0) {
@@ -56,8 +57,15 @@ void GblTrack::setMomentumVector(double x, double y, double z) {
 }
 
 void GblTrack::print() {
-     cout << "GblTrack: " << "\n";
-     cout << "seed        (kappa,theta,phi,d0,z0): " << getKappa() << "," << getTheta() << "," << getPhi() << "," << getD0() << "," << getZ0() << "\n";
-     cout << "seed params (kappa,theta,phi,d0,z0): " << getSeedKappa() << "," << getSeedTheta() << "," << getSeedPhi() << "," << getSeedD0() << "," << getSeedZ0() << "\n";
-     cout << endl;
-   }
+     std::cout << "GblTrack: " << std::endl;
+     std::cout << "seed        (kappa,theta,phi,d0,z0): " << getKappa() 
+               << "," << getTheta() 
+               << "," << getPhi() 
+               << "," << getD0() 
+               << "," << getZ0() << std::endl;
+     std::cout << "seed params (kappa,theta,phi,d0,z0): " << getSeedKappa() << "," 
+               << getSeedTheta() << "," 
+               << getSeedPhi() << "," 
+               << getSeedD0() << "," 
+               << getSeedZ0() << std::endl;
+}
