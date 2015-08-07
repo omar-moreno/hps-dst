@@ -19,7 +19,12 @@
 #include <TObject.h>
 #include <TClonesArray.h>
 #include <TRefArray.h>
+#include <TRef.h>
 #include <TMatrixD.h>
+
+
+// Forward declarations
+class SvtTrack; 
 
 class GblTrack : public TObject {
 
@@ -64,6 +69,11 @@ class GblTrack : public TObject {
          *
          */
         void setCov(const TMatrixD& mat);
+
+        /**
+         *
+         */
+        void setSeedTrack(SvtTrack* seed_track) { this->seed_track = (TObject*) seed_track; }; 
 
         /**
          *
@@ -143,12 +153,18 @@ class GblTrack : public TObject {
         /**
          *
          */
+        TRef getSeedTrack() const { return seed_track; };
+
+        /**
+         *
+         */
         void print();
 
-        ClassDef(GblTrack,1) //Track class for use with GBL
+        ClassDef(GblTrack, 1) //Track class for use with GBL
 
     private:
 
+            TRef seed_track; 
             TMatrixD cov;
 
             double kappa;
