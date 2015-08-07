@@ -15,6 +15,7 @@ ClassImp(GblTrack)
 
 GblTrack::GblTrack() 
     : TObject(),
+      seed_track(NULL), 
       cov(5, 5),
       chi2(-1.) {
 }
