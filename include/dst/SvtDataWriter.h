@@ -80,9 +80,6 @@ class SvtDataWriter : public DataWriter {
         std::string track_data_collection_name;
         std::string track_data_rel_collection_name;
 
-		double l1_isolation; 
-		double l2_isolation; 
-
 }; // SvtDataWriter
 
 #endif // __SVT_DATA_WRITER_H__
