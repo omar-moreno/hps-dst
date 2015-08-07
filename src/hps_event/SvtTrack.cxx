@@ -15,6 +15,7 @@ SvtTrack::SvtTrack()
     : TObject(), 
       svt_hits(new TRefArray()),
       fs_particle(NULL),
+      isolation{}, 
       n_hits(0),
       track_volume(-1),
       d0(0),
@@ -23,9 +24,7 @@ SvtTrack::SvtTrack()
       tan_lambda(0),
       z0(0),
       chi_squared(0),
-      track_time(0),
-      l1_isolation(0),
-      l2_isolation(0) {
+      track_time(0) {
 }
 
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
@@ -40,12 +39,11 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       tan_lambda(svtTrackObj.tan_lambda),
       z0(svtTrackObj.z0),
       chi_squared(svtTrackObj.chi_squared),
-      track_time(svtTrackObj.track_time),
-      l1_isolation(svtTrackObj.l1_isolation),
-      l2_isolation(svtTrackObj.l2_isolation) {
-    
+      track_time(svtTrackObj.track_time) {
+
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
+    memcpy(&isolation, svtTrackObj.isolation, 12*sizeof(double));
 }
 
 
@@ -65,12 +63,11 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
     this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
     this->chi_squared = svtTrackObj.chi_squared;
     this->track_time = svtTrackObj.track_time;
-    this->l1_isolation = svtTrackObj.l1_isolation;
-    this->l2_isolation = svtTrackObj.l2_isolation;
 
     svt_hits = new TRefArray();
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
+    memcpy(&isolation, svtTrackObj.isolation, 12*sizeof(double));
 
     return *this;
 }
@@ -82,7 +79,8 @@ SvtTrack::~SvtTrack() {
 
 void SvtTrack::Clear(Option_t* /* option */) {
     TObject::Clear(); 
-    svt_hits->Delete(); 
+    svt_hits->Delete();
+    memset(isolation, 0, sizeof(isolation)); 
     n_hits = 0; 
 }
 
