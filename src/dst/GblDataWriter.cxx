@@ -119,13 +119,15 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         // that matches the track associated with the GblTrackData
         // TODO: The seed track shouldn't be associated with a GblTrack instead
         //       of a GblTrackData object.
+        SvtTrack* svt_track = NULL;
         for (int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n) { 
             
             // Use the track fit chi^2 to find the match
             // TODO: Verify that the track fit chit^2 is enough to conclude
             //       that the tracks match  
             if (track->getChi2() == hps_event->getTrack(track_n)->getChi2()) {
-                hps_gbl_track_data->setTrack(hps_event->getTrack(track_n));
+                svt_track = hps_event->getTrack(track_n); 
+                hps_gbl_track_data->setTrack(svt_track);
                 break;  
             }
         }
@@ -242,7 +244,10 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             GblTrack* hps_gbl_track = hps_event->addGblTrack(); 
 
             // Set the GBL track properties
-            gbl_fitter->setTrackProperties(hps_gbl_track, hps_gbl_track_data); 
+            gbl_fitter->setTrackProperties(hps_gbl_track, hps_gbl_track_data);
+
+            // Set the seed SvtTrack associated with this GblTrack
+            hps_gbl_track->setSeedTrack(svt_track);  
        
         } else { 
             
