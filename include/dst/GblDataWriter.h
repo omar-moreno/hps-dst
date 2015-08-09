@@ -45,6 +45,9 @@
 //-------------//
 #include <HpsGblFitter.h>
 
+// Forward declarations
+class SvtTrack; 
+
 class GblDataWriter : public DataWriter {
 
     public:
