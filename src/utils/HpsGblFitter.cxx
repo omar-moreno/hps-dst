@@ -401,10 +401,6 @@ void HpsGblFitter::setTrackProperties(GblTrack* track, const GblTrackData* track
         return;
     }
 
-    // set original track parameters for comparison
-    // TODO: should be removed as they are duplicated?
-    track->setSeedTrackParameters(track_data->getKappa(),track_data->getTheta(),track_data->getPhi(),track_data->getD0(),track_data->getZ0());
-
     // get the track parameter corrections to the reference point (path length zero)
     TVectorD localPar(5);
     TMatrixDSym localCov(5);
@@ -426,24 +422,25 @@ void HpsGblFitter::setTrackProperties(GblTrack* track, const GblTrackData* track
 
     // corrections
     double qP_corr = localPar[idx_qOverP]; 
-    double pt_old = fabs((1.0/track->getSeedKappa()) * b_fac);
-    double qP_old = sin(track->getSeedTheta())/pt_old;
+    double pt_old = fabs((1.0/track_data->getKappa()) * b_fac);
+    double qP_old = sin(track_data->getTheta())/pt_old;
     double qP_new = qP_old + qP_corr;
     double p_new = fabs(1/qP_new);
-    double pt_new = p_new * sin(track->getSeedTheta());
+    double pt_new = p_new * sin(track_data->getTheta());
     double kappa_new = 1/pt_new * b_fac;
     double d0_corr = -1.0 * perParCorr[1]; // sign convention of d0 in curvilinear frame
     double z0_corr = perParCorr[2]; 
 
     // set the new parameters
-    track->setTrackParameters(kappa_new,track->getSeedTheta(),track->getSeedPhi(),track->getSeedD0() + d0_corr,track->getSeedZ0() + z0_corr);
+    // TODO: Use the seed SvtTrack directly to get the seed track parameters
+    track->setTrackParameters(track_data->getD0() + d0_corr, track_data->getPhi(), kappa_new, track_data->getTheta(), track_data->getZ0() + z0_corr);
 
     //set covariance matrix
     //TODO: do this correctly for perigee frame - right now it's the CL frame 
     track->setCov(localCov);
 
     // set momentum vector
-    track->setMomentumVector(pt_new*cos(track->getPhi()), pt_new*sin(track->getPhi()),p_new*cos(track->getSeedTheta()));
+    track->setMomentumVector(pt_new*cos(track->getPhi0()), pt_new*sin(track->getPhi0()), p_new*cos(track_data->getTheta()));
 
     // set chi2 
     track->setChi2(chi2);
@@ -463,11 +460,10 @@ void HpsGblFitter::setTrackProperties(GblTrack* track, const GblTrackData* track
         clParCorr.Print();
         std::cout << "perParCorr " << std::endl;
         perParCorr.Print();
-        double curv_corr = kappa_new - track->getSeedKappa();   
-        std::cout << "d0_gbl " << track->getD0() << "(" << track->getSeedD0() << ") z0_gbl " << track->getZ0() << " (" << track->getSeedZ0() << ")" << std::endl;
-        std::cout << "kappa_gbl " << track->getKappa() << "(" << track->getSeedKappa() << " from q/p_corr " << qP_corr << " qP_old " << qP_old << " qP_new " << qP_new << " pt_new " << pt_new <<  " curv_corr " << curv_corr << " theta " << track->getSeedTheta() <<  " )" << std::endl;
-        track->print();
-
+        double curv_corr = kappa_new - track_data->getKappa();   
+        std::cout << "d0_gbl " << track->getD0() << "(" << track_data->getD0() << ") z0_gbl " << track->getZ0() << " (" << track_data->getZ0() << ")" << std::endl;
+        std::cout << "kappa_gbl " << track->getKappa() << "(" << track_data->getKappa() << " from q/p_corr " << qP_corr << " qP_old " << qP_old << " qP_new " << qP_new << " pt_new " << pt_new <<  " curv_corr " << curv_corr << " theta " << track_data->getTheta() <<  " )" << std::endl;
+        track->toString();
     }
 }
 
