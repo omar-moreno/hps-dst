@@ -16,57 +16,60 @@ ClassImp(GblTrack)
 GblTrack::GblTrack() 
     : TObject(),
       seed_track(NULL), 
-      cov(5, 5),
-      chi2(-1.) {
+      cov_matrix(5, 5),
+      d0(0),
+      phi0(0),
+      kappa(0),
+      theta(0),
+      z0(0),      
+      chi_squared(-1.), 
+      ndof(0), 
+      px(0), 
+      py(0), 
+      pz(0) {
 }
 
 GblTrack::~GblTrack() {
+    Clear(); 
 }
 
-void GblTrack::setSeedTrackParameters(double kappa, double theta, double phi, double d0, double z0) {
-   seed_kappa = kappa;
-   seed_theta = theta;
-   seed_phi = phi;
-   seed_d0 = d0;
-   seed_z0 = z0;
+void GblTrack::Clear(Option_t *option) { 
+    TObject::Clear(); 
 }
 
-void GblTrack::setTrackParameters(double C, double th, double phi0, double dca, double z) {
-   kappa = C;
-   theta = th;
-   phi = phi0;
-   d0 = dca;
-   z0 = z;
-}
+void GblTrack::setTrackParameters(const double d0, 
+        const double phi0,
+        const double kappa,
+        const double theta,
+        const double z0) {
 
-void GblTrack::setCov(const TMatrixD& mat) {
-  cov = mat;
-}
-
-void GblTrack::setChi2(double c) {
-chi2 = c;
-}
-
-void GblTrack::setNdf(double ndof) {
-   ndf = ndof;
+    this->d0 = d0; 
+    this->phi0 = phi0; 
+    this->kappa = kappa; 
+    this->theta = theta;
+    this->z0 = z0;  
 }
 
 void GblTrack::setMomentumVector(double x, double y, double z) {
-   px = x;
-   py = y;
-   pz = z;
+    px = x;
+    py = y;
+    pz = z;
 }
 
-void GblTrack::print() {
-     std::cout << "GblTrack: " << std::endl;
-     std::cout << "seed        (kappa,theta,phi,d0,z0): " << getKappa() 
-               << "," << getTheta() 
-               << "," << getPhi() 
-               << "," << getD0() 
-               << "," << getZ0() << std::endl;
-     std::cout << "seed params (kappa,theta,phi,d0,z0): " << getSeedKappa() << "," 
-               << getSeedTheta() << "," 
-               << getSeedPhi() << "," 
-               << getSeedD0() << "," 
-               << getSeedZ0() << std::endl;
+std::vector<double> GblTrack::getMomentum() {
+    std::vector<double> p(3, 0);
+    p[0] = px; 
+    p[1] = py; 
+    p[2] = pz;
+    return p; 
+}
+
+void GblTrack::toString() {
+    std::cout << "GblTrack: " << std::endl;
+    std::cout << "    (kappa, theta, phi0, d0, z0): " 
+        << getKappa() 
+        << "," << getTheta() 
+        << "," << getPhi0() 
+        << "," << getD0() 
+        << "," << getZ0() << std::endl;
 }
