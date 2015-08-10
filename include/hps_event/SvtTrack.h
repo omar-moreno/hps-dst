@@ -14,6 +14,7 @@
 //--- C++ StdLib ---//
 //------------------//
 #include<vector>
+#include <stdio.h>
 
 //------------//
 //--- ROOT ---//
@@ -102,13 +103,8 @@ class SvtTrack : public TObject {
 
         /**
          *
-         */
-        void setL1Isolation(const double l1_isolation) { this->l1_isolation = l1_isolation; };
-        
-        /**
-         *
-         */
-        void setL2Isolation(const double l2_isolation) { this->l2_isolation = l2_isolation; };
+         */ 
+        void setIsolation(const int layer, const double isolation) { this->isolation[layer] = isolation; };
 
         /**
          *
@@ -161,6 +157,11 @@ class SvtTrack : public TObject {
         /**
          *
          */
+        double getIsolation(const int layer) const { return isolation[layer]; }; 
+
+        /**
+         *
+         */
         int getCharge(); 
 
         /**
@@ -168,16 +169,6 @@ class SvtTrack : public TObject {
          */
         std::vector<double> getMomentum(); 
         
-        /**
-         *
-         */
-        double getL1Isolation() const { return l1_isolation; };
-        
-        /**
-         *
-         */
-        double getL2Isolation() const { return l2_isolation; };
-
         /**
          *
          */
@@ -205,10 +196,19 @@ class SvtTrack : public TObject {
 
     private:
 
+        /** Reference to the 3D hits associated with this track */
         TRefArray* svt_hits; 
+
+        /** Reference to the reconstructed particle associated with this track */
         TRef fs_particle;
 
+        /** Array used to store the isolation variables for each of the sensor layers */
+        double isolation[12];
+
+        /** The number of 3D hits associated with this track */
         int n_hits; 
+
+        /** The volume to which this track belongs to */
         int track_volume; 
 
         double d0; 
@@ -218,8 +218,6 @@ class SvtTrack : public TObject {
         double z0;  
         double chi_squared;
         double track_time;
-        double l1_isolation;
-        double l2_isolation;
 
 }; // SvtTrack
 

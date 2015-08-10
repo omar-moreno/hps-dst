@@ -17,9 +17,7 @@ SvtDataWriter::SvtDataWriter()
       svt_hit(NULL),
 	  tracks_collection_name("MatchedTracks"),
       track_data_collection_name("TrackData"), 
-      track_data_rel_collection_name("TrackDataRelations"),
-	  l1_isolation(-9999),
-      l2_isolation(-9999) {
+      track_data_rel_collection_name("TrackDataRelations") { 
 }
 
 SvtDataWriter::~SvtDataWriter() {
@@ -58,30 +56,36 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         // Get te track data associated with this track.
         EVENT::LCObjectVec track_data_list = track_data_nav->getRelatedFromObjects(track);
 
-        // If the track data list should only contain a single object.  If not,
-        // throw an exception
+        // If the track data list should only contain a single object.  If not, throw an exception
         if (track_data_list.size() != 1) { 
             throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format.");
         }
 
         // Get the track data generic object
         IMPL::LCGenericObjectImpl* track_datum = (IMPL::LCGenericObjectImpl*) track_data_list.at(0);
-        
-        if (track_datum->getNDouble() != 2 || track_datum->getNFloat() != 1 || track_datum->getNInt() != 1) {
-            throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format.");
+       
+        // Check that the data structure is correct.  If it's not, throw a runtime exception.   
+        if (track_datum->getNDouble() != 12 || track_datum->getNFloat() != 1 || track_datum->getNInt() != 1) {
+            throw std::runtime_error("[ SvtDataWriter ]: The collection " + track_data_collection_name 
+                    + " has the wrong structure.");
         }
 
-        svt_track->setL1Isolation(track_datum->getDoubleVal(0));
-        svt_track->setL1Isolation(track_datum->getDoubleVal(1));
+        // Set all isolation values for the track
+        for (int iso_index = 0; iso_index < track_datum->getNDouble(); ++iso_index) { 
+            svt_track->setIsolation(iso_index, track_datum->getDoubleVal(iso_index));
+        }
 
+        // Set the track time
         svt_track->setTrackTime(track_datum->getFloatVal(0));
 
+        // Set the volume (top/bottom) in which the track resides
         svt_track->setTrackVolume(track_datum->getIntVal(0));
 
 		// Get the hits associated with the track
 		EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
 
-		//
+		//  Loop through all of the hits and add references to those that
+        //  correspond to this track
 		for (int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n) {
 			
 			tracker_hit = (IMPL::TrackerHitImpl*) tracker_hits[hit_n];
