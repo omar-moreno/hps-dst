@@ -31,6 +31,20 @@ find_package(ROOT REQUIRED)
 # Add the ROOT headers to the build
 include_directories(${ROOT_INCLUDE_DIRS})
 
+# Fix broken linking on Apple/Darwin.
+if(APPLE)
+	find_program(ROOT_CONFIG root-config)
+	if(ROOT_CONFIG-NOTFOUND)
+		MESSAGE( FATAL_ERROR "root-config was not found.")
+	endif()
+	execute_process(COMMAND root-config --cflags OUTPUT_VARIABLE DARWIN_ROOT_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+	execute_process(COMMAND root-config --libs OUTPUT_VARIABLE DARWIN_ROOT_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
+	message(STATUS "DARWIN_ROOT_CFLAGS: ${DARWIN_ROOT_CFLAGS}")
+	message(STATUS "DARWIN_ROOT_LIBS: ${DARWIN_ROOT_LIBS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_ROOT_CFLAGS}")
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${DARWIN_ROOT_LIBS}")
+endif()
+
 # Include the LCIO headers
 include_directories("$ENV{LCIO}/include")
 
@@ -90,6 +104,8 @@ file(GLOB HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/*.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/TriggerData.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/MuonCluster.h")
+
+message( STATUS "rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR} ${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 
 message(STATUS "HpsEvent ROOT dictionary has been generated")
