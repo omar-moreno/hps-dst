@@ -105,7 +105,6 @@ list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/TriggerData.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/MuonCluster.h")
 
-message( STATUS "rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR} ${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 
 message(STATUS "HpsEvent ROOT dictionary has been generated")
