@@ -105,7 +105,15 @@ list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/TriggerData.h")
 list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/MuonCluster.h")
 
+execute_process(COMMAND root-config --version  OUTPUT_VARIABLE ROOT_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE) 
+message(STATUS "ROOT_VERSION: ${ROOT_VERSION}")
+
+if( ROOT_VERSION VERSION_GREATER "6.0" )
+message("ROOT 6 or later pre-processing ")
+execute_process(COMMAND rootcling -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -I${GBL_INCLUDE_DIR} -I${HPS_EVENT_HDR_DIR} -I${UTIL_HDR_DIR} -I${DST_HDR_DIR} -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
+else()
 execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
+endif()
 
 message(STATUS "HpsEvent ROOT dictionary has been generated")
 
