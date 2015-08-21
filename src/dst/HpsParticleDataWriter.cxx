@@ -128,7 +128,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
             hps_particle->setPDG(particle->getParticleIDUsed()->getPDG());    
             continue;
         } 
-
+        
         // Set the vertex position of the particle
         hps_particle->setVertexPosition(((IMPL::VertexImpl*) particle->getStartVertex())->getPosition()); 
 
@@ -140,14 +140,25 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
     
             // Loop through all of the daughter particles associated with the particle
             for (uint pd_particle_n = 0; pd_particle_n < particle->getParticles().size(); ++pd_particle_n) {
+
+                // Get the daughter particle from the LCIO ReconstructedParticle
+                EVENT::ReconstructedParticle* daughter_particle = particle->getParticles()[pd_particle_n]; 
                 
                 // Loop through all of the final state particles in the HpsEvent and
-                // find the one that matches the daughters associated with the particles
+                // find the one that matches the daughter ReconstructedParticle
                 for (int d_particle_n = 0; d_particle_n < hps_event->getNumberOfParticles(HpsEvent::FINAL_STATE_PARTICLES); ++d_particle_n) {
                     
-                    //
-                    if (particle->getParticles()[pd_particle_n]->getEnergy() == hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n)->getEnergy()) {
-                        hps_particle->addParticle(hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n));
+                    // Get a final state particle from the HPS event
+                    HpsParticle* daughter_hps_particle = hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n); 
+
+                    // Try to find the match between a final state HpsParticle 
+                    // and ReconstructedParticle daughter.  For now, use the
+                    // momentum as the matching criterion. 
+                    // TODO: Verify that the track momentum is always unique in an event.
+                    if (daughter_particle->getMomentum()[0] == daughter_hps_particle->getMomentum()[0]
+                        && daughter_particle->getMomentum()[1] == daughter_hps_particle->getMomentum()[1]
+                        && daughter_particle->getMomentum()[2] == daughter_hps_particle->getMomentum()[2]) {
+                        hps_particle->addParticle(daughter_hps_particle);
                         break;  
                     }
                 }
