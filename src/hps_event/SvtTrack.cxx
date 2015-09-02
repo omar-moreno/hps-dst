@@ -1,10 +1,12 @@
 /**
- * @file: SvtTrack.cxx
- * @author: Omar Moreno <omoreno1@ucsc.edu>
- * @section Institution \n
- *          Santa Cruz Institute for Particle Physics \n
- *          University of California, Santa Cruz
- * @date: February 19, 2013
+ * 
+ * @file SvtTrack.h
+ * @brief Class used to describe an HPS SVT track.
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date February 19, 2013
+ * 
  */
 
 #include <SvtTrack.h>
@@ -18,6 +20,7 @@ SvtTrack::SvtTrack()
       isolation{}, 
       n_hits(0),
       track_volume(-1),
+      type(0), 
       d0(0),
       phi0(0),
       omega(0),
@@ -33,6 +36,7 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       fs_particle(NULL),
       n_hits(svtTrackObj.n_hits),
       track_volume(svtTrackObj.track_volume),
+      type(svtTrackObj.type), 
       d0(svtTrackObj.d0),
       phi0(svtTrackObj.phi0),
       omega(svtTrackObj.omega),
@@ -58,6 +62,7 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
 
     this->n_hits = svtTrackObj.n_hits; 
     this->track_volume = svtTrackObj.track_volume;
+    this->type = svtTrackObj.type;
     this->d0 = svtTrackObj.d0;
     this->phi0 = svtTrackObj.phi0;
     this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
