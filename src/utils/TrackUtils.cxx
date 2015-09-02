@@ -98,7 +98,7 @@ namespace TrackUtils {
 		return charge; 		
 	};
 
-	int getLayer(IMPL::TrackerHitImpl* tracker_hit){
+	int getLayer(EVENT::TrackerHit* tracker_hit){
 
 		int z = (int) round(tracker_hit->getPosition()[0]/100);
 		switch(z){
