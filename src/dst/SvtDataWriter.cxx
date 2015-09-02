@@ -57,7 +57,10 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 				    					  track->getOmega(), 
 					    				  track->getTanLambda(), 
 						    			  track->getZ0());
-            
+           
+            // Set the SvtTrack type
+            svt_track->setType(track->getType()); 
+
 		    // Set the SvtTrack fit chi^2
 		    svt_track->setChi2(track->getChi2());
         
