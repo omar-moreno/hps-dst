@@ -65,7 +65,10 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
         hps_particle = hps_event->addParticle(collection_type);
 
         // Set the charge of the HpsParticle    
-        hps_particle->setCharge(particle->getCharge()); 
+        hps_particle->setCharge(particle->getCharge());
+
+        // Set the HpsParticle type
+        hps_particle->setType(particle->getType());  
         
         // Set the energy of the HpsParticle
         hps_particle->setEnergy(particle->getEnergy());

@@ -82,7 +82,14 @@ class HpsParticle : public TObject {
          * @param charge Particle charge
          */
         void setCharge(const int charge) { this->charge = charge; };
-        
+       
+        /**
+         * Set the type of this particle.
+         *
+         * @param type The type of this particle
+         */
+        void setType(const int type) { this->type = type; }; 
+
         /**
          * Set the PDG ID of this particle.
          *
@@ -159,6 +166,13 @@ class HpsParticle : public TObject {
         int getCharge() const { return charge; };
         
         /**
+         * Get the type of this particle.
+         *
+         * @return The type of this particle.
+         */
+        int getType() const { return type; }; 
+
+        /**
          * Get the particle ID.
          *
          * @return The particle ID
@@ -224,6 +238,9 @@ class HpsParticle : public TObject {
 
         /** The charge of this particle */
         int charge; 
+
+        /** The type of this particle */
+        int type; 
 
         /** The PDG ID of this particle */
         int pdg; 

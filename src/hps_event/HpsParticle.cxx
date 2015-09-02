@@ -19,6 +19,7 @@ HpsParticle::HpsParticle()
       ecal_clusters(new TRefArray()),
       particles(new TRefArray()),
       n_daughters(0),
+      type(0), 
       charge(0), 
       px(0),
       py(0),
@@ -37,6 +38,7 @@ HpsParticle::HpsParticle(const HpsParticle &particle_obj)
       ecal_clusters(new TRefArray()),
       particles(new TRefArray()),
       n_daughters(particle_obj.n_daughters),
+      type(particle_obj.type),
       charge(particle_obj.charge),
       px(particle_obj.px),
       py(particle_obj.py),
@@ -68,6 +70,7 @@ HpsParticle &HpsParticle::operator=(const HpsParticle &particle_obj) {
     Clear(); 
 
     this->n_daughters = particle_obj.n_daughters;
+    this->type = particle_obj.type;
     this->charge = particle_obj.charge;
 
     this->px = particle_obj.px; 
