@@ -1,10 +1,12 @@
 /**
- * @file: HpsParticle.cxx
- * @author: Omar Moreno <omoreno1@ucsc.edu>
- * @section Institution \n
- *          Santa Cruz Institute for Particle Physics
- *          University of California, Santa Cruz
+ *
+ * @file HpsParticle.cxx
+ * @brief Class used to describe an HPS particle. 
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
  * @date: March 29, 2013
+ *
  */
 
 #include <HpsParticle.h>
