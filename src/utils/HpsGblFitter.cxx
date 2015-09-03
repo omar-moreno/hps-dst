@@ -440,7 +440,8 @@ void HpsGblFitter::setTrackProperties(GblTrack* track, const GblTrackData* track
     track->setCov(localCov);
 
     // set momentum vector
-    track->setMomentumVector(pt_new*cos(track->getPhi0()), pt_new*sin(track->getPhi0()), p_new*cos(track_data->getTheta()));
+    //track->setMomentumVector(pt_new*cos(track->getPhi0()), pt_new*sin(track->getPhi0()), p_new*cos(track_data->getTheta()));
+    track->setMomentumVector(pt_new*sin(track->getPhi0()), p_new*cos(track_data->getTheta()), pt_new*cos(track->getPhi0())); 
 
     // set chi2 
     track->setChi2(chi2);
