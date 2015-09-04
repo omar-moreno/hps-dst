@@ -21,7 +21,45 @@ SvtDataWriter::~SvtDataWriter() {
 }
 
 void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
-    
+   
+    // Get the collection of 3D hits from the LCIO event. If no such collection 
+    // exist, a DataNotAvailableException is thrown
+    EVENT::LCCollection* tracker_hits = (EVENT::LCCollection*) event->getCollection("RotatedHelicalTrackHits");
+
+    // Create a map from an LCIO TrackerHit to a SvtHit. This will be used when
+    // assigning references to a track
+    //std::unsorted_map<EVENT::TrackerHit*, SvtHit*> svt_hit_map; 
+
+    // Loop over all of the 3D hits in the LCIO event and add them to the 
+    // HPS event
+    for (int tracker_hit_n = 0; tracker_hit_n < tracker_hits->getNumberOfElements(); ++tracker_hit_n) { 
+        
+        // Get a 3D hit from the list of hits
+        EVENT::TrackerHit* tracker_hit = (EVENT::TrackerHit*) tracker_hits->getElementAt(tracker_hit_n);
+
+        // Add an SvtHit object to the HPS event
+		SvtHit* svt_hit = hps_event->addSvtHit();
+
+        // Set the SvtHit layer
+		svt_hit->setLayer(TrackUtils::getLayer(tracker_hit));
+			    
+        // Rotate the position of the LCIO TrackerHit and Set the position
+        // of the SvtHit
+        double hit_position_lcsim[3];
+        memcpy(&hit_position_lcsim, tracker_hit->getPosition(), 3*sizeof(double));   
+        double hit_position_jlab[3] = {0}; 
+        hit_position_jlab[0] = hit_position_lcsim[1]; 
+        hit_position_jlab[1] = hit_position_lcsim[2]; 
+        hit_position_jlab[2] = hit_position_lcsim[0]; 
+        svt_hit->setPosition(hit_position_jlab);
+
+        // Set the covariance matrix of the SvtHit
+		svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
+			    
+        // Set the time of the SvtHit
+        svt_hit->setTime(tracker_hit->getTime());
+    }
+
     // Get all track collections from the event
     std::vector<EVENT::LCCollection*> track_collections = DstUtils::getCollections(event, EVENT::LCIO::TRACK);
 
@@ -98,9 +136,12 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 		    // Get the collection of 3D hits associated with a LCIO Track
 		    EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
 
-		    //  Iterate through the collection of hits and add references
+		    //  Iterate through the collection of 3D hits, find the corresponding 
+            //  hit in the HPS  and add references
             //  to the corresponding SvtTrack
-		    for (int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n) {
+
+
+		    /*for (int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n) {
 			
                 // Get a 3D hit from the list of hits
                 EVENT::TrackerHit* tracker_hit = (EVENT::TrackerHit*) tracker_hits[hit_n];
@@ -122,7 +163,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
                 // Add a reference to the hit to the SvtTrack
 			    svt_track->addHit(svt_hit);
-            } 
+            }*/ 
         }
     }
 
