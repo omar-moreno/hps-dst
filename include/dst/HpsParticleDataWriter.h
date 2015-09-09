@@ -1,26 +1,28 @@
 /**
- *  @file: HpsParticleDataWriter.h
- *  @author: Omar Moreno <omoreno1@ucsc.edu>
- *  @section Institution \n
- *              Santa Cruz Institute for Particle Physics
- *              University of California, Santa Cruz
- *  @date:      March 31, 2014
+ *
+ * @file HpsParticleDataWriter.h
+ * @brief Data writer used to convert LCIO ReconstructedParticle objects
+ *        to {@link HpsParticle} objects and add them to an event.
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date March 31, 2014
  *
  */
 
 #ifndef __HPS_PARTICLE_WRITER_H__
 #define __HPS_PARTICLE_WRITER_H__
 
-//-----------//
-//--- C++ ---//
-//-----------//
+//------------------//
+//--- C++ StdLib ---//
+//------------------//
 #include <string>
 #include <map>
 
 //------------//
 //--- LCIO ---//
 //------------//
-#include <IMPL/LCCollectionVec.h>
+#include <EVENT/LCCollection.h>
 #include <IMPL/ReconstructedParticleImpl.h>
 #include <IMPL/VertexImpl.h>
 #include <Exceptions.h>
@@ -40,52 +42,64 @@ class HpsParticleDataWriter : public DataWriter {
 
     public: 
 
-        /**
-         * Default constructor
-         */
+        /** Default constructor */
         HpsParticleDataWriter();
 
-        /**
-         * Destructor
-         */ 
+        /** Destructor */ 
         ~HpsParticleDataWriter(); 
 
         /**
-         * Make HpsParticles out of ReconstructedParticles and write them to
-         * an HpsEvent.
+         * Make {@link HpsParticle} objects out of LCIO ReconstructedParticles
+         * and add them to the event ({@link HpsEvent} object).
          *
-         * @param lc_event : LCSim event from which the ReconstructedParticle 
-         *                   collection is retrieved.
-         * @param hps_event : HpsEvent to which the HpsParticles will be 
-         *                    written to. 
+         * @param lc_event LCIO event from which the ReconstructedParticle 
+         *                 collections are retrieved from.
+         * @param hps_event {@link HpsEvent} object to which the 
+         *                  {@link HpsParticle}s will be added to. 
          */
         void writeData(EVENT::LCEvent* lc_event, HpsEvent* hps_event);
 
     private:
 
         /**
-         * Make HpsParticles using a specific collection of 
-         * ReconstructedParticles and write them to an HpsEvent.
+         * Make {@link HpsParticle} objects of the given 
+         * {@link HpsParticle::ParticleType} out of LCIO ReconstructedParticles
+         * and add them to an {@link HpsEvent} object.
          *
-         * @param collection_type : The type of particles that will be written
-         *                          to the HpsEvent.
-         * @param particles: The collection of ReconstructedParticles
-         * @param hps_event : HpsEvent to which the HpsParticles will be 
-         *                    written to. 
+         * @param type The type of particle that is being requested e.g. 
+         *             HpsParticle::FINAL_STATE_PARTICLE.
+         * @param particles The collection of LCIO ReconstructedParticles
+         * @param hps_event {@link HpsEvent} object to which the 
+         *                  {@link HpsParticle}s will be added to. 
          */
-        void writeParticleData(HpsParticle::particle_type collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event); 
+        void writeParticleData(HpsParticle::ParticleType type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event); 
 
+        /** LCIO Collection name of final state particles */
         std::string fs_particles_collection_name;
-        std::string uc_vtx_particles_collection_name; 
-        std::string bsc_vtx_particles_collection_name; 
-        std::string tc_vtx_particles_collection_name; 
+        
+        /** LCIO Collection name of unconstrained V0 candidates */
+        std::string uc_v0_candidates_collection_name; 
 
-        IMPL::LCCollectionVec* particles;
+        /** LCIO Collection name of unconstrained V0 candidates */
+        std::string uc_moller_candidates_collection_name; 
+
+        /** LCIO Collection name of beam spot constrained V0 candidates */
+        std::string bsc_v0_candidates_collection_name; 
+
+        /** LCIO Collection name of beam spot constrained V0 candidates */
+        std::string bsc_moller_candidates_collection_name; 
+
+        /** LCIO Collection name of target constrained V0 candidates */
+        std::string tc_v0_candidates_collection_name; 
+
+        /** LCIO Collection name of target constrained V0 candidates */
+        std::string tc_moller_candidates_collection_name; 
+
         IMPL::ReconstructedParticleImpl* particle; 
 
         HpsParticle* hps_particle; 
 
-        std::map<HpsParticle::particle_type, std::string> particle_collections;
+        std::map<HpsParticle::ParticleType, std::string> particle_collections;
 
 }; // HpsParticleWriter
 
