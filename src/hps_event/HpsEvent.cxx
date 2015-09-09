@@ -9,7 +9,10 @@
  * @date February 19, 2013
  *
  */
+
 #include <HpsEvent.h>
+
+// TODO: Add documentation
 
 ClassImp(HpsEvent)
 
@@ -231,8 +234,11 @@ EcalHit* HpsEvent::addEcalHit() {
     return (EcalHit*) ecal_hits->ConstructedAt(n_ecal_hits++);
 }
 
-HpsParticle* HpsEvent::addParticle(HpsParticle::particle_type type) {
-    switch(type) { 
+HpsParticle* HpsEvent::addParticle(HpsParticle::ParticleType type) {
+    
+    // FIXME: This should probably be using a map instead of a giant switch 
+    //        statement.
+    switch (type) { 
         case HpsParticle::FINAL_STATE_PARTICLE:
             return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++); 
         case HpsParticle::UC_V0_CANDIDATE: 
@@ -241,9 +247,14 @@ HpsParticle* HpsEvent::addParticle(HpsParticle::particle_type type) {
             return (HpsParticle*) bsc_v0_candidates->ConstructedAt(n_bsc_v0_candidates++);
         case HpsParticle::TC_V0_CANDIDATE:
             return (HpsParticle*) tc_v0_candidates->ConstructedAt(n_tc_v0_candidates++);
+        case HpsParticle::UC_MOLLER_CANDIDATE: 
+            return (HpsParticle*) uc_moller_candidates->ConstructedAt(n_uc_moller_candidates++);
+        case HpsParticle::BSC_MOLLER_CANDIDATE:
+            return (HpsParticle*) bsc_moller_candidates->ConstructedAt(n_bsc_moller_candidates++);
+        case HpsParticle::TC_MOLLER_CANDIDATE:
+            return (HpsParticle*) tc_moller_candidates->ConstructedAt(n_tc_moller_candidates++);
         default: 
-            // TODO: If a collection type is invalid, throw an exception instead
-            return NULL; 
+            throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
     }
 }
 
@@ -252,8 +263,11 @@ HpsMCParticle* HpsEvent::addHpsMCParticle() {
 }
 
 
-int HpsEvent::getNumberOfParticles(HpsParticle::particle_type type) {
-    switch(type){
+int HpsEvent::getNumberOfParticles(HpsParticle::ParticleType type) const {
+    
+    // FIXME: This should probably be using a map instead of a giant switch 
+    //        statement.
+    switch (type) {
         case HpsParticle::FINAL_STATE_PARTICLE:
             return n_fs_particles;
         case HpsParticle::UC_V0_CANDIDATE: 
@@ -262,9 +276,14 @@ int HpsEvent::getNumberOfParticles(HpsParticle::particle_type type) {
             return n_bsc_v0_candidates;
         case HpsParticle::TC_V0_CANDIDATE:
             return n_tc_v0_candidates; 
+        case HpsParticle::UC_MOLLER_CANDIDATE: 
+            return n_uc_moller_candidates;  
+        case HpsParticle::BSC_MOLLER_CANDIDATE:
+            return n_bsc_moller_candidates;
+        case HpsParticle::TC_MOLLER_CANDIDATE:
+            return n_tc_moller_candidates; 
         default: 
-            // TODO: If a collection type is invalid, throw an exception instead
-            return -1; 
+            throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
     }
 }
 
@@ -309,14 +328,14 @@ EcalHit* HpsEvent::getEcalHit(int ecal_hit_index) {
 }
 
 HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_index) {
-    return (HpsMCParticle*) mc_particles->At(mc_particle_n);
+    return (HpsMCParticle*) mc_particles->At(mc_particle_index);
 }
 
-HpsParticle* HpsEvent::getParticle(HpsParticle::particle_type type, int particle_index) {
+HpsParticle* HpsEvent::getParticle(HpsParticle::ParticleType type, int particle_index) {
     
     // FIXME: This should probably be using a map instead of a giant switch 
     //        statement.
-    switch(type) { 
+    switch (type) { 
         case HpsParticle::FINAL_STATE_PARTICLE:
             return (HpsParticle*) fs_particles->At(particle_index); 
         case HpsParticle::UC_V0_CANDIDATE: 
@@ -332,6 +351,6 @@ HpsParticle* HpsEvent::getParticle(HpsParticle::particle_type type, int particle
         case HpsParticle::TC_MOLLER_CANDIDATE: 
             return (HpsParticle*) tc_moller_candidates->ConstructedAt(particle_index);
         default:
-            return throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
+            throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
     }
 }
