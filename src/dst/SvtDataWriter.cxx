@@ -28,7 +28,8 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
     // Create a map from an LCIO TrackerHit to a SvtHit. This will be used when
     // assigning references to a track
-    //std::unsorted_map<EVENT::TrackerHit*, SvtHit*> svt_hit_map; 
+    // TODO: Use an unordered map for faster access
+    std::map<EVENT::TrackerHit*, SvtHit*> svt_hit_map; 
 
     // Loop over all of the 3D hits in the LCIO event and add them to the 
     // HPS event
@@ -58,6 +59,10 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 			    
         // Set the time of the SvtHit
         svt_hit->setTime(tracker_hit->getTime());
+
+        // Map the TrackerHit object to the corresponding SvtHit object. This
+        // will be used later when setting references for hits on tracks.
+        svt_hit_map[tracker_hit] = svt_hit; 
     }
 
     // Get all track collections from the event
@@ -136,34 +141,14 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 		    // Get the collection of 3D hits associated with a LCIO Track
 		    EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
 
-		    //  Iterate through the collection of 3D hits, find the corresponding 
-            //  hit in the HPS  and add references
-            //  to the corresponding SvtTrack
-
-
-		    /*for (int hit_n = 0; hit_n < (int) tracker_hits.size(); ++hit_n) {
-			
-                // Get a 3D hit from the list of hits
-                EVENT::TrackerHit* tracker_hit = (EVENT::TrackerHit*) tracker_hits[hit_n];
-
-                // Add an SvtHit object to the HPS event
-			    SvtHit* svt_hit = hps_event->addSvtHit();
-
-                // Set the SvtHit layer
-			    svt_hit->setLayer(TrackUtils::getLayer(tracker_hit));
-			    
-                // Set the position of the SvtHit
-                svt_hit->setPosition(tracker_hit->getPosition());
-
-                // Set the covariance matrix of the SvtHit
-			    svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
-			    
-                // Set the time of the SvtHit
-                svt_hit->setTime(tracker_hit->getTime());
-
-                // Add a reference to the hit to the SvtTrack
-			    svt_track->addHit(svt_hit);
-            }*/ 
+		    //  Iterate through the collection of 3D hits (TrackerHit objects)
+            //  associated with a track, find the corresponding hits in the HPS
+            //  event and add references to the track
+            for (auto tracker_hit : tracker_hits) { 
+                
+                // Add a reference to the hit
+                svt_track->addHit(svt_hit_map[tracker_hit]);  
+            }
         }
     }
 
