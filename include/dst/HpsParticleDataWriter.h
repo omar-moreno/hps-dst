@@ -73,7 +73,7 @@ class HpsParticleDataWriter : public DataWriter {
          * @param hps_event : HpsEvent to which the HpsParticles will be 
          *                    written to. 
          */
-        void writeParticleData(HpsEvent::collection_t collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event); 
+        void writeParticleData(HpsParticle::particle_type collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event); 
 
         std::string fs_particles_collection_name;
         std::string uc_vtx_particles_collection_name; 
@@ -85,7 +85,7 @@ class HpsParticleDataWriter : public DataWriter {
 
         HpsParticle* hps_particle; 
 
-        std::map<HpsEvent::collection_t, std::string> particle_collections;
+        std::map<HpsParticle::particle_type, std::string> particle_collections;
 
 }; // HpsParticleWriter
 

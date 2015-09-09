@@ -19,10 +19,10 @@ HpsParticleDataWriter::HpsParticleDataWriter()
       hps_particle(NULL) {
 
     // Add all collections to be processed
-    particle_collections.insert(std::pair<HpsEvent::collection_t, std::string>(HpsEvent::FINAL_STATE_PARTICLES, fs_particles_collection_name)); 
-    particle_collections.insert(std::pair<HpsEvent::collection_t, std::string>(HpsEvent::UC_VTX_PARTICLES, uc_vtx_particles_collection_name)); 
-    particle_collections.insert(std::pair<HpsEvent::collection_t, std::string>(HpsEvent::BSC_VTX_PARTICLES, bsc_vtx_particles_collection_name)); 
-    particle_collections.insert(std::pair<HpsEvent::collection_t, std::string>(HpsEvent::TC_VTX_PARTICLES, tc_vtx_particles_collection_name)); 
+    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::FINAL_STATE_PARTICLE, fs_particles_collection_name)); 
+    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::UC_V0_CANDIDATE, uc_vtx_particles_collection_name)); 
+    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::BSC_V0_CANDIDATE, bsc_vtx_particles_collection_name)); 
+    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::TC_V0_CANDIDATE, tc_vtx_particles_collection_name)); 
 }
 
 HpsParticleDataWriter::~HpsParticleDataWriter() {
@@ -33,13 +33,13 @@ void HpsParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event
 
         // Iterate through all of the collections of particles.  If the collection 
         // is empty, skip it.
-        std::map<HpsEvent::collection_t, std::string>::iterator particle_collection; 
+        std::map<HpsParticle::particle_type, std::string>::iterator particle_collection; 
         for (particle_collection = particle_collections.begin(); 
                 particle_collection != particle_collections.end(); ++particle_collection) {
 
             // Get the collection from the event
             particles = (IMPL::LCCollectionVec*) event->getCollection(particle_collection->second);
-            if (particle_collection->first == HpsEvent::FINAL_STATE_PARTICLES && particles->getNumberOfElements() == 0) return;
+            if (particle_collection->first == HpsParticle::FINAL_STATE_PARTICLE && particles->getNumberOfElements() == 0) return;
             else if (particles->getNumberOfElements() == 0) continue;
 
             // Write the particle data to the event
@@ -53,7 +53,7 @@ void HpsParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event
     }   
 }
 
-void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event)
+void HpsParticleDataWriter::writeParticleData(HpsParticle::particle_type collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event)
 {
     // Loop through all of the particles in the event
     for (int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n) {
@@ -96,7 +96,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
                         
                         // If the particle is a final state particle, add a
                         // reference from the corresponding track to the particle
-                        if (collection_type == HpsEvent::FINAL_STATE_PARTICLES) { 
+                        if (collection_type == HpsParticle::FINAL_STATE_PARTICLE) { 
                             hps_event->getTrack(track_n)->setParticle(hps_particle); 
                         }
                         break;
@@ -125,7 +125,7 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
         }
 
         // Only add vertex information if the particle is not a final state particle
-        if (collection_type == HpsEvent::FINAL_STATE_PARTICLES) {
+        if (collection_type == HpsParticle::FINAL_STATE_PARTICLE) {
             
             // Set the PDG ID of the particle
             hps_particle->setPDG(particle->getParticleIDUsed()->getPDG());    
@@ -146,11 +146,11 @@ void HpsParticleDataWriter::writeParticleData(HpsEvent::collection_t collection_
                 
                 // Loop through all of the final state particles in the HpsEvent and
                 // find the one that matches the daughters associated with the particles
-                for (int d_particle_n = 0; d_particle_n < hps_event->getNumberOfParticles(HpsEvent::FINAL_STATE_PARTICLES); ++d_particle_n) {
+                for (int d_particle_n = 0; d_particle_n < hps_event->getNumberOfParticles(HpsParticle::FINAL_STATE_PARTICLE); ++d_particle_n) {
                     
                     //
-                    if (particle->getParticles()[pd_particle_n]->getEnergy() == hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n)->getEnergy()) {
-                        hps_particle->addParticle(hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, d_particle_n));
+                    if (particle->getParticles()[pd_particle_n]->getEnergy() == hps_event->getParticle(HpsParticle::FINAL_STATE_PARTICLE, d_particle_n)->getEnergy()) {
+                        hps_particle->addParticle(hps_event->getParticle(HpsParticle::FINAL_STATE_PARTICLE, d_particle_n));
                         break;  
                     }
                 }

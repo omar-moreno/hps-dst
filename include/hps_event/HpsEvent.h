@@ -1,14 +1,14 @@
 /**
  *
- * @author: 	Omar Moreno <omoreno1@ucsc.edu>
+ * @author:     Omar Moreno <omoreno1@ucsc.edu>
  * @section institution
- * 				Santa Cruz Institute for Particle Physics
- * 				University of California, Santa Cruz
+ *              Santa Cruz Institute for Particle Physics
+ *              University of California, Santa Cruz
  * @date:       February 19, 2013
  */
 
 #ifndef _HPS_EVENT_H_
-#define	_HPS_EVENT_H_
+#define _HPS_EVENT_H_
 
 //-----------//
 //--- C++ ---//
@@ -39,28 +39,21 @@ class HpsEvent : public TObject {
 
     public:
 
-		HpsEvent();
+        HpsEvent();
         HpsEvent(const HpsEvent &hpsEventoObj);
         virtual ~HpsEvent();    
         HpsEvent &operator=(const HpsEvent &hpsEventObj);
 
-		enum collection_t { 
-			FINAL_STATE_PARTICLES = 0,
-			UC_VTX_PARTICLES	  = 1, 
-			BSC_VTX_PARTICLES	  = 2, 
-			TC_VTX_PARTICLES	  = 3
-		};
-
         void Clear(Option_t *option="");
-        SvtTrack* 		addTrack();
-        SvtHit* 		addSvtHit();
-        EcalCluster* 	addEcalCluster();
-        EcalHit* 		addEcalHit();
-        HpsParticle*    addParticle(collection_t); 
+        SvtTrack*       addTrack();
+        SvtHit*         addSvtHit();
+        EcalCluster*    addEcalCluster();
+        EcalHit*        addEcalHit();
+        HpsParticle*    addParticle(HpsParticle::particle_type type); 
         HpsMCParticle*  addHpsMCParticle();
-        GblTrack*   	addGblTrack();
-        GblTrackData* 	addGblTrackData();
-        GblStripData* 	addGblStripData();
+        GblTrack*       addGblTrack();
+        GblTrackData*   addGblTrackData();
+        GblStripData*   addGblStripData();
 
         /**
          *
@@ -140,7 +133,7 @@ class HpsEvent : public TObject {
         int getNumberOfTracks()         const  { return n_tracks; };
         int getNumberOfSvtHits()        const  { return n_svt_hits; };
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
-		int getNumberOfParticles(collection_t)	const; 
+        int getNumberOfParticles(HpsParticle::particle_type type) const; 
         int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
         int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
         int getNumberOfGblStripData()   const  { return n_gbl_strips_data; };
@@ -148,14 +141,14 @@ class HpsEvent : public TObject {
         SvtTrack*      getTrack(int);
         SvtHit*        getSvtHit(int);
         EcalCluster*   getEcalCluster(int);
-        EcalHit* 	   getEcalHit(int);
+        EcalHit*       getEcalHit(int);
         HpsMCParticle* getMCParticle(int);
-        HpsParticle*   getParticle(collection_t, int); 
+        HpsParticle*   getParticle(HpsParticle::particle_type type, int); 
         GblTrack*      getGblTrack(int);
         GblTrackData*  getGblTrackData(int);
         GblStripData*  getGblStripData(int);
 
-        ClassDef(HpsEvent, 1);	
+        ClassDef(HpsEvent, 1);  
 
     private:
 
@@ -166,7 +159,7 @@ class HpsEvent : public TObject {
         /** Collection of Ecal clusters */
         TClonesArray* ecal_clusters;         //->
         /** Collection of Ecal hits */
-        TClonesArray* ecal_hits; 		     //->
+        TClonesArray* ecal_hits;             //->
         /** Collection of final state particles */
         TClonesArray* fs_particles;          //->
         /** Collection of unconstrained v0 candidates */
@@ -182,7 +175,7 @@ class HpsEvent : public TObject {
         /** Collection of target constrained Moller candidates */
         TClonesArray* tc_moller_candidates;  //->
         /** Collection of Monte Carlo particles */
-        TClonesArray* mc_particles; 	     //->
+        TClonesArray* mc_particles;          //->
         /** Collection of GBL tracks */
         TClonesArray* gbl_tracks;            //->
         /** Collection of GBLTrackData Generic Objects */
