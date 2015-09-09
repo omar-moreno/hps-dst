@@ -1,10 +1,13 @@
 /**
  *
- * @author:     Omar Moreno <omoreno1@ucsc.edu>
- * @section institution
- *              Santa Cruz Institute for Particle Physics
- *              University of California, Santa Cruz
- * @date:       February 19, 2013
+ * @file HpsEvent.h
+ * @brief Event class used to encapsulate event information and physics 
+ *        collections.
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date February 19, 2013
+ *
  */
 
 #ifndef _HPS_EVENT_H_
@@ -37,22 +40,66 @@
 
 class HpsEvent : public TObject { 
 
+    // TODO: Add documentation
+
     public:
 
+        /** Constructor */
         HpsEvent();
-        HpsEvent(const HpsEvent &hpsEventoObj);
-        virtual ~HpsEvent();    
+
+        /** 
+         * Copy Constructor
+         *
+         * @param hpsEventObj An HpsEvent object 
+         */
+        HpsEvent(const HpsEvent &hpsEventObj);
+
+        /** Destructor */
+        ~HpsEvent();    
+        
+        /**
+         * Copy assignment operator 
+         *
+         * @param hpsEventObj An HpsEvent object
+         */ 
         HpsEvent &operator=(const HpsEvent &hpsEventObj);
 
+        /** */
         void Clear(Option_t *option="");
+        
+        /** */
         SvtTrack*       addTrack();
+        
+        /** */
         SvtHit*         addSvtHit();
+        
+        /** */
         EcalCluster*    addEcalCluster();
+        
+        /** */
         EcalHit*        addEcalHit();
-        HpsParticle*    addParticle(HpsParticle::particle_type type); 
+        
+        /**
+         * Create an {@link HpsParticle} object with the given 
+         * {@link HpsParticle::ParticleType} and add it to the
+         * event.
+         *
+         * @param type The type of particle that is being requested e.g. 
+         *             HpsParticle::FINAL_STATE_PARTICLE.
+         * @return A pointer to the newly created HpsParticle object. 
+         */
+        HpsParticle*    addParticle(HpsParticle::ParticleType type); 
+        
+        /** */
         HpsMCParticle*  addHpsMCParticle();
+        
+        /** */
         GblTrack*       addGblTrack();
+        
+        /** */
         GblTrackData*   addGblTrackData();
+        
+        /** */
         GblStripData*   addGblStripData();
 
         /**
@@ -130,22 +177,65 @@ class HpsEvent : public TObject {
         bool isPulserTrigger() const { return (bool) pulser_trigger; };
 
 
+        /** */
         int getNumberOfTracks()         const  { return n_tracks; };
+        
+        /** */
         int getNumberOfSvtHits()        const  { return n_svt_hits; };
+        
+        /** */
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
-        int getNumberOfParticles(HpsParticle::particle_type type) const; 
+        
+        /**
+         * Get the number of particles ({@link HpsParticle} objects) of the 
+         * given {@link HpsParticle::ParticleType} in the event.
+         *
+         * @param type The type of particle that is being requested e.g. 
+         *             HpsParticle::FINAL_STATE_PARTICLE.
+         * @return The number of particles of the given type in the event.
+         */
+        int getNumberOfParticles(HpsParticle::ParticleType type) const; 
         int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
         int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
         int getNumberOfGblStripData()   const  { return n_gbl_strips_data; };
 
+        /** */
         SvtTrack*      getTrack(int);
+        
+        /** */
         SvtHit*        getSvtHit(int);
+        
+        /** */
         EcalCluster*   getEcalCluster(int);
+        
+        /** */
         EcalHit*       getEcalHit(int);
+        
+        /** */
         HpsMCParticle* getMCParticle(int);
-        HpsParticle*   getParticle(HpsParticle::particle_type type, int); 
+        
+        /**
+         * Get the particle object ({@link HpsParticle}) of the given type and
+         * at the given position in the container from the event.  See the class
+         * {@link HpsParticle} for the type of particles that are available.
+         *
+         * @param type The type of particle that is being requested e.g. 
+         *             HpsParticle::FINAL_STATE_PARTICLE.
+         * @param particle_index The position of the particle in the container
+         * @return An HpsParticle object of the given type and at the given 
+         *         position in the container
+         * @throws std::runtime_error if the given type is invalid
+         *
+         */
+        HpsParticle*   getParticle(HpsParticle::ParticleType type, int particle_index); 
+        
+        /** */
         GblTrack*      getGblTrack(int);
+        
+        /** */
         GblTrackData*  getGblTrackData(int);
+        
+        /** */
         GblStripData*  getGblStripData(int);
 
         ClassDef(HpsEvent, 1);  
