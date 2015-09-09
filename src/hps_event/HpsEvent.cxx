@@ -235,16 +235,16 @@ EcalHit* HpsEvent::addEcalHit()
 	return (EcalHit*) ecal_hits->ConstructedAt(n_ecal_hits++);
 }
 
-HpsParticle* HpsEvent::addParticle(collection_t collection_type)
+HpsParticle* HpsEvent::addParticle(HpsParticle::particle_type type)
 {
-	switch(collection_type) { 
-        case FINAL_STATE_PARTICLES:
+	switch(type) { 
+        case HpsParticle::FINAL_STATE_PARTICLE:
             return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++); 
-		case UC_VTX_PARTICLES: 
+		case HpsParticle::UC_V0_CANDIDATE: 
 			return (HpsParticle*) uc_v0_candidates->ConstructedAt(n_uc_v0_candidates++);
-		case BSC_VTX_PARTICLES:
+		case HpsParticle::BSC_V0_CANDIDATE:
 			return (HpsParticle*) bsc_v0_candidates->ConstructedAt(n_bsc_v0_candidates++);
-		case TC_VTX_PARTICLES:
+		case HpsParticle::TC_V0_CANDIDATE:
 			return (HpsParticle*) tc_v0_candidates->ConstructedAt(n_tc_v0_candidates++);
 		default: 
 			// TODO: If a collection type is invalid, throw an exception instead
@@ -258,16 +258,16 @@ HpsMCParticle* HpsEvent::addHpsMCParticle()
 }
 
 
-int HpsEvent::getNumberOfParticles(collection_t collection_type) const
+int HpsEvent::getNumberOfParticles(HpsParticle::particle_type type) const
 {
-	switch(collection_type){
-		case FINAL_STATE_PARTICLES:
+	switch(type){
+		case HpsParticle::FINAL_STATE_PARTICLE:
 			return n_fs_particles;
-		case UC_VTX_PARTICLES: 
+		case HpsParticle::UC_V0_CANDIDATE: 
 			return n_uc_v0_candidates;  
-		case BSC_VTX_PARTICLES:
+		case HpsParticle::BSC_V0_CANDIDATE:
 			return n_bsc_v0_candidates;
-		case TC_VTX_PARTICLES:
+		case HpsParticle::TC_V0_CANDIDATE:
 			return n_tc_v0_candidates; 
 		default: 
 			// TODO: If a collection type is invalid, throw an exception instead
@@ -330,16 +330,16 @@ HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_n)
 	return (HpsMCParticle*) mc_particles->At(mc_particle_n);
 }
 
-HpsParticle* HpsEvent::getParticle(collection_t collection_type, int particle_n)
+HpsParticle* HpsEvent::getParticle(HpsParticle::particle_type type, int particle_n)
 {
-	switch(collection_type){ 
-        case FINAL_STATE_PARTICLES:
+	switch(type){ 
+        case HpsParticle::FINAL_STATE_PARTICLE:
             return (HpsParticle*) fs_particles->At(particle_n); 
-		case UC_VTX_PARTICLES: 
+		case HpsParticle::UC_V0_CANDIDATE: 
 			return (HpsParticle*) uc_v0_candidates->At(particle_n);
-		case BSC_VTX_PARTICLES: 
+		case HpsParticle::BSC_V0_CANDIDATE: 
 			return (HpsParticle*) bsc_v0_candidates->At(particle_n);
-		case TC_VTX_PARTICLES: 
+		case HpsParticle::TC_V0_CANDIDATE: 
 			return (HpsParticle*) tc_v0_candidates->ConstructedAt(particle_n);
 		default:
 			// TODO: If the collection type is invalid, throw an exception instead.	

@@ -28,6 +28,17 @@ class HpsParticle : public TObject {
 
     public:
 
+        /** Enum constants used to denote the different particle types */
+		enum particle_type { 
+			FINAL_STATE_PARTICLE = 0,
+			UC_V0_CANDIDATE	     = 1, 
+			BSC_V0_CANDIDATE	 = 2, 
+			TC_V0_CANDIDATE	     = 3,
+			UC_MOLLER_CANDIDATE	 = 4, 
+			BSC_MOLLER_CANDIDATE = 5, 
+			TC_MOLLER_CANDIDATE	 = 6,
+		};
+
         /** Default Constructor. */
         HpsParticle(); 
 
