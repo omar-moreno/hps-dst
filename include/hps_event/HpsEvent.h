@@ -159,18 +159,36 @@ class HpsEvent : public TObject {
 
     private:
 
-        TClonesArray* tracks;              //->
-        TClonesArray* svt_hits;            //->
-        TClonesArray* ecal_clusters;       //->
-        TClonesArray* ecal_hits; 		   //->
-        TClonesArray* fs_particles;        //->
-        TClonesArray* uc_vtx_particles;    //->
-        TClonesArray* bsc_vtx_particles;   //->
-        TClonesArray* tc_vtx_particles;    //->
-        TClonesArray* mc_particles; 	   //->
-        TClonesArray* gbl_tracks;          //->
-        TClonesArray* gbl_tracks_data;     //->
-        TClonesArray* gbl_strips_data;     //->
+        /** Collection of SVT tracks */ 
+        TClonesArray* tracks;                //->
+        /** Collection of SVT 3D hits */
+        TClonesArray* svt_hits;              //->
+        /** Collection of Ecal clusters */
+        TClonesArray* ecal_clusters;         //->
+        /** Collection of Ecal hits */
+        TClonesArray* ecal_hits; 		     //->
+        /** Collection of final state particles */
+        TClonesArray* fs_particles;          //->
+        /** Collection of unconstrained v0 candidates */
+        TClonesArray* uc_v0_candidates;      //->
+        /** Collection of unconstrained Moller candidates */
+        TClonesArray* uc_moller_candidates;  //->
+        /** Collection of beam spot constrained v0 candidates */
+        TClonesArray* bsc_v0_candidates;     //->
+        /** Collection of beam spot constrained Moller candidates */
+        TClonesArray* bsc_moller_candidates; //->
+        /** Collection of target constrained v0 candidates */
+        TClonesArray* tc_v0_candidates;      //->
+        /** Collection of target constrained Moller candidates */
+        TClonesArray* tc_moller_candidates;  //->
+        /** Collection of Monte Carlo particles */
+        TClonesArray* mc_particles; 	     //->
+        /** Collection of GBL tracks */
+        TClonesArray* gbl_tracks;            //->
+        /** Collection of GBLTrackData Generic Objects */
+        TClonesArray* gbl_tracks_data;       //->
+        /** Collection of GBLStripClusterData Generic Objects */
+        TClonesArray* gbl_strips_data;       //->
 
         // Event information
         int event_number;
@@ -187,9 +205,12 @@ class HpsEvent : public TObject {
         int n_ecal_clusters;
         int n_ecal_hits;
         int n_fs_particles;
-        int n_uc_vtx_particles;
-        int n_bsc_vtx_particles;
-        int n_tc_vtx_particles;
+        int n_uc_v0_candidates;
+        int n_uc_moller_candidates;
+        int n_bsc_v0_candidates;
+        int n_bsc_moller_candidates;
+        int n_tc_v0_candidates;
+        int n_tc_moller_candidates; 
         int n_mc_particles;
         int n_gbl_tracks;
         int n_gbl_tracks_data;
