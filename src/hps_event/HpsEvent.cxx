@@ -17,18 +17,32 @@ HpsEvent::HpsEvent()
         ecal_clusters(new TClonesArray("EcalCluster", 1000)),
         ecal_hits(new TClonesArray("EcalHit", 1000)),
         fs_particles(new TClonesArray("HpsParticle", 1000)),
-        uc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
-        bsc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
-        tc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
+        uc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+        uc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
+        bsc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+        bsc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
+        tc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+        tc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
         mc_particles(new TClonesArray("HpsMCParticle", 1000)),
         gbl_tracks(new TClonesArray("GblTrack", 1000)),
         gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
         gbl_strips_data(new TClonesArray("GblStripData", 1000)),
-        event_number(0), run_number(0), n_tracks(0), n_svt_hits(0),
-        n_ecal_clusters(0), n_ecal_hits(0), 
-        n_fs_particles(0), n_uc_vtx_particles(0), 
-        n_bsc_vtx_particles(0), n_tc_vtx_particles(0), 
-        n_mc_particles(0), n_gbl_tracks_data(0), n_gbl_strips_data(0)
+        event_number(0),
+        run_number(0),
+        n_tracks(0),
+        n_svt_hits(0),
+        n_ecal_clusters(0), 
+        n_ecal_hits(0), 
+        n_fs_particles(0),
+        n_uc_v0_candidates(0), 
+        n_uc_moller_candidates(0), 
+        n_bsc_v0_candidates(0),
+        n_bsc_moller_candidates(0),
+        n_tc_v0_candidates(0), 
+        n_tc_moller_candidates(0), 
+        n_mc_particles(0),
+        n_gbl_tracks_data(0),
+        n_gbl_strips_data(0)
 {}
 
 HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
@@ -38,9 +52,12 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
         ecal_clusters(new TClonesArray("EcalCluster", 1000)),
         ecal_hits(new TClonesArray("EcalHit", 1000)),
         fs_particles(new TClonesArray("HpsParticle", 1000)),
-        uc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
-        bsc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
-        tc_vtx_particles(new TClonesArray("HpsParticle", 1000)),
+        uc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+        uc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
+        bsc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+        bsc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
+        tc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+        tc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
         mc_particles(new TClonesArray("HpsMCParticle", 1000)),
         gbl_tracks(new TClonesArray("GblTrack", 1000)),
         gbl_tracks_data(new TClonesArray("GblTrackData", 1000)),
@@ -53,9 +70,12 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_ecal_clusters  = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_fs_particles = hpsEventObj.n_fs_particles;
-    this->n_uc_vtx_particles = hpsEventObj.n_uc_vtx_particles;
-    this->n_bsc_vtx_particles = hpsEventObj.n_bsc_vtx_particles;
-    this->n_tc_vtx_particles = hpsEventObj.n_tc_vtx_particles;
+    this->n_uc_v0_candidates = hpsEventObj.n_uc_v0_candidates;
+    this->n_uc_moller_candidates = hpsEventObj.n_uc_moller_candidates;
+    this->n_bsc_v0_candidates = hpsEventObj.n_bsc_v0_candidates;
+    this->n_bsc_moller_candidates = hpsEventObj.n_bsc_moller_candidates;
+    this->n_tc_v0_candidates = hpsEventObj.n_tc_v0_candidates;
+    this->n_tc_moller_candidates = hpsEventObj.n_tc_moller_candidates;
     this->n_mc_particles = hpsEventObj.n_mc_particles;
     this->n_gbl_tracks = hpsEventObj.n_gbl_tracks;
     this->n_gbl_tracks_data = hpsEventObj.n_gbl_tracks_data;
@@ -66,9 +86,12 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     *ecal_clusters = *hpsEventObj.ecal_clusters;
     *ecal_hits = *hpsEventObj.ecal_hits;
     *fs_particles = *hpsEventObj.fs_particles;
-    *uc_vtx_particles = *hpsEventObj.uc_vtx_particles;
-    *bsc_vtx_particles = *hpsEventObj.bsc_vtx_particles;
-    *tc_vtx_particles = *hpsEventObj.tc_vtx_particles;
+    *uc_v0_candidates = *hpsEventObj.uc_v0_candidates;
+    *uc_moller_candidates = *hpsEventObj.uc_moller_candidates;
+    *bsc_v0_candidates = *hpsEventObj.bsc_v0_candidates;
+    *bsc_moller_candidates = *hpsEventObj.bsc_moller_candidates;
+    *tc_v0_candidates = *hpsEventObj.tc_v0_candidates;
+    *tc_moller_candidates = *hpsEventObj.tc_moller_candidates;
     *mc_particles = *hpsEventObj.mc_particles;
     *gbl_tracks = *hpsEventObj.gbl_tracks;
     *gbl_tracks_data = *hpsEventObj.gbl_tracks_data;
@@ -84,9 +107,12 @@ HpsEvent::~HpsEvent()
     delete ecal_clusters; 
     delete ecal_hits;
     delete fs_particles;
-    delete uc_vtx_particles;
-    delete bsc_vtx_particles;
-    delete tc_vtx_particles;
+    delete uc_v0_candidates;
+    delete uc_moller_candidates;
+    delete bsc_v0_candidates;
+    delete bsc_moller_candidates;
+    delete tc_v0_candidates;
+    delete tc_moller_candidates;
     delete mc_particles;
     delete gbl_tracks;
     delete gbl_tracks_data;
@@ -107,9 +133,12 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     this->n_ecal_clusters   = hpsEventObj.n_ecal_clusters;
     this->n_ecal_hits  = hpsEventObj.n_ecal_hits;
     this->n_fs_particles = hpsEventObj.n_fs_particles;
-    this->n_uc_vtx_particles = hpsEventObj.n_uc_vtx_particles;
-    this->n_bsc_vtx_particles = hpsEventObj.n_bsc_vtx_particles;
-    this->n_tc_vtx_particles = hpsEventObj.n_tc_vtx_particles;
+    this->n_uc_v0_candidates = hpsEventObj.n_uc_v0_candidates;
+    this->n_uc_moller_candidates = hpsEventObj.n_uc_moller_candidates;
+    this->n_bsc_v0_candidates = hpsEventObj.n_bsc_v0_candidates;
+    this->n_bsc_moller_candidates = hpsEventObj.n_bsc_moller_candidates;
+    this->n_tc_v0_candidates = hpsEventObj.n_tc_v0_candidates;
+    this->n_tc_moller_candidates = hpsEventObj.n_tc_moller_candidates;
     this->n_mc_particles = hpsEventObj.n_mc_particles;
     this->n_gbl_tracks     = hpsEventObj.n_gbl_tracks; 
     this->n_gbl_tracks_data     = hpsEventObj.n_gbl_tracks_data; 
@@ -120,9 +149,12 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     ecal_clusters = new TClonesArray("EcalCluster", 1000); 
     ecal_hits = new TClonesArray("EcalHit", 1000);
     fs_particles = new TClonesArray("HpsParticle", 1000);
-    uc_vtx_particles = new TClonesArray("HpsParticle", 1000);
-    bsc_vtx_particles = new TClonesArray("HpsParticle", 1000);
-    tc_vtx_particles = new TClonesArray("HpsParticle", 1000);
+    uc_v0_candidates = new TClonesArray("HpsParticle", 1000);
+    uc_moller_candidates = new TClonesArray("HpsParticle", 1000);
+    bsc_v0_candidates = new TClonesArray("HpsParticle", 1000);
+    bsc_moller_candidates = new TClonesArray("HpsParticle", 1000);
+    tc_v0_candidates = new TClonesArray("HpsParticle", 1000);
+    tc_moller_candidates = new TClonesArray("HpsParticle", 1000);
     mc_particles = new TClonesArray("HpsMCParticle", 1000);
     gbl_tracks = new TClonesArray("GblTrack", 1000);
     gbl_tracks_data = new TClonesArray("GblTrackData", 1000);
@@ -133,9 +165,12 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj)
     *ecal_clusters = *hpsEventObj.ecal_clusters;
     *ecal_hits = *hpsEventObj.ecal_hits;
     *fs_particles = *hpsEventObj.fs_particles;
-    *uc_vtx_particles = *hpsEventObj.uc_vtx_particles;
-    *bsc_vtx_particles = *hpsEventObj.bsc_vtx_particles;
-    *tc_vtx_particles = *hpsEventObj.tc_vtx_particles;
+    *uc_v0_candidates = *hpsEventObj.uc_v0_candidates;
+    *uc_moller_candidates = *hpsEventObj.uc_moller_candidates;
+    *bsc_v0_candidates = *hpsEventObj.bsc_v0_candidates;
+    *bsc_moller_candidates = *hpsEventObj.bsc_moller_candidates;
+    *tc_v0_candidates = *hpsEventObj.tc_v0_candidates;
+    *tc_moller_candidates = *hpsEventObj.tc_moller_candidates;
     *mc_particles = *hpsEventObj.mc_particles;
     *gbl_tracks = *hpsEventObj.gbl_tracks;
     *gbl_tracks_data = *hpsEventObj.gbl_tracks_data;
@@ -152,9 +187,12 @@ void HpsEvent::Clear(Option_t * /*option*/)
     ecal_clusters->Clear("C");
     ecal_hits->Clear("C");
     fs_particles->Clear("C");
-    uc_vtx_particles->Clear("C");
-    bsc_vtx_particles->Clear("C");
-    tc_vtx_particles->Clear("C");
+    uc_v0_candidates->Clear("C");
+    uc_moller_candidates->Clear("C");
+    bsc_v0_candidates->Clear("C");
+    bsc_moller_candidates->Clear("C");
+    tc_v0_candidates->Clear("C");
+    tc_moller_candidates->Clear("C");
     mc_particles->Clear("C");
     gbl_tracks->Clear("C");
     gbl_tracks_data->Clear("C");
@@ -164,9 +202,12 @@ void HpsEvent::Clear(Option_t * /*option*/)
     n_tracks = 0;  
     n_svt_hits = 0;
     n_fs_particles = 0;
-    n_uc_vtx_particles = 0;
-    n_bsc_vtx_particles = 0;
-    n_tc_vtx_particles = 0;
+    n_uc_v0_candidates = 0;
+    n_uc_moller_candidates = 0;
+    n_bsc_v0_candidates = 0;
+    n_bsc_moller_candidates = 0;
+    n_tc_v0_candidates = 0;
+    n_tc_moller_candidates = 0;
     n_mc_particles = 0;
     n_gbl_tracks = 0;
     n_gbl_tracks_data = 0;
@@ -200,11 +241,11 @@ HpsParticle* HpsEvent::addParticle(collection_t collection_type)
         case FINAL_STATE_PARTICLES:
             return (HpsParticle*) fs_particles->ConstructedAt(n_fs_particles++); 
 		case UC_VTX_PARTICLES: 
-			return (HpsParticle*) uc_vtx_particles->ConstructedAt(n_uc_vtx_particles++);
+			return (HpsParticle*) uc_v0_candidates->ConstructedAt(n_uc_v0_candidates++);
 		case BSC_VTX_PARTICLES:
-			return (HpsParticle*) bsc_vtx_particles->ConstructedAt(n_bsc_vtx_particles++);
+			return (HpsParticle*) bsc_v0_candidates->ConstructedAt(n_bsc_v0_candidates++);
 		case TC_VTX_PARTICLES:
-			return (HpsParticle*) tc_vtx_particles->ConstructedAt(n_tc_vtx_particles++);
+			return (HpsParticle*) tc_v0_candidates->ConstructedAt(n_tc_v0_candidates++);
 		default: 
 			// TODO: If a collection type is invalid, throw an exception instead
 			return NULL; 
@@ -223,11 +264,11 @@ int HpsEvent::getNumberOfParticles(collection_t collection_type) const
 		case FINAL_STATE_PARTICLES:
 			return n_fs_particles;
 		case UC_VTX_PARTICLES: 
-			return n_uc_vtx_particles;  
+			return n_uc_v0_candidates;  
 		case BSC_VTX_PARTICLES:
-			return n_bsc_vtx_particles;
+			return n_bsc_v0_candidates;
 		case TC_VTX_PARTICLES:
-			return n_tc_vtx_particles; 
+			return n_tc_v0_candidates; 
 		default: 
 			// TODO: If a collection type is invalid, throw an exception instead
 			return -1; 
@@ -295,11 +336,11 @@ HpsParticle* HpsEvent::getParticle(collection_t collection_type, int particle_n)
         case FINAL_STATE_PARTICLES:
             return (HpsParticle*) fs_particles->At(particle_n); 
 		case UC_VTX_PARTICLES: 
-			return (HpsParticle*) uc_vtx_particles->At(particle_n);
+			return (HpsParticle*) uc_v0_candidates->At(particle_n);
 		case BSC_VTX_PARTICLES: 
-			return (HpsParticle*) bsc_vtx_particles->At(particle_n);
+			return (HpsParticle*) bsc_v0_candidates->At(particle_n);
 		case TC_VTX_PARTICLES: 
-			return (HpsParticle*) tc_vtx_particles->ConstructedAt(particle_n);
+			return (HpsParticle*) tc_v0_candidates->ConstructedAt(particle_n);
 		default:
 			// TODO: If the collection type is invalid, throw an exception instead.	
 			return NULL; 
