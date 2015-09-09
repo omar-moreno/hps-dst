@@ -1,9 +1,12 @@
 /**
- *  @author:    Omar Moreno <omoreno1@ucsc.edu>
- *  @section institution
- *              Santa Cruz Institute for Particle Physics
- *              University of California, Santa Cruz
- *  @date:      March 31, 2014
+ *
+ * @file HpsParticleDataWriter.cxx
+ * @brief Data writer used to convert LCIO ReconstructedParticle objects
+ *        to {@link HpsParticle} objects and add them to an event.
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date March 31, 2014
  *
  */
 
@@ -11,50 +14,58 @@
 
 HpsParticleDataWriter::HpsParticleDataWriter() 
     : fs_particles_collection_name("FinalStateParticles"),
-      uc_vtx_particles_collection_name("UnconstrainedV0Candidates"),
-      bsc_vtx_particles_collection_name("BeamspotConstrainedV0Candidates"),
-      tc_vtx_particles_collection_name("TargetConstrainedV0Candidates"),
-      particles(NULL), 
+      uc_v0_candidates_collection_name("UnconstrainedV0Candidates"),
+      uc_moller_candidates_collection_name("UnconstrainedMollerCandidates"),
+      bsc_v0_candidates_collection_name("BeamspotConstrainedV0Candidates"),
+      bsc_moller_candidates_collection_name("BeamspotConstrainedMollerCandidates"),
+      tc_v0_candidates_collection_name("TargetConstrainedV0Candidates"),
+      tc_moller_candidates_collection_name("TargetConstrainedMollerCandidates"),
       particle(NULL), 
       hps_particle(NULL) {
 
-    // Add all collections to be processed
-    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::FINAL_STATE_PARTICLE, fs_particles_collection_name)); 
-    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::UC_V0_CANDIDATE, uc_vtx_particles_collection_name)); 
-    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::BSC_V0_CANDIDATE, bsc_vtx_particles_collection_name)); 
-    particle_collections.insert(std::pair<HpsParticle::particle_type, std::string>(HpsParticle::TC_V0_CANDIDATE, tc_vtx_particles_collection_name)); 
+    
+
+    // Create a mapping between a HpsParticle::ParticleType and the LCIO 
+    // collection name
+    // FIXME: This should really be used the LCIO ReconstructedParticle type. 
+    //        Doing it this way is really ugly! 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::FINAL_STATE_PARTICLE, fs_particles_collection_name)); 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::UC_V0_CANDIDATE, uc_v0_candidates_collection_name)); 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::UC_MOLLER_CANDIDATE, uc_moller_candidates_collection_name)); 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::BSC_V0_CANDIDATE, bsc_v0_candidates_collection_name)); 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::BSC_MOLLER_CANDIDATE, bsc_moller_candidates_collection_name)); 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::TC_V0_CANDIDATE, tc_v0_candidates_collection_name)); 
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::TC_MOLLER_CANDIDATE, tc_moller_candidates_collection_name)); 
 }
 
 HpsParticleDataWriter::~HpsParticleDataWriter() {
 }
 
 void HpsParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
-    try { 
 
-        // Iterate through all of the collections of particles.  If the collection 
-        // is empty, skip it.
-        std::map<HpsParticle::particle_type, std::string>::iterator particle_collection; 
-        for (particle_collection = particle_collections.begin(); 
-                particle_collection != particle_collections.end(); ++particle_collection) {
-
-            // Get the collection from the event
-            particles = (IMPL::LCCollectionVec*) event->getCollection(particle_collection->second);
-            if (particle_collection->first == HpsParticle::FINAL_STATE_PARTICLE && particles->getNumberOfElements() == 0) return;
-            else if (particles->getNumberOfElements() == 0) continue;
-
-            // Write the particle data to the event
-            writeParticleData(particle_collection->first, particles, hps_event); 
-        }
-
-    } catch(EVENT::DataNotAvailableException e) {
-        // For now, don't do anything.  Once the HPS reconstruction is
-        // verified to place a collection for every single event, then the
-        // exception will be handled properly.
-    }   
+    // Iterate through all of the collections of LCIO ReconstructedParticle objects and
+    // add them to the event (HpsEvent object).  If the collection isn't present in the
+    // event, throw an exception. 
+    for (auto const &particle_collection : particle_collections) { 
+        
+        // Get the collection from the event
+        EVENT::LCCollection* particles = (EVENT::LCCollection*) event->getCollection(particle_collection.second);
+       
+        // Write the particle data to the event
+        writeParticleData(particle_collection.first, particles, hps_event); 
+    }
 }
 
-void HpsParticleDataWriter::writeParticleData(HpsParticle::particle_type collection_type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event)
-{
+void HpsParticleDataWriter::writeParticleData(HpsParticle::ParticleType collection_type, 
+        EVENT::LCCollection* particles, HpsEvent* hps_event) {
+    
     // Loop through all of the particles in the event
     for (int particle_n = 0; particle_n < particles->getNumberOfElements(); ++particle_n) {
 
