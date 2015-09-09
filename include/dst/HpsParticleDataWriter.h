@@ -23,8 +23,8 @@
 //--- LCIO ---//
 //------------//
 #include <EVENT/LCCollection.h>
-#include <IMPL/ReconstructedParticleImpl.h>
-#include <IMPL/VertexImpl.h>
+#include <EVENT/ReconstructedParticle.h>
+#include <EVENT/Vertex.h>
 #include <Exceptions.h>
 
 //-----------//
@@ -72,7 +72,7 @@ class HpsParticleDataWriter : public DataWriter {
          * @param hps_event {@link HpsEvent} object to which the 
          *                  {@link HpsParticle}s will be added to. 
          */
-        void writeParticleData(HpsParticle::ParticleType type, IMPL::LCCollectionVec* particles, HpsEvent* hps_event); 
+        void writeParticleData(HpsParticle::ParticleType type, EVENT::LCCollection* particles, HpsEvent* hps_event); 
 
         /** LCIO Collection name of final state particles */
         std::string fs_particles_collection_name;
@@ -95,10 +95,10 @@ class HpsParticleDataWriter : public DataWriter {
         /** LCIO Collection name of target constrained V0 candidates */
         std::string tc_moller_candidates_collection_name; 
 
-        IMPL::ReconstructedParticleImpl* particle; 
-
-        HpsParticle* hps_particle; 
-
+        /** 
+         * Map from an {@link HpsParticle::ParticleType} to the LCIO collection
+         * name 
+         */
         std::map<HpsParticle::ParticleType, std::string> particle_collections;
 
 }; // HpsParticleWriter
