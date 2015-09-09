@@ -80,11 +80,6 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
     // Loop over all the track collections and process them
     for (auto tracks : track_collections) { 
         
-        // For now, skip the GBL track collection.  Once GBL tracks have been
-        // verified to be correct, they will be processes along with the rest
-        // of the tracks.
-        if (tracks == (EVENT::LCCollection*) event->getCollection("GblTracks")) continue;
-	
         // Loop over all the LCIO Tracks and add them to the HPS event.
         for (int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n) {
         
