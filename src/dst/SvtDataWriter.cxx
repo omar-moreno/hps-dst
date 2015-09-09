@@ -85,7 +85,13 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         
 		    // Get a LCIO Track from the LCIO event
             EVENT::Track* track = (EVENT::Track*) tracks->getElementAt(track_n);
-            
+    
+            /*std::cout << "Position at Ecal: x: " 
+                << track->getTrackStates()[1]->getReferencePoint()[0] 
+                << track->getTrackStates()[1]->getReferencePoint()[1] 
+                << track->getTrackStates()[1]->getReferencePoint()[2] 
+                << std::endl;*/
+
 		    // Add an SvtTrack object to the HPS event
 		    SvtTrack* svt_track = hps_event->addTrack(); 
 		    
