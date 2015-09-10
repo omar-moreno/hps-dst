@@ -153,11 +153,11 @@ class HpsEvent : public TObject {
          * Set the flag indicating whether the event was affected by SVT burst
          * noise.
          *
-         * @param svt_burst_noise Flag indicating whether an event was affected
+         * @param svt_burstmode_noise Flag indicating whether an event was affected
          *                        by SVT burst noise.  It's set to 0 if it was
          *                        or 1 if it wasn't.
          */
-        void setSvtBurstNoise(const int svt_burst_noise) { this->svt_burst_noise = svt_burst_noise; };
+        void setSvtBurstModeNoise(const int svt_burstmode_noise) { this->svt_burstmode_noise = svt_burstmode_noise; };
 
         /**
          * Set the state of indicating whether the SVT was open or closed 
@@ -317,7 +317,7 @@ class HpsEvent : public TObject {
          * @return Returns true if the event has SVT burst noise, false 
          *         otherwise. 
          */
-        bool hasSvtBurstNoise() const { return svt_burst_noise == 0; }; 
+        bool hasSvtBurstModeNoise() const { return svt_burstmode_noise == 0; }; 
 
         ClassDef(HpsEvent, 1);  
 
@@ -403,7 +403,7 @@ class HpsEvent : public TObject {
          * Flag indicating whether the event was affected by SVT burst noise. 
          * It's set to 0 if the event saw burst noise or 1 if it was fine.
          */ 
-        int svt_burst_noise; 
+        int svt_burstmode_noise; 
         
         /** 
          * Flag indicating whether the SVT was open or closed.  It's set to 0 if 
