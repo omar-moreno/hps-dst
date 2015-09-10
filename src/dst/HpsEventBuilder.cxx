@@ -1,6 +1,7 @@
 /**
- *  @file   HpsEventBuilder.cxx
- *  @brief
+ *
+ *  @file HpsEventBuilder.cxx
+ *  @brief Builds {@link HpsEvent} objects out of LCIO events.
  *  @author Omar Moreno <omoreno1@ucsc.edu>
  *          Santa Cruz Institute for Particle Physics
  *          University of California, Santa Cruz
@@ -79,6 +80,16 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
 
     // Set the trigger timestamp 
     hps_event->setTriggerTimeStamp(lc_event->getTimeStamp()); 
+
+    // Set the SVT bias state
+    hps_event->setSvtBiasState(lc_event->getParameters().getIntVal("svt_bias_good")); 
+    
+    // Set the flag indicating whether the event was affected by SVT burst
+    // mode noise 
+    hps_event->setSvtBurstModeNoise(lc_event->getParameters().getIntVal("svt_burstmode_noise_good"));
+
+    // Set the SVT position state
+    hps_event->setSvtPositionState(lc_event->getParameters().getIntVal("svt_position_good"));
 
     // Set the trigger data
     try { 
