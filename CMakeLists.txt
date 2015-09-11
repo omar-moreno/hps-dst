@@ -140,17 +140,3 @@ if(DOXYGEN_FOUND)
 else()
 	MESSAGE(STATUS "Doxygen was not found.  Documentation will not be generated.")
 endif(DOXYGEN_FOUND)
-
-#-------------------------------------------------#
-#--- Add a custom target to build the examples ---#
-#-------------------------------------------------#
-add_custom_target(examples COMMENT "HPS DST examples have been built")
-set(EXAMPLES_DIR "${HPS_DST_SOURCE_DIR}/examples")
-add_subdirectory("${EXAMPLES_DIR}")
-file(GLOB EXAMPLES_SRC "${EXAMPLES_DIR}/*.cxx")
-foreach(EXAMPLE ${EXAMPLES_SRC})
-	message(STATUS "Found source: ${EXAMPLE}")
-	get_filename_component(EXAMPLE_NAME "${EXAMPLE}" NAME_WE)
-	message(STATUS "Source name: ${EXAMPLE_NAME}")
-	add_dependencies(examples "${EXAMPLE_NAME}")
-endforeach(EXAMPLE)
