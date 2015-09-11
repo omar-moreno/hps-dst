@@ -88,7 +88,7 @@ class HpsGblFitter {
          * @param track : A GBL track object
          * @param track_data : The GBL track data used in the track refit
          */
-        void setTrackProperties(GblTrack* track, const GblTrackData* track_data);
+        void setTrackProperties(GblTrack* track, const SvtTrack* seed_track, const GblTrackData* track_data);
 
     private:
 
@@ -98,7 +98,6 @@ class HpsGblFitter {
         TRandom *m_r;
         
         double b_field;
-        double b_fac;// for Bz in Tesla, momentum in GeV and Radius in mm
         double chi2;
         double lost_weight;
        

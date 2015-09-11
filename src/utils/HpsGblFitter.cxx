@@ -9,19 +9,22 @@
 #include "HpsGblFitter.h"
 
 // constant to normalize curvature
-static const double Bconst = 0.0002998; 
+static const double FIELD_CONVERSION = 0.0002998; 
 //variable that defines the reference point on the trajectory (typically at path length zero)
-static const int refLabel = 1;
+static const int REF_LABEL = 1;
+
 //variable indexes
-static const unsigned int idx_qOverP = 0;
-static const unsigned int idx_xT = 3;
-static const unsigned int idx_yT = 4;
+// FIXME: This should just be an enum
+static const unsigned int Q_OVER_P_INDEX = 0;
+static const unsigned int YT_PRIME_INDEX = 1; 
+static const unsigned int XT_PRIME_INDEX = 2; 
+static const unsigned int XT_INDEX = 3;
+static const unsigned int YT_INDEX = 4;
 
 HpsGblFitter::HpsGblFitter() 
     : m_traj(NULL), 
       m_r(new TRandom3()),
       b_field(std::numeric_limits<double>::quiet_NaN()),
-      b_fac(Bconst*b_field), 
       chi2(-1.), 
       lost_weight(-1.),
       ndf(-1),
@@ -197,7 +200,7 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::fit(const GblTrackData* track) {
         }
 
         //Find the Jacobian to be able to propagate the covariance matrix to this strip position
-        jacPointToPoint = gblSimpleJacobianLambdaPhi(step, cosLambda, fabs(b_fac));
+        jacPointToPoint = gblSimpleJacobianLambdaPhi(step, cosLambda, fabs(FIELD_CONVERSION*b_field));
 
         if (debug) {
             std::cout << "HpsGblFitter: " << "jacPointToPoint to extrapolate to this point:" << std::endl;
@@ -267,38 +270,6 @@ HpsGblFitter::HpsGblFitStatus HpsGblFitter::fit(const GblTrackData* track) {
         msCov(1, 1) += scatErr[0]*scatErr[0];
         msCov(2, 2) += scatErr[1]*scatErr[1];
 
-        /*
-
-##### 
-## Calculate global derivatives for this point
-# track direction in tracking/global frame
-tDirGlobal = np.array( [ [cosPhi * cosLambda, sinPhi * cosLambda, sinLambda] ] )        
-# Cross-check that the input is consistent
-if( np.linalg.norm( tDirGlobal - strip.tDir) > 0.00001):
-print 'ERROR: tDirs are not consistent!'
-sys.exit(1)
-# rotate track direction to measurement frame          
-tDirMeas = np.dot( tDirGlobal, np.array([strip.u, strip.v, strip.w]) )
-#tDirMeas = utils.rotateGlToMeas(strip,tDirGlobal)
-normalMeas = np.dot( strip.w , np.array([strip.u, strip.v, strip.w]) ) 
-#normalMeas = utils.rotateGlToMeas(strip,strip.w) 
-# non-measured directions 
-vmeas = 0.
-wmeas = 0.
-# calculate and add derivatives to point
-glDers = utils.globalDers(strip.layer,strip.meas,vmeas,wmeas,tDirMeas,normalMeas)
-ders = glDers.getDers(track.isTop())
-labGlobal = ders['labels']
-addDer = ders['ders']
-if debug:
-print 'global derivatives:'
-print labGlobal
-print addDer
-point.addGlobals(labGlobal, addDer)
-##### 
-
-*/
-
 
         if(debug) {
             std::cout << "HpsGblFitter: " << "uRes " <<  strip->GetId() <<  " uRes " << uRes <<  " pred (" <<  strip->GetTrackPos().x() << "," << strip->GetTrackPos().y() << "," << strip->GetTrackPos().z() << ") s(3D) " << strip->GetPath3D() << std::endl;
@@ -333,15 +304,6 @@ point.addGlobals(labGlobal, addDer)
         delete (it->second);
     }
 
-
-
-    /*
-    clock_t endTime = clock();
-    double diff = endTime - startTime;
-    double cps = CLOCKS_PER_SEC;
-    if( debug ) {
-        std::cout << "HpsGblFitter: " << " Time elapsed " << diff / cps << " s" << std::endl;
-    }*/
 
     if(debug) {
         std::cout << "HpsGblFitter: " << "HpsGblFitter: Fit() done successfully." << std::endl;
@@ -392,83 +354,112 @@ TMatrixD HpsGblFitter::gblSimpleJacobianLambdaPhi(double ds, double cosl, double
 }
 
 
-void HpsGblFitter::setTrackProperties(GblTrack* track, const GblTrackData* track_data) {
+void HpsGblFitter::setTrackProperties(GblTrack* track, const SvtTrack* seed_track, const GblTrackData* track_data) {
 
     // Convert GBL trajectory information to the track object
-
-    if( m_traj == NULL) {
+    //
+    // FIXME: Should the trajectory be passed as an argument to the method? --OM
+    if (m_traj == NULL) {
         std::cout << "HpsGblFitter: ERROR there is no trajectory created so can't set properties!" << std::endl;
         return;
     }
+
+    // Calculate the original track parameters
+    // FIXME: These should be retrieved from the seed track itself
+    double pt = (1.0/seed_track->getOmega())*(fabs(b_field)*FIELD_CONVERSION);
+    double sin_theta = 1.0/sqrt(1 + pow(seed_track->getTanLambda(), 2)); 
+    double q_over_p = sin_theta/pt;
+    double d0 = seed_track->getD0();
+    double z0 = seed_track->getZ0();
+    double phi0 = seed_track->getPhi0(); 
+    double lambda = atan(seed_track->getTanLambda()); 
 
     // get the track parameter corrections to the reference point (path length zero)
     TVectorD localPar(5);
     TMatrixDSym localCov(5);
 
-    m_traj->getResults(refLabel,localPar, localCov);
+    m_traj->getResults(REF_LABEL, localPar, localCov);
 
-    // convert xT,yT,zT correction in curvilinear frame to perigee frame
-    TVectorD clParCorr(3);
-    clParCorr[0] = localPar[idx_xT];
-    clParCorr[1] = localPar[idx_yT];
-    clParCorr[2] = 0.;
+    // Get the corrections
+    double q_over_p_corr = localPar[Q_OVER_P_INDEX]; 
+    double xt_prime_corr = localPar[XT_PRIME_INDEX];
+    double yt_prime_corr = localPar[YT_PRIME_INDEX];
+    double xt_corr = localPar[XT_INDEX];
+    double yt_corr = localPar[YT_INDEX];
+
+    // Transform the xT, yT and zT corrections from the curvilinear frame to 
+    // the perigee frame 
+    TVectorD cl_par_corr(3);
+    cl_par_corr[0] = xt_corr;  
+    cl_par_corr[1] = yt_corr;
+    cl_par_corr[2] = 0.;
 
     // get the projection from perigee to curvilinear frame
-    TMatrixD prjClToPer(TMatrixD::kInverted, track_data->getPrjPerToCl());
-    //TMatrixD prjClToPer(track_data->getPrjPerToCl());
+    TMatrixD cl_to_per_prj(TMatrixD::kInverted, track_data->getPrjPerToCl());
 
     // project into the perigee frame
-    TVectorD perParCorr = prjClToPer * clParCorr;
+    TVectorD per_par_corr = cl_to_per_prj * cl_par_corr;
 
-    // corrections
-    double qP_corr = localPar[idx_qOverP]; 
-    double pt_old = fabs((1.0/track_data->getKappa()) * b_fac);
-    double qP_old = sin(track_data->getTheta())/pt_old;
-    double qP_new = qP_old + qP_corr;
-    double p_new = fabs(1/qP_new);
-    double pt_new = p_new * sin(track_data->getTheta());
-    double kappa_new = 1/pt_new * b_fac;
-    double d0_corr = -1.0 * perParCorr[1]; // sign convention of d0 in curvilinear frame
-    double z0_corr = perParCorr[2]; 
+    // Calculate the GBL track d0
+    double d0_corr = -1.0 * per_par_corr[1]; // sign convention of d0 in curvilinear frame
+    double gbl_dca = d0 + d0_corr; 
+
+    // Calculate the GBL track Z0
+    double z0_corr = per_par_corr[2]; 
+    double gbl_z0 = z0 + z0_corr; 
+    
+    // Calculate the GBL track slope
+    double lambda_gbl = lambda + yt_prime_corr;
+    double gbl_slope = tan(lambda_gbl); 
+
+    // Calculate the GBL curvature
+    double gbl_q_over_p = q_over_p + q_over_p_corr;
+    double gbl_omega =  FIELD_CONVERSION*fabs(b_field)*gbl_q_over_p/cos(lambda_gbl); 
+
+    // Calculate the GBL phi
+    double gbl_phi = phi0 + xt_prime_corr - per_par_corr[0]*gbl_omega; 
+
+    // Calculate the momentum of the GBL track
+    double gbl_pt = fabs((1/gbl_omega)*b_field*FIELD_CONVERSION); 
+    double gbl_px = gbl_pt*sin(gbl_phi);
+    double gbl_py = gbl_pt*gbl_slope; 
+    double gbl_pz = gbl_pt*cos(gbl_phi); 
 
     // set the new parameters
-    // TODO: Use the seed SvtTrack directly to get the seed track parameters
-    track->setTrackParameters(track_data->getD0() + d0_corr, track_data->getPhi(), kappa_new, track_data->getTheta(), track_data->getZ0() + z0_corr);
+    track->setTrackParameters(gbl_dca, gbl_phi, gbl_omega, gbl_slope, gbl_z0);
 
     //set covariance matrix
     //TODO: do this correctly for perigee frame - right now it's the CL frame 
     track->setCov(localCov);
 
     // set momentum vector
-    //track->setMomentumVector(pt_new*cos(track->getPhi0()), pt_new*sin(track->getPhi0()), p_new*cos(track_data->getTheta()));
-    track->setMomentumVector(pt_new*sin(track->getPhi0()), p_new*cos(track_data->getTheta()), pt_new*cos(track->getPhi0())); 
+    track->setMomentumVector(gbl_px, gbl_py, gbl_pz); 
 
     // set chi2 
     track->setChi2(chi2);
     track->setNdf(ndf);
 
     if( debug) {
-        std::cout << "HpsGblFitter: Corrections of at reference point " << refLabel << std::endl;
+        std::cout << "HpsGblFitter: Corrections of at reference point " << REF_LABEL << std::endl;
         std::cout << "locPar " << std::endl;
         localPar.Print();
         std::cout << "prjPerToCl:" << std::endl;
         track_data->getPrjPerToCl().Print();
-        std::cout << "prjClToPer:" << std::endl;
-        prjClToPer.Print();
+        std::cout << "cl_to_per_prj:" << std::endl;
+        cl_to_per_prj.Print();
         //std::cout << "locCov " << std::endl;
         //localCov.Print();
-        std::cout << "clParCorr " << std::endl;
-        clParCorr.Print();
-        std::cout << "perParCorr " << std::endl;
-        perParCorr.Print();
-        double curv_corr = kappa_new - track_data->getKappa();   
+        std::cout << "cl_par_corr " << std::endl;
+        cl_par_corr.Print();
+        std::cout << "per_par_corr " << std::endl;
+        per_par_corr.Print();
+        double curv_corr = gbl_omega - seed_track->getOmega();   
         std::cout << "d0_gbl " << track->getD0() << "(" << track_data->getD0() << ") z0_gbl " << track->getZ0() << " (" << track_data->getZ0() << ")" << std::endl;
-        std::cout << "kappa_gbl " << track->getKappa() << "(" << track_data->getKappa() << " from q/p_corr " << qP_corr << " qP_old " << qP_old << " qP_new " << qP_new << " pt_new " << pt_new <<  " curv_corr " << curv_corr << " theta " << track_data->getTheta() <<  " )" << std::endl;
+        std::cout << "kappa_gbl " << track->getOmega() << "(" << track_data->getKappa() << " from q/p_corr " << q_over_p_corr << " q_over_p " << q_over_p << " gbl_q_over_p " << gbl_q_over_p << " gbl_pt " << gbl_pt <<  " curv_corr " << curv_corr << " theta " << track_data->getTheta() <<  " )" << std::endl;
         track->toString();
     }
 }
 
 void HpsGblFitter::setBField(const double b_field) { 
     this->b_field = b_field; 
-    this->b_fac = Bconst*b_field; 
 } 
