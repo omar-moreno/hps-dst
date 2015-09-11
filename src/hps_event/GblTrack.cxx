@@ -19,8 +19,8 @@ GblTrack::GblTrack()
       cov_matrix(5, 5),
       d0(0),
       phi0(0),
-      kappa(0),
-      theta(0),
+      omega(0),
+      tan_lambda(0),
       z0(0),      
       chi_squared(-1.), 
       ndof(0), 
@@ -39,14 +39,14 @@ void GblTrack::Clear(Option_t *option) {
 
 void GblTrack::setTrackParameters(const double d0, 
         const double phi0,
-        const double kappa,
-        const double theta,
+        const double omega,
+        const double tan_lambda,
         const double z0) {
 
     this->d0 = d0; 
     this->phi0 = phi0; 
-    this->kappa = kappa; 
-    this->theta = theta;
+    this->omega = omega; 
+    this->tan_lambda = tan_lambda;
     this->z0 = z0;  
 }
 
@@ -66,9 +66,9 @@ std::vector<double> GblTrack::getMomentum() {
 
 void GblTrack::toString() {
     std::cout << "GblTrack: " << std::endl;
-    std::cout << "    (kappa, theta, phi0, d0, z0): " 
-        << getKappa() 
-        << "," << getTheta() 
+    std::cout << "    (omega, tan_lambda, phi0, d0, z0): " 
+        << getOmega() 
+        << "," << getTanLambda() 
         << "," << getPhi0() 
         << "," << getD0() 
         << "," << getZ0() << std::endl;
