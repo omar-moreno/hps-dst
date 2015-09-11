@@ -1,6 +1,9 @@
 #
-#	@author: Omar Moreno <omoreno1@ucsc.edu>
-#	@date: December 06, 2013
+# @file: CMakeLists.txt
+# @author: Omar Moreno <omoreno1@ucsc.edu>
+#          Santa Cruz Institute for Particle Physics
+#          University of California, Santa Cruz
+#  @date: December 06, 2013
 #
 
 # Find the necessary LCIO libraries
@@ -12,17 +15,29 @@ find_library(GBL_LIB GBL ${GBL_DIR}/lib)
 
 # Add the dump_hps_event executable
 add_executable(dump_hps_event dump_hps_event.cxx)
-target_link_libraries(dump_hps_event ${LCIO_LIB})
+target_link_libraries(dump_hps_event 
+    ${LCIO_LIB}
+)
 
-# Create the TrackUtils library
+# Build the TrackUtils library
 add_library(TrackUtils TrackUtils.cxx)
-target_link_libraries(TrackUtils ${LCIO_LIB})
+target_link_libraries(TrackUtils 
+    ${LCIO_LIB}
+)
 
-# Create the EcalUtils library
+# Build the EcalUtils library
 add_library(EcalUtils EcalUtils.cxx)
-target_link_libraries(EcalUtils ${LCIO_LIB})
+target_link_libraries(EcalUtils 
+    ${LCIO_LIB}
+)
 
-# If GBL is installed, create the HpsGblFitter library
-find_library(GBL_LIB GBL ${GBL_LIBRARY_DIRS})
+# Build the HpsGblFitter library
 add_library(HpsGblFitter HpsGblFitter.cxx)
-target_link_libraries(HpsGblFitter ${GBL_LIB} ${ROOT_MATHCORE_LIBRARY} ${ROOT_MATRIX_LIBRARY})
+target_link_libraries(HpsGblFitter 
+    ${GBL_LIB}
+    ${ROOT_MATHCORE_LIBRARY}
+    ${ROOT_MATRIX_LIBRARY}
+    GblStripData
+    GblTrackData
+    GblTrack
+)

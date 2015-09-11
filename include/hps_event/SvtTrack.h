@@ -1,10 +1,12 @@
 /**
- * @file: SvtTrack.h
- * @author: Omar Moreno <omoreno1@ucsc.edu>
- * @section Institution \n
- *          Santa Cruz Institute for Particle Physics
- *          University of California, Santa Cruz
- * @date:   February 19, 2013
+ * 
+ * @file SvtTrack.h
+ * @brief Class used to describe an HPS SVT track.
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date February 19, 2013
+ * 
  */
 
 #ifndef __SVT_TRACK_H__
@@ -14,6 +16,7 @@
 //--- C++ StdLib ---//
 //------------------//
 #include<vector>
+#include <stdio.h>
 
 //------------//
 //--- ROOT ---//
@@ -28,7 +31,7 @@
 //-----------------//
 #include <HpsParticle.h>
 
-// Forward declarations
+/** Forward declarations */
 class SvtHit;
 
 class SvtTrack : public TObject {
@@ -37,31 +40,27 @@ class SvtTrack : public TObject {
 
     public:
 
-        /**
-         * Default Constructor
-         */
+        /** Constructor */
         SvtTrack();
 
         /**
          * Copy constructor
          *
-         * @param svtTrackObj : An SvtTrack object
+         * @param svtTrackObj An SvtTrack object
          */
         SvtTrack(const SvtTrack &svtTrackObj);
 
-        /**
-         * Destructor
-         */
+        /** Destructor */
         ~SvtTrack();
 
         /**
+         * Copy assignment operator
          *
+         * @param svtTrackObj An SvtTrack object
          */
         SvtTrack &operator=(const SvtTrack &svtTrackObj);
        
-        /**
-         *
-         */ 
+        /** Reset the SvtTrack object */ 
         void Clear(Option_t *option="");
 
         /**
@@ -102,13 +101,8 @@ class SvtTrack : public TObject {
 
         /**
          *
-         */
-        void setL1Isolation(const double l1_isolation) { this->l1_isolation = l1_isolation; };
-        
-        /**
-         *
-         */
-        void setL2Isolation(const double l2_isolation) { this->l2_isolation = l2_isolation; };
+         */ 
+        void setIsolation(const int layer, const double isolation) { this->isolation[layer] = isolation; };
 
         /**
          *
@@ -122,6 +116,10 @@ class SvtTrack : public TObject {
          * @param fs_particle : Final state HpsParticle associated with this track
          */
         void setParticle(HpsParticle* fs_particle) { this->fs_particle = (TObject*) fs_particle; };
+
+        /**
+         */
+        void setType(const int type) { this->type = type; }; 
 
         /**
          *
@@ -161,6 +159,11 @@ class SvtTrack : public TObject {
         /**
          *
          */
+        double getIsolation(const int layer) const { return isolation[layer]; }; 
+
+        /**
+         *
+         */
         int getCharge(); 
 
         /**
@@ -168,16 +171,6 @@ class SvtTrack : public TObject {
          */
         std::vector<double> getMomentum(); 
         
-        /**
-         *
-         */
-        double getL1Isolation() const { return l1_isolation; };
-        
-        /**
-         *
-         */
-        double getL2Isolation() const { return l2_isolation; };
-
         /**
          *
          */
@@ -205,11 +198,23 @@ class SvtTrack : public TObject {
 
     private:
 
+        /** Reference to the 3D hits associated with this track */
         TRefArray* svt_hits; 
+
+        /** Reference to the reconstructed particle associated with this track */
         TRef fs_particle;
 
+        /** Array used to store the isolation variables for each of the sensor layers */
+        double isolation[12];
+
+        /** The number of 3D hits associated with this track */
         int n_hits; 
+
+        /** The volume to which this track belongs to */
         int track_volume; 
+
+        /** The track type */
+        int type; 
 
         double d0; 
         double phi0;
@@ -218,8 +223,6 @@ class SvtTrack : public TObject {
         double z0;  
         double chi_squared;
         double track_time;
-        double l1_isolation;
-        double l2_isolation;
 
 }; // SvtTrack
 

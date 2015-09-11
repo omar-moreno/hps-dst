@@ -1,10 +1,12 @@
 /**
- * @file: SvtTrack.cxx
- * @author: Omar Moreno <omoreno1@ucsc.edu>
- * @section Institution \n
- *          Santa Cruz Institute for Particle Physics \n
- *          University of California, Santa Cruz
- * @date: February 19, 2013
+ * 
+ * @file SvtTrack.h
+ * @brief Class used to describe an HPS SVT track.
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *         Santa Cruz Institute for Particle Physics
+ *         University of California, Santa Cruz
+ * @date February 19, 2013
+ * 
  */
 
 #include <SvtTrack.h>
@@ -15,17 +17,17 @@ SvtTrack::SvtTrack()
     : TObject(), 
       svt_hits(new TRefArray()),
       fs_particle(NULL),
+      isolation{}, 
       n_hits(0),
       track_volume(-1),
+      type(0), 
       d0(0),
       phi0(0),
       omega(0),
       tan_lambda(0),
       z0(0),
       chi_squared(0),
-      track_time(0),
-      l1_isolation(0),
-      l2_isolation(0) {
+      track_time(0) {
 }
 
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
@@ -34,18 +36,18 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       fs_particle(NULL),
       n_hits(svtTrackObj.n_hits),
       track_volume(svtTrackObj.track_volume),
+      type(svtTrackObj.type), 
       d0(svtTrackObj.d0),
       phi0(svtTrackObj.phi0),
       omega(svtTrackObj.omega),
       tan_lambda(svtTrackObj.tan_lambda),
       z0(svtTrackObj.z0),
       chi_squared(svtTrackObj.chi_squared),
-      track_time(svtTrackObj.track_time),
-      l1_isolation(svtTrackObj.l1_isolation),
-      l2_isolation(svtTrackObj.l2_isolation) {
-    
+      track_time(svtTrackObj.track_time) {
+
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
+    memcpy(&isolation, svtTrackObj.isolation, 12*sizeof(double));
 }
 
 
@@ -60,17 +62,17 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
 
     this->n_hits = svtTrackObj.n_hits; 
     this->track_volume = svtTrackObj.track_volume;
+    this->type = svtTrackObj.type;
     this->d0 = svtTrackObj.d0;
     this->phi0 = svtTrackObj.phi0;
     this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
     this->chi_squared = svtTrackObj.chi_squared;
     this->track_time = svtTrackObj.track_time;
-    this->l1_isolation = svtTrackObj.l1_isolation;
-    this->l2_isolation = svtTrackObj.l2_isolation;
 
     svt_hits = new TRefArray();
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
+    memcpy(&isolation, svtTrackObj.isolation, 12*sizeof(double));
 
     return *this;
 }
@@ -82,7 +84,8 @@ SvtTrack::~SvtTrack() {
 
 void SvtTrack::Clear(Option_t* /* option */) {
     TObject::Clear(); 
-    svt_hits->Delete(); 
+    svt_hits->Delete();
+    memset(isolation, 0, sizeof(isolation)); 
     n_hits = 0; 
 }
 
