@@ -196,10 +196,10 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
         }
 
         // Loop over all final state particles in the event
-        for(int particle_n = 0; particle_n < hps_event->getNumberOfParticles(HpsEvent::FINAL_STATE_PARTICLES); ++particle_n){
+        for(int particle_n = 0; particle_n < hps_event->getNumberOfParticles(HpsParticle::FINAL_STATE_PARTICLE); ++particle_n){
             
             // Get a final state particle from the event
-            particle = hps_event->getParticle(HpsEvent::FINAL_STATE_PARTICLES, particle_n); 
+            particle = hps_event->getParticle(HpsParticle::FINAL_STATE_PARTICLE, particle_n); 
 
             //
             if(particle->getPDG() == 22) continue; 
@@ -210,10 +210,10 @@ void runAnalysis(std::string root_file_name, std::string pdf_file_name){
         }
 
 		// Loop over all unconstrained vertexed particles in the event
-		for(int particle_n = 0; particle_n < hps_event->getNumberOfParticles(HpsEvent::UC_VTX_PARTICLES); ++particle_n){
+		for(int particle_n = 0; particle_n < hps_event->getNumberOfParticles(HpsParticle::UC_V0_CANDIDATE); ++particle_n){
 			
 			// Get a vertexed particle from the event
-			particle = hps_event->getParticle(HpsEvent::UC_VTX_PARTICLES, particle_n); 
+			particle = hps_event->getParticle(HpsParticle::UC_V0_CANDIDATE, particle_n); 
 			
 			vertex_z = particle->getVertexPosition()[2];
 			h_vertex_z->Fill(vertex_z);

@@ -88,7 +88,7 @@ def main():
 
     # import the modules used by HpsEvent i.e. HpsEvent, 
     # SvtTrack, EcalCluster ...
-    from ROOT import HpsEvent, SvtTrack, EcalCluster, EcalHit
+    from ROOT import HpsEvent, SvtTrack, EcalCluster, EcalHit, HpsParticle
 
     #-----------------------------#
     #--- Setup ROOT histograms ---#
@@ -223,10 +223,10 @@ def main():
             h_p.Fill(math.sqrt(p[0]*p[0] + p[1]*p[1] + p[2]*p[2]))
 
         # Loop over all unconstrained vertexed particles in the event
-        for particle_n in xrange(0, hps_event.getNumberOfParticles(hps_event.UC_VTX_PARTICLES)):
+        for particle_n in xrange(0, hps_event.getNumberOfParticles(HpsParticle.UC_V0_CANDIDATE)):
 
             # Get a vertexed particle from the event
-            particle = hps_event.getParticle(hps_event.UC_VTX_PARTICLES, particle_n)
+            particle = hps_event.getParticle(HpsParticle.UC_V0_CANDIDATE, particle_n)
            
             # Only look at particles that have two daugther particles
             daughter_particles = particle.getParticles()
