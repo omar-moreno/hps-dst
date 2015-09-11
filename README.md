@@ -42,9 +42,9 @@ can be downloaded as a zip file or tag.gz file.
 Alternatively, a release can be downloaded and untarred by issuing the 
 following commands from a terminal
 
-    wget https://github.com/omar-moreno/hps-dst/archive/v0.7.tar.gz
-    tar zxvf v0.7.tar.gz
-    cd hps-dst-0.7
+    wget https://github.com/omar-moreno/hps-dst/archive/v0.8.tar.gz
+    tar zxvf v0.8.tar.gz
+    cd hps-dst-0.8
 
 Once downloaded, the package can be built in the usual way.
 
