@@ -244,11 +244,11 @@ void GblDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             GblTrack* hps_gbl_track = hps_event->addGblTrack(); 
 
             // Set the GBL track properties
-            gbl_fitter->setTrackProperties(hps_gbl_track, hps_gbl_track_data);
-
+            gbl_fitter->setTrackProperties(hps_gbl_track, svt_track, hps_gbl_track_data);
+            
             // Set the seed SvtTrack associated with this GblTrack
             hps_gbl_track->setSeedTrack(svt_track);  
-       
+ 
         } else { 
             
             if (debug) { 
