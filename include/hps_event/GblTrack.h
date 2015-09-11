@@ -57,14 +57,14 @@ class GblTrack : public TObject {
          *
          * @param d0: 
          * @param phi0:
-         * @param kappa:
-         * @param theta:
+         * @param omega:
+         * @param tan_lambda:
          * @param z0:
          */
         void setTrackParameters(const double d0, 
                 const double phi0,
-                const double kappa,
-                const double theta,
+                const double omega,
+                const double tan_lambda,
                 const double z0);
 
         /**
@@ -112,12 +112,12 @@ class GblTrack : public TObject {
         /**
          *
          */
-        double getKappa() const { return kappa; }
+        double getOmega() const { return omega; }
 
         /**
          *
          */
-        double getTheta() const { return theta; }
+        double getTanLambda() const { return tan_lambda; }
 
         /**
          *
@@ -153,8 +153,8 @@ class GblTrack : public TObject {
 
             double d0;
             double phi0;
-            double kappa;
-            double theta;
+            double omega;
+            double tan_lambda;
             double z0;
             double chi_squared;
             double ndof;
