@@ -169,6 +169,11 @@ class SvtTrack : public TObject {
         /**
          *
          */
+        int getType() const { return type; }; 
+
+        /**
+         *
+         */
         std::vector<double> getMomentum(); 
         
         /**
