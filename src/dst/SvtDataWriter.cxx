@@ -3,17 +3,18 @@
  * @file SvtDataWriter.cxx
  * @brief Data writer used to convert LCIO Tracks and TrackerHits
  *        to SvtTracks and SvtHits and add them to the HPS event.
- *	@author Omar Moreno <omoreno1@ucsc.edu>
- *			 Santa Cruz Institute for Particle Physics
- *			 University of California, Santa Cruz
- *	@date January 2, 2013
+ * @author Omar Moreno <omoreno1@ucsc.edu>
+ *          Santa Cruz Institute for Particle Physics
+ *          University of California, Santa Cruz
+ * @date January 2, 2013
  *
  */
 
 #include <SvtDataWriter.h>
 
-SvtDataWriter::SvtDataWriter()	
-	: track_data_collection_name("TrackData"), 
+SvtDataWriter::SvtDataWriter()  
+    : track_collection_name("MatchedTracks"),
+      track_data_collection_name("TrackData"), 
       track_data_rel_collection_name("TrackDataRelations") { 
 }
 
@@ -39,11 +40,11 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         EVENT::TrackerHit* tracker_hit = (EVENT::TrackerHit*) tracker_hits->getElementAt(tracker_hit_n);
 
         // Add an SvtHit object to the HPS event
-		SvtHit* svt_hit = hps_event->addSvtHit();
+        SvtHit* svt_hit = hps_event->addSvtHit();
 
         // Set the SvtHit layer
-		svt_hit->setLayer(TrackUtils::getLayer(tracker_hit));
-			    
+        svt_hit->setLayer(TrackUtils::getLayer(tracker_hit));
+                
         // Rotate the position of the LCIO TrackerHit and Set the position
         // of the SvtHit
         double hit_position_lcsim[3];
@@ -55,8 +56,8 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         svt_hit->setPosition(hit_position_jlab);
 
         // Set the covariance matrix of the SvtHit
-		svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
-			    
+        svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
+                
         // Set the time of the SvtHit
         svt_hit->setTime(tracker_hit->getTime());
 
@@ -65,11 +66,17 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         svt_hit_map[tracker_hit] = svt_hit; 
     }
 
-    // Get all track collections from the event
-    std::vector<EVENT::LCCollection*> track_collections = DstUtils::getCollections(event, EVENT::LCIO::TRACK);
+    // NOTE: When it was decided that the LCIO recon output would contain 
+    //       multiple track collections, the SVT data writer was changed such
+    //       that it could handle multiple track collections.  These track 
+    //       collections were later merged so this functionality is no 
+    //       longer needed but will be left in case multiple track 
+    //       collections are needed in the future. 
+    std::vector<EVENT::LCCollection*> track_collections;
+    track_collections.push_back(event->getCollection(track_collection_name));  
 
-	// Get the collection of LCRelations between track data variables 
-	// (TrackData) and the corresponding track.
+    // Get the collection of LCRelations between track data variables 
+    // (TrackData) and the corresponding track.
     EVENT::LCCollection* track_data 
         = (EVENT::LCCollection*) event->getCollection(track_data_rel_collection_name);
 
@@ -83,7 +90,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         // Loop over all the LCIO Tracks and add them to the HPS event.
         for (int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n) {
         
-		    // Get a LCIO Track from the LCIO event
+            // Get a LCIO Track from the LCIO event
             EVENT::Track* track = (EVENT::Track*) tracks->getElementAt(track_n);
     
             /*std::cout << "Position at Ecal: x: " 
@@ -92,21 +99,21 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
                 << track->getTrackStates()[1]->getReferencePoint()[2] 
                 << std::endl;*/
 
-		    // Add an SvtTrack object to the HPS event
-		    SvtTrack* svt_track = hps_event->addTrack(); 
-		    
+            // Add an SvtTrack object to the HPS event
+            SvtTrack* svt_track = hps_event->addTrack(); 
+            
             // Set the SvtTrack track parameters
-		    svt_track->setTrackParameters(track->getD0(), 
-			    						  track->getPhi(), 
-				    					  track->getOmega(), 
-					    				  track->getTanLambda(), 
-						    			  track->getZ0());
+            svt_track->setTrackParameters(track->getD0(), 
+                                          track->getPhi(), 
+                                          track->getOmega(), 
+                                          track->getTanLambda(), 
+                                          track->getZ0());
            
             // Set the SvtTrack type
             svt_track->setType(track->getType()); 
 
-		    // Set the SvtTrack fit chi^2
-		    svt_track->setChi2(track->getChi2());
+            // Set the SvtTrack fit chi^2
+            svt_track->setChi2(track->getChi2());
         
             // Get the list of TrackData associated with the LCIO Track
             EVENT::LCObjectVec track_data_list = track_data_nav->getRelatedFromObjects(track);
@@ -139,10 +146,10 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             // Set the volume (top/bottom) in which the SvtTrack resides
             svt_track->setTrackVolume(track_datum->getIntVal(0));
         
-		    // Get the collection of 3D hits associated with a LCIO Track
-		    EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
+            // Get the collection of 3D hits associated with a LCIO Track
+            EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
 
-		    //  Iterate through the collection of 3D hits (TrackerHit objects)
+            //  Iterate through the collection of 3D hits (TrackerHit objects)
             //  associated with a track, find the corresponding hits in the HPS
             //  event and add references to the track
             for (auto tracker_hit : tracker_hits) { 
