@@ -27,7 +27,10 @@ SvtTrack::SvtTrack()
       tan_lambda(0),
       z0(0),
       chi_squared(0),
-      track_time(0) {
+      track_time(0), 
+      x_at_ecal(0), 
+      y_at_ecal(0), 
+      z_at_ecal(0) {
 }
 
 SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
@@ -43,7 +46,10 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
       tan_lambda(svtTrackObj.tan_lambda),
       z0(svtTrackObj.z0),
       chi_squared(svtTrackObj.chi_squared),
-      track_time(svtTrackObj.track_time) {
+      track_time(svtTrackObj.track_time),
+      x_at_ecal(svtTrackObj.x_at_ecal), 
+      y_at_ecal(svtTrackObj.x_at_ecal), 
+      z_at_ecal(svtTrackObj.x_at_ecal) {
 
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
@@ -68,6 +74,9 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
     this->omega = svtTrackObj.omega;this->tan_lambda = svtTrackObj.tan_lambda;this->z0 = svtTrackObj.z0;
     this->chi_squared = svtTrackObj.chi_squared;
     this->track_time = svtTrackObj.track_time;
+    this->x_at_ecal = svtTrackObj.x_at_ecal;
+    this->y_at_ecal = svtTrackObj.y_at_ecal;
+    this->z_at_ecal = svtTrackObj.z_at_ecal;
 
     svt_hits = new TRefArray();
     *svt_hits = *svtTrackObj.svt_hits;
@@ -92,10 +101,16 @@ void SvtTrack::Clear(Option_t* /* option */) {
 void SvtTrack::setTrackParameters(double d0, double phi0, double omega,
                                   double tan_lambda, double z0) {
     this->d0         = d0;
-    this->phi0        = phi0;
+    this->phi0       = phi0;
     this->omega      = omega;
     this->tan_lambda = tan_lambda;
     this->z0         = z0;
+}
+
+void SvtTrack::setPositionAtEcal(const float* position) { 
+    x_at_ecal = position[0]; 
+    y_at_ecal = position[1];
+    z_at_ecal = position[2];
 }
 
 int SvtTrack::getCharge() { 
