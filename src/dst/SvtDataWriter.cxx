@@ -104,7 +104,12 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
             // Set the position of the extrapolated track at the Ecal face. The
             // extrapolation uses the full 3D field map.
-            svt_track->setPositionAtEcal(track->getTrackStates()[1]->getReferencePoint()); 
+            double position_at_ecal[3] = { 
+               track->getTrackStates()[1]->getReferencePoint()[1],  
+               track->getTrackStates()[1]->getReferencePoint()[2],  
+               track->getTrackStates()[1]->getReferencePoint()[0]
+            };  
+            svt_track->setPositionAtEcal(position_at_ecal); 
         
             // Get the list of TrackData associated with the LCIO Track
             EVENT::LCObjectVec track_data_list = track_data_nav->getRelatedFromObjects(track);
