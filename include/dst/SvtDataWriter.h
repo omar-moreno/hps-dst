@@ -3,10 +3,10 @@
  * @file SvtDataWriter.h
  * @brief Data writer used to convert LCIO Tracks and TrackerHits
  *        to SvtTracks and SvtHits and add them to the HPS event.
- *	@author Omar Moreno <omoreno1@ucsc.edu>
- *			 Santa Cruz Institute for Particle Physics
- *			 University of California, Santa Cruz
- *	@date January 2, 2013
+ *  @author Omar Moreno <omoreno1@ucsc.edu>
+ *           Santa Cruz Institute for Particle Physics
+ *           University of California, Santa Cruz
+ *  @date January 2, 2013
  *
  */
 
@@ -48,17 +48,17 @@
 
 class SvtDataWriter : public DataWriter { 
 
-	public:
+    public:
 
         /**
          * Constructor
          */        
-		SvtDataWriter();
+        SvtDataWriter();
 
         /**
          * Default constructor
          */ 
-		~SvtDataWriter(); 
+        ~SvtDataWriter(); 
 
         /**
          * Make SvtTracks and SvtHits out of LCIO Tracks and TrackerHits
@@ -69,18 +69,24 @@ class SvtDataWriter : public DataWriter {
          * @param hps_event  HpsEvent to which the SvtTracks and SvtHits 
          *                   will be written to 
          */        
-		void writeData(EVENT::LCEvent*, HpsEvent*);
+        void writeData(EVENT::LCEvent*, HpsEvent*);
 
-	private:
+    private:
+
+        /** 
+         * The name of the collection of 'partial tracks' i.e. tracks which are
+         * a subset of other tracks in the event.
+         */
+        static const std::string PARTIAL_TRACKS_COL_NAME;  
 
         /** The name of the collection of TrackData GenericObjects */ 
-        std::string track_data_collection_name;
+        static const std::string TRACK_DATA_COL_NAME;
 
         /** 
          * The name of the collection containing Track to TrackData 
          * LCRelations
          */
-        std::string track_data_rel_collection_name;
+        static const std::string TRACK_DATA_REL_COL_NAME;
 
 }; // SvtDataWriter
 
