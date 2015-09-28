@@ -46,13 +46,12 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
                 
         // Rotate the position of the LCIO TrackerHit and Set the position
         // of the SvtHit
-        double hit_position_lcsim[3];
-        memcpy(&hit_position_lcsim, tracker_hit->getPosition(), 3*sizeof(double));   
-        double hit_position_jlab[3] = {0}; 
-        hit_position_jlab[0] = hit_position_lcsim[1]; 
-        hit_position_jlab[1] = hit_position_lcsim[2]; 
-        hit_position_jlab[2] = hit_position_lcsim[0]; 
-        svt_hit->setPosition(hit_position_jlab);
+        double hit_position[3] = { 
+            tracker_hit->getPosition()[1], 
+            tracker_hit->getPosition()[2], 
+            tracker_hit->getPosition()[0]
+        };
+        svt_hit->setPosition(hit_position);
 
         // Set the covariance matrix of the SvtHit
         svt_hit->setCovarianceMatrix(tracker_hit->getCovMatrix());
