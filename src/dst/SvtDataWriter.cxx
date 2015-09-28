@@ -12,9 +12,13 @@
 
 #include <SvtDataWriter.h>
 
-SvtDataWriter::SvtDataWriter()  
-    : track_data_collection_name("TrackData"), 
-      track_data_rel_collection_name("TrackDataRelations") { 
+const std::string SvtDataWriter::PARTIAL_TRACKS_COL_NAME = "PartialTracks"; 
+
+const std::string SvtDataWriter::TRACK_DATA_COL_NAME = "TrackData"; 
+
+const std::string SvtDataWriter::TRACK_DATA_REL_COL_NAME = "TrackDataRelations";
+
+SvtDataWriter::SvtDataWriter() { 
 }
 
 SvtDataWriter::~SvtDataWriter() {
@@ -70,15 +74,19 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
     // Get the collection of LCRelations between track data variables 
     // (TrackData) and the corresponding track.
     EVENT::LCCollection* track_data 
-        = (EVENT::LCCollection*) event->getCollection(track_data_rel_collection_name);
+        = (EVENT::LCCollection*) event->getCollection(TRACK_DATA_REL_COL_NAME);
 
     // Instantiate a LCRelation navigator which will allow faster access
     // to TrackData objects  
     UTIL::LCRelationNavigator* track_data_nav = new UTIL::LCRelationNavigator(track_data);
-
+    
     // Loop over all the track collections and process them
     for (auto tracks : track_collections) { 
-        
+       
+        // Don't write partial tracks to the DST.  Partial tracks are tracks
+        // whose hits are a subset of another track in the event.
+        if (tracks == (EVENT::LCCollection*) event->getCollection(PARTIAL_TRACKS_COL_NAME)) continue;
+
         // Loop over all the LCIO Tracks and add them to the HPS event.
         for (int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n) {
         
@@ -126,7 +134,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             // not, throw a runtime exception.   
             if (track_datum->getNDouble() != 12 || track_datum->getNFloat() != 1 
                     || track_datum->getNInt() != 1) {
-                throw std::runtime_error("[ SvtDataWriter ]: The collection " + track_data_collection_name 
+                throw std::runtime_error("[ SvtDataWriter ]: The collection " + TRACK_DATA_COL_NAME 
                         + " has the wrong structure.");
             }
 
