@@ -107,7 +107,7 @@ void SvtTrack::setTrackParameters(double d0, double phi0, double omega,
     this->z0         = z0;
 }
 
-void SvtTrack::setPositionAtEcal(const float* position) { 
+void SvtTrack::setPositionAtEcal(const double* position) { 
     x_at_ecal = position[0]; 
     y_at_ecal = position[1];
     z_at_ecal = position[2];

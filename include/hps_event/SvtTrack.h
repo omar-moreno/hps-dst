@@ -130,7 +130,7 @@ class SvtTrack : public TObject {
          *
          * @parm position The extrapolated track position at the Ecal
          */
-        void setPositionAtEcal(const float* position);
+        void setPositionAtEcal(const double* position);
 
         /**
          * Set the track type.  For more details, see {@link StrategyType} and
