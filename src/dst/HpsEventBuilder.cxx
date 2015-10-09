@@ -79,7 +79,7 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
     hps_event->setRunNumber(lc_event->getRunNumber());
 
     // Set the trigger timestamp 
-    hps_event->setTriggerTimeStamp(lc_event->getTimeStamp()); 
+    hps_event->setEventTime(lc_event->getTimeStamp()); 
 
     // Set the SVT bias state
     hps_event->setSvtBiasState(lc_event->getParameters().getIntVal("svt_bias_good")); 

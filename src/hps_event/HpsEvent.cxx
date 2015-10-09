@@ -34,6 +34,7 @@ HpsEvent::HpsEvent()
       uc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
       uc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
       event_number(0),
+      event_time(0), 
       pair0_trigger(0), 
       pair1_trigger(0), 
       pulser_trigger(0),
@@ -41,7 +42,8 @@ HpsEvent::HpsEvent()
       single0_trigger(0), 
       single1_trigger(0), 
       svt_bias_state(0), 
-      svt_burstmode_noise(0), 
+      svt_burstmode_noise(0),
+      svt_event_header_state(0),  
       svt_position_state(0),
       n_tracks(0),
       n_svt_hits(0),
@@ -78,6 +80,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
       uc_v0_candidates(new TClonesArray("HpsParticle", 1000)) {
 
     this->event_number = hpsEventObj.event_number;
+    this->event_time = hpsEventObj.event_time; 
     this->pair0_trigger = hpsEventObj.pair0_trigger;  
     this->pair1_trigger = hpsEventObj.pair1_trigger;  
     this->pulser_trigger = hpsEventObj.pulser_trigger;  
@@ -86,6 +89,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->single1_trigger = hpsEventObj.single1_trigger;
     this->svt_bias_state = hpsEventObj.svt_bias_state; 
     this->svt_burstmode_noise = hpsEventObj.svt_burstmode_noise;
+    this->svt_event_header_state = hpsEventObj.svt_event_header_state;  
     this->svt_position_state = hpsEventObj.svt_position_state;   
     this->n_tracks = hpsEventObj.n_tracks; 
     this->n_svt_hits = hpsEventObj.n_svt_hits;
@@ -151,7 +155,8 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
 
     TObject::operator=(hpsEventObj);
     this->~HpsEvent();
-    this->event_number = hpsEventObj.event_number; 
+    this->event_number = hpsEventObj.event_number;
+    this->event_time = hpsEventObj.event_time;  
     this->pair0_trigger = hpsEventObj.pair0_trigger;  
     this->pair1_trigger = hpsEventObj.pair1_trigger;  
     this->pulser_trigger = hpsEventObj.pulser_trigger;  
