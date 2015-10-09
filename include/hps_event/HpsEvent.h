@@ -13,21 +13,21 @@
 #ifndef __HPS_EVENT_H__
 #define __HPS_EVENT_H__
 
-//------------------//
-//--- C++ StdLib ---//
-//------------------//
+//----------------//
+//   C++ StdLib   //
+//----------------//
 #include <iostream>
 #include <assert.h>
 
-//-----------//
-//-- ROOT ---//
-//-----------//
+//----------//
+//   ROOT   //
+//----------//
 #include <TObject.h>
 #include <TClonesArray.h>
 
-//-----------------//
-//--- HPS Event ---//
-//-----------------//
+//---------------//
+//   HPS Event   //
+//---------------//
 #include <SvtTrack.h>
 #include <SvtHit.h>
 #include <EcalCluster.h> 
@@ -64,19 +64,36 @@ class HpsEvent : public TObject {
          */ 
         HpsEvent &operator=(const HpsEvent &hpsEventObj);
 
-        /** */
+        /** 
+         */
         void Clear(Option_t *option="");
         
-        /** */
+        /** 
+         * Add a track, {@link SvtTrack} object, to the event.
+         *
+         * @return A pointer to the {@link SvtTrack} object that was added.
+         */
         SvtTrack*       addTrack();
         
-        /** */
+        /** 
+         * Add an SVT hit, {@link SvtHit} object, to the event.
+         *
+         * @return A pointer to the {@link SvtHit} object that was added.
+         */
         SvtHit*         addSvtHit();
         
-        /** */
+        /** 
+         * Add an Ecal cluster, {@link EcalCluster} object, to the event.
+         *
+         * @return A pointer to the {@link EcalCluster} object that was added.
+         */
         EcalCluster*    addEcalCluster();
         
-        /** */
+        /** 
+         * Add a Ecal hit, {@link EcalHit} object, to the event.
+         *
+         * @return A pointer to the {@link EcalHit} object that was added.
+         */
         EcalHit*        addEcalHit();
         
         /**
@@ -105,10 +122,16 @@ class HpsEvent : public TObject {
         //--- Setters ---//
         //---------------//
 
-        /**
-         *
-         */
+        /** Set the event number. */
         void setEventNumber(int event_number){ this->event_number = event_number; };
+
+        /**
+         * Set the event time stamp. The event time is currently the Unix time 
+         * stamp associated with the event.
+         *
+         * @param event_time The Unix time stamp of the event.
+         */
+        void setEventTime(const long event_time) { this->event_time = event_time; }; 
 
         /**
          *
@@ -168,12 +191,7 @@ class HpsEvent : public TObject {
          *                           was open or 1 if it was closed. 
          */ 
         void setSvtPositionState(const int svt_position_state) { this->svt_position_state = svt_position_state; }; 
-
-        /**
-         *
-         */
-        void setTriggerTimeStamp(const long trigger_time_stamp) { this->trigger_time_stamp = trigger_time_stamp; }; 
-      
+  
         //--- Getters ---//
         //---------------//
 
@@ -199,6 +217,14 @@ class HpsEvent : public TObject {
          *
          */ 
         int getEventNumber() const  { return event_number; };
+
+        /**
+         * Get the event time stamp i.e. the Unix time stamp associated
+         * with the event.
+         *
+         * @return The event time stamp.  
+         */
+        int getEventTime() const { return event_time; };
 
         /** */
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
@@ -357,9 +383,12 @@ class HpsEvent : public TObject {
         //-- Event information --//
         //-----------------------//
 
-        /** Event number */
+        /** Event number. */
         int event_number;
         
+        /** The event time. */
+        long event_time;
+
         /** 
          * Flag indicating that a pair0 trigger was registered. It's 
          * set to 1 if it was registered or 0 if it wasn't.
@@ -404,16 +433,18 @@ class HpsEvent : public TObject {
          * It's set to 0 if the event saw burst noise or 1 if it was fine.
          */ 
         int svt_burstmode_noise; 
-        
+
+        /**
+         * 
+         */
+        int svt_event_header_state; 
+
         /** 
          * Flag indicating whether the SVT was open or closed.  It's set to 0 if 
          * the SVT was open or 1 if it was closed.
          */ 
         int svt_position_state;
-        
-        /** Trigger time stamp */
-        long trigger_time_stamp;
-
+ 
         int n_tracks;
         int n_svt_hits;
         int n_ecal_clusters;
