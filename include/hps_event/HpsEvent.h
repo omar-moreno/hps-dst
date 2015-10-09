@@ -183,6 +183,16 @@ class HpsEvent : public TObject {
         void setSvtBurstModeNoise(const int svt_burstmode_noise) { this->svt_burstmode_noise = svt_burstmode_noise; };
 
         /**
+         * Set the flag indicating whether the SVT headers had errors.
+         *
+         * @param svt_event_header_state Flag indicating whether the SVT event
+         *                               headers had errors.
+         *
+         */
+        void setSvtEventHeaderState(const int svt_event_header_state) { this->svt_event_header_state 
+                                                                            = svt_event_header_state; };
+        
+        /**
          * Set the state of indicating whether the SVT was open or closed 
          * during an event. 
          *
@@ -343,7 +353,15 @@ class HpsEvent : public TObject {
          * @return Returns true if the event has SVT burst noise, false 
          *         otherwise. 
          */
-        bool hasSvtBurstModeNoise() const { return svt_burstmode_noise == 0; }; 
+        bool hasSvtBurstModeNoise() const { return svt_burstmode_noise == 0; };
+
+        /**
+         * Indicates whether the SVT event headers had errors.
+         *
+         * @return Returns true if the SVT event headers had an error, 
+         *         false otherwise.
+         */
+        bool hasSvtEventHeaderErrors() const { return svt_event_header_state == 0; }; 
 
         ClassDef(HpsEvent, 1);  
 
@@ -435,7 +453,8 @@ class HpsEvent : public TObject {
         int svt_burstmode_noise; 
 
         /**
-         * 
+         * Flag indicating whether the SVT event headers had an error. It's 
+         * set to 0 if the event headers had and error, of 1 if it was errorless. 
          */
         int svt_event_header_state; 
 
