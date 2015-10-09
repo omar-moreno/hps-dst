@@ -91,6 +91,9 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
     // Set the SVT position state
     hps_event->setSvtPositionState(lc_event->getParameters().getIntVal("svt_position_good"));
 
+    // Set the SVT event header state
+    hps_event->setSvtEventHeaderState(lc_event->getParameters().getIntVal("svt_event_header_good"));
+
     // Set the trigger data
     try { 
         trigger_data = (IMPL::LCCollectionVec*) lc_event->getCollection("TriggerBank"); 

@@ -165,6 +165,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     this->single1_trigger = hpsEventObj.single1_trigger;
     this->svt_bias_state = hpsEventObj.svt_bias_state; 
     this->svt_burstmode_noise = hpsEventObj.svt_burstmode_noise;
+    this->svt_event_header_state = hpsEventObj.svt_event_header_state; 
     this->svt_position_state = hpsEventObj.svt_position_state;   
     this->n_tracks = hpsEventObj.n_tracks; 
     this->n_svt_hits = hpsEventObj.n_svt_hits;
