@@ -19,6 +19,11 @@ target_link_libraries(dump_hps_event
     ${LCIO_LIB}
 )
 
+add_library(TrackType TrackType.cxx)
+target_link_libraries(TrackType
+    SvtTrack
+)
+
 # Build the TrackUtils library
 add_library(TrackUtils TrackUtils.cxx)
 target_link_libraries(TrackUtils 
