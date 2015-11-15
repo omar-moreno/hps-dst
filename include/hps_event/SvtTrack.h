@@ -220,7 +220,14 @@ class SvtTrack : public TObject {
          * @return The track momentum.
          */
         std::vector<double> getMomentum(); 
-        
+       
+        /**
+         * Get the extrapolated track position at the Ecal face.
+         *
+         * @return Extrapolated track position at Ecal face.
+         */
+        std::vector<double> getPositionAtEcal(); 
+
         /**
          * Get an array of references to the hits associated with this track.
          *

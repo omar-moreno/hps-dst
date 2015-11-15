@@ -123,6 +123,15 @@ std::vector<double> SvtTrack::getMomentum() {
     return ((HpsParticle*) this->fs_particle.GetObject())->getMomentum();
 }
 
+std::vector<double> SvtTrack::getPositionAtEcal() { 
+    std::vector<double> position = { 
+        x_at_ecal, 
+        y_at_ecal, 
+        z_at_ecal
+    };
+    return position; 
+}
+
 void SvtTrack::addHit(SvtHit* hit) {
     ++n_hits; 
     svt_hits->Add((TObject*) hit); 
