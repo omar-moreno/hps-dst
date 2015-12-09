@@ -20,7 +20,9 @@ HpsParticle::HpsParticle()
       particles(new TRefArray()),
       n_daughters(0),
       charge(0), 
-      type(0), 
+      type(0),
+      pdg(0), 
+      goodness_pid(-9999),   
       px(0),
       py(0),
       pz(0),
@@ -40,6 +42,8 @@ HpsParticle::HpsParticle(const HpsParticle &particle_obj)
       n_daughters(particle_obj.n_daughters),
       charge(particle_obj.charge),
       type(particle_obj.type),
+      pdg(particle_obj.pdg), 
+      goodness_pid(particle_obj.goodness_pid), 
       px(particle_obj.px),
       py(particle_obj.py),
       pz(particle_obj.pz), 
@@ -70,8 +74,10 @@ HpsParticle &HpsParticle::operator=(const HpsParticle &particle_obj) {
     Clear(); 
 
     this->n_daughters = particle_obj.n_daughters;
-    this->type = particle_obj.type;
     this->charge = particle_obj.charge;
+    this->type = particle_obj.type;
+    this->pdg = particle_obj.pdg;
+    this->goodness_pid = particle_obj.goodness_pid; 
 
     this->px = particle_obj.px; 
     this->py = particle_obj.py; 

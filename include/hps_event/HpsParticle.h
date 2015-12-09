@@ -95,6 +95,13 @@ class HpsParticle : public TObject {
         void setCharge(const int charge) { this->charge = charge; };
        
         /**
+         * Set the overall goodness of the PID for this particle. 
+         *
+         * @param goodness_pid The goodness of the PID. 
+         */
+        void setGoodnessOfPID(const double goodness_pid) { this->goodness_pid = goodness_pid; }; 
+
+        /**
          * Set the type of this particle.
          *
          * @param type The type of this particle
@@ -107,7 +114,7 @@ class HpsParticle : public TObject {
          * @param pdg The PDG ID of this particle
          */
         void setPDG(const int pdg) { this->pdg = pdg; }; 
-        
+       
         /**
          * Set the energy of the particle in GeV.
          *
@@ -175,7 +182,14 @@ class HpsParticle : public TObject {
          * @return The particle charge
          */
         int getCharge() const { return charge; };
-        
+       
+        /**
+         * Get the overall goodness of the PID for this particle.
+         *
+         * @return The goodness of the PID. 
+         */
+        double getGoodnessOfPID() const { return goodness_pid; }; 
+            
         /**
          * Get the type of this particle.
          *
@@ -255,6 +269,9 @@ class HpsParticle : public TObject {
 
         /** The PDG ID of this particle */
         int pdg; 
+
+        /** The goodness of PID of this particle. */
+        double goodness_pid; 
 
         /** The x component of the momentum of this particle in GeV */
         double px; 
