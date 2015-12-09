@@ -111,10 +111,14 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
             // Set the position of the extrapolated track at the Ecal face. The
             // extrapolation uses the full 3D field map.
+            const EVENT::TrackState* track_state = track->getTrackState(EVENT::TrackState::AtCalorimeter);
+            if (track_state == NULL) {
+               throw std::runtime_error("[ SvtDataWriter ]: Track does not have a track state at the Ecal."); 
+            } 
             double position_at_ecal[3] = { 
-               track->getTrackStates()[1]->getReferencePoint()[1],  
-               track->getTrackStates()[1]->getReferencePoint()[2],  
-               track->getTrackStates()[1]->getReferencePoint()[0]
+               track_state->getReferencePoint()[1],  
+               track_state->getReferencePoint()[2],  
+               track_state->getReferencePoint()[0]
             };  
             svt_track->setPositionAtEcal(position_at_ecal); 
         
