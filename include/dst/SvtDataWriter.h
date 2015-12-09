@@ -36,6 +36,7 @@
 //------------//
 #include <EVENT/LCIO.h>
 #include <EVENT/Track.h>
+#include <EVENT/TrackState.h>
 #include <EVENT/LCCollection.h>
 #include <IMPL/LCGenericObjectImpl.h>
 #include <UTIL/LCRelationNavigator.h>
