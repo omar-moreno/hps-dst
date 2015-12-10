@@ -49,17 +49,13 @@ int main(int argc, char **argv) {
     clock_t initial_time = clock();
 
     string dst_file_name = "";  
-    double b_field = numeric_limits<double>::quiet_NaN();  
     int total_events = -1;  
-    bool run_gbl = false;
     bool ecal_only = false;
     // Parse any command line arguments.  If there are no valid command line 
     // arguments passed, print the usage and exit.  
     static struct option long_options[] = { 
         {"output",        required_argument, 0, 'o' },
         {"total_events",  required_argument, 0, 'n' },
-        {"b_field",       required_argument, 0, 'b' }, 
-        {"gbl",           no_argument,       0, 'g' },
         {"ecal_only",     no_argument,       0, 'e' },
         {"help",          no_argument,       0, 'h' },
         {0, 0, 0, 0}
@@ -74,12 +70,6 @@ int main(int argc, char **argv) {
             case 'n': 
                 total_events = atoi(optarg); 
                 break; 
-            case 'b':
-                b_field = atof(optarg);
-                break;  
-            case 'g':
-                run_gbl = true;
-                break;
             case 'e':
                 ecal_only = true;
                 break;    
@@ -108,21 +98,6 @@ int main(int argc, char **argv) {
     }
     cout << "[ DST MAKER ]: Setting DST file name to " << dst_file_name << endl;
 
-    // If GBL is enabled, check if the B-field has been set.  
-    // TODO: The B-field should be aquired from the event instead of it being
-    //       specified by the user.
-    if (run_gbl) {
-        cout << "[ DST MAKER ]: GBL has been enabled. "
-             << "Checking if B-field has been set ..."  << endl;
-        // Only require a b-field if the GBL output is enabled
-        if(std::isnan(b_field)){ 
-            cerr << "[ DST MAKER ]: Please specify the B field strength in Tesla." << endl;
-            cerr << "[ DST MAKER ]: Use the --help flag for usage" << endl;
-            return EXIT_FAILURE;
-        }
-        cout << "[ DST MAKER ]: B-field has been set to " << b_field << " Tesla" << endl;
-    }
-
     // Open a ROOT file
     TFile* root_file = new TFile(dst_file_name.c_str(), "RECREATE");
 
@@ -140,14 +115,6 @@ int main(int argc, char **argv) {
     HpsEventBuilder* event_builder = new HpsEventBuilder(); 
     // Set whether the event builder should only write Ecal data
     event_builder->writeEcalOnly(ecal_only);    
-    
-    if (run_gbl) {
-        // Set the B field
-        event_builder->setBField(b_field); 
-        
-        // Set the GBL flag to true
-        event_builder->runGbl(run_gbl);
-    }
     
     EVENT::LCEvent* event = NULL;
     int event_number = 0;
