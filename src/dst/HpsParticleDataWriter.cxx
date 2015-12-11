@@ -88,6 +88,9 @@ void HpsParticleDataWriter::writeParticleData(HpsParticle::ParticleType collecti
         // Set the mass of the HpsParticle
         hps_particle->setMass(particle->getMass());
 
+        // Set the goodness of PID for the HpsParticle
+        hps_particle->setGoodnessOfPID(particle->getGoodnessOfPID()); 
+
         // Loop through all of the tracks associated with the particle
         // and add references to the HpsParticle object.
         for (auto const &track : particle->getTracks()) { 
