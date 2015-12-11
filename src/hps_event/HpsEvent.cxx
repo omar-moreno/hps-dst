@@ -40,7 +40,8 @@ HpsEvent::HpsEvent()
       single1_trigger(0), 
       svt_bias_state(0), 
       svt_burstmode_noise(0),
-      svt_event_header_state(0),  
+      svt_event_header_state(0), 
+      svt_latency_state(0),  
       svt_position_state(0),
       n_tracks(0),
       n_svt_hits(0),
@@ -82,6 +83,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->svt_bias_state = hpsEventObj.svt_bias_state; 
     this->svt_burstmode_noise = hpsEventObj.svt_burstmode_noise;
     this->svt_event_header_state = hpsEventObj.svt_event_header_state;  
+    this->svt_latency_state = hpsEventObj.svt_latency_state;   
     this->svt_position_state = hpsEventObj.svt_position_state;   
     this->n_tracks = hpsEventObj.n_tracks; 
     this->n_svt_hits = hpsEventObj.n_svt_hits;
@@ -148,6 +150,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     this->svt_bias_state = hpsEventObj.svt_bias_state; 
     this->svt_burstmode_noise = hpsEventObj.svt_burstmode_noise;
     this->svt_event_header_state = hpsEventObj.svt_event_header_state; 
+    this->svt_latency_state = hpsEventObj.svt_latency_state;   
     this->svt_position_state = hpsEventObj.svt_position_state;   
     this->n_tracks = hpsEventObj.n_tracks; 
     this->n_svt_hits = hpsEventObj.n_svt_hits;

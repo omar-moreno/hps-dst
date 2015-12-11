@@ -181,6 +181,16 @@ class HpsEvent : public TObject {
                                                                             = svt_event_header_state; };
         
         /**
+         * Set the flag indicating whether the SVT latency was correct
+         * during an event.
+         *
+         * @param svt_latency_state Flag indicating whether the SVT latency
+         *                          was correct during an event.
+         */
+        void setSvtLatencyState(const int svt_latency_state) { this->svt_latency_state = svt_latency_state; }; 
+
+
+        /**
          * Set the state of indicating whether the SVT was open or closed 
          * during an event. 
          *
@@ -318,6 +328,14 @@ class HpsEvent : public TObject {
         bool isSvtClosed() const { return svt_position_state == 1; }; 
 
         /**
+         * Indicate whether the SVT latency was correct during an event.
+         *
+         * @return Returns true if the SVT latency was correct, false 
+         *         otherwise.
+         */
+        bool isSvtLatencyGood() const { return svt_latency_state == 1; };
+
+        /**
          * Indicates whether the event was affected by SVT burst noise.
          *
          * @return Returns true if the event has SVT burst noise, false 
@@ -421,6 +439,12 @@ class HpsEvent : public TObject {
          * set to 0 if the event headers had and error, of 1 if it was errorless. 
          */
         int svt_event_header_state; 
+
+        /**
+         * Flag indicating whether the SVT latency was correct during an event. 
+         * It's set to 0 if the latency was incorrect, 1 if it was fine.
+         */
+        int svt_latency_state; 
 
         /** 
          * Flag indicating whether the SVT was open or closed.  It's set to 0 if 

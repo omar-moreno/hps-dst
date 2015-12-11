@@ -78,6 +78,10 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
     // mode noise 
     hps_event->setSvtBurstModeNoise(lc_event->getParameters().getIntVal("svt_burstmode_noise_good"));
 
+    // Set the flag indicating whether the SVT latency was correct during an
+    // event.
+    hps_event->setSvtLatencyState(lc_event->getParameters().getIntVal("svt_latency_good")); 
+
     // Set the SVT position state
     hps_event->setSvtPositionState(lc_event->getParameters().getIntVal("svt_position_good"));
 
