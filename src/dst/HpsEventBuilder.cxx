@@ -16,11 +16,9 @@ HpsEventBuilder::HpsEventBuilder()
       ecal_writer(new EcalDataWriter()),
       mc_particle_writer(new MCParticleDataWriter()),
       particle_writer(new HpsParticleDataWriter()),
-      gbl_data_writer(new GblDataWriter()),
       hps_trigger_data(NULL),
       trigger_data(NULL),
       trigger_datum(NULL),
-      run_gbl(false),
       ecal_only(false) {
 }
 
@@ -29,7 +27,6 @@ HpsEventBuilder::~HpsEventBuilder() {
     delete ecal_writer;     
     delete mc_particle_writer;
     delete particle_writer; 
-    delete gbl_data_writer;
 }
 
 void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
@@ -60,13 +57,6 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
     // Write the HpsParticle data to the HpsEvent
     particle_writer->writeData(event, hps_event); 
-
-    // If GBL has been enabled, process the SVT tracks using GBL and write the
-    // data to the HpsEvent
-    if (!run_gbl) return;
-
-    // Write info used for GBL to the HpsEvent
-    gbl_data_writer->writeData(event, hps_event);
 
 }
 
@@ -119,8 +109,4 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
             break;
         }
     }
-}
-
-void HpsEventBuilder::setBField(const double b_field) {
-    gbl_data_writer->setBField(b_field);
 }

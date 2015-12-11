@@ -6,8 +6,6 @@
 # Find the necessary LCIO libraries
 find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
 
-find_library(GBL_LIB GBL ${GBL_DIR}/lib)
-
 add_library(DstUtils DstUtils.cxx)
 target_link_libraries(DstUtils 
     ${LCIO_LIB}
@@ -19,7 +17,8 @@ target_link_libraries(SvtDataWriter
     ${LCIO_LIB} 
     DstUtils
     TrackUtils 
-    HpsEvent)
+    HpsEvent
+)
 
 # Create the EcalDataWriter library
 add_library(EcalDataWriter EcalDataWriter.cxx)
@@ -33,14 +32,6 @@ target_link_libraries(MCParticleDataWriter ${LCIO_LIB} HpsEvent)
 add_library(HpsParticleDataWriter HpsParticleDataWriter.cxx)
 target_link_libraries(HpsParticleDataWriter ${LCIO_LIB} HpsEvent)
 
-# Create the GblDataWriter library
-add_library(GblDataWriter GblDataWriter.cxx)
-target_link_libraries(GblDataWriter 
-    ${LCIO_LIB} 
-    HpsEvent
-    HpsGblFitter
-)
-
 # Create the HpsEventBuilder library
 add_library(HpsEventBuilder HpsEventBuilder.cxx)
 target_link_libraries(HpsEventBuilder 
@@ -49,7 +40,6 @@ target_link_libraries(HpsEventBuilder
     EcalDataWriter 
     MCParticleDataWriter
     HpsParticleDataWriter
-    GblDataWriter
     TriggerData
 )
 

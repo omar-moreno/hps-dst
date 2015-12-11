@@ -17,7 +17,6 @@
 #include <SvtDataWriter.h>
 #include <EcalDataWriter.h>
 #include <MCParticleDataWriter.h>
-#include <GblDataWriter.h>
 #include <HpsParticleDataWriter.h>
 #include <TriggerData.h>
 
@@ -57,22 +56,6 @@ class HpsEventBuilder : public EventBuilder {
         void writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_event); 
 
         /**
-         *  Set the strenght of the magnetic field during the run.  This is 
-         *  currently used by GBL only and will be removed when the B field
-         *  information can be retrieved from the recon file.
-         *
-         *  @param b_field - The strength of the magnetic field in tesla
-         */
-        void setBField(const double);
-        
-        /**
-         *  Enable/disble the processing of SVT tracks with GBL.
-         *
-         *  @param run_gbl - true to enable GBL, false otherwise
-         */
-        void runGbl(const bool run_gbl) { this->run_gbl = run_gbl; };
-    
-        /**
          *  Enable/disable the creation of an HpsEvent using recon files 
          *  containing ECal data only.
          *
@@ -86,13 +69,11 @@ class HpsEventBuilder : public EventBuilder {
         EcalDataWriter* ecal_writer; 
         MCParticleDataWriter* mc_particle_writer;
         HpsParticleDataWriter* particle_writer; 
-        GblDataWriter* gbl_data_writer;
         TriggerData* hps_trigger_data;
 
         IMPL::LCCollectionVec* trigger_data;
         EVENT::LCGenericObject* trigger_datum;  
 
-        bool run_gbl;
         bool ecal_only;
 
 }; // HpsEventBuilder

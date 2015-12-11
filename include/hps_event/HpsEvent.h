@@ -17,7 +17,7 @@
 //   C++ StdLib   //
 //----------------//
 #include <iostream>
-#include <assert.h>
+#include <stdexcept>
 
 //----------//
 //   ROOT   //
@@ -34,9 +34,6 @@
 #include <EcalHit.h>
 #include <HpsParticle.h>
 #include <HpsMCParticle.h>
-#include <GblTrackData.h>
-#include <GblStripData.h>
-#include <GblTrack.h>
 
 class HpsEvent : public TObject { 
 
@@ -110,15 +107,6 @@ class HpsEvent : public TObject {
         /** */
         HpsMCParticle*  addHpsMCParticle();
         
-        /** */
-        GblTrack*       addGblTrack();
-        
-        /** */
-        GblTrackData*   addGblTrackData();
-        
-        /** */
-        GblStripData*   addGblStripData();
-
         //--- Setters ---//
         //---------------//
 
@@ -212,15 +200,6 @@ class HpsEvent : public TObject {
         EcalHit*       getEcalHit(int);
         
         /** */
-        GblStripData*  getGblStripData(int);
-       
-        /** */
-        GblTrack*      getGblTrack(int);
-        
-        /** */
-        GblTrackData*  getGblTrackData(int);
-        
-        /** */
         HpsMCParticle* getMCParticle(int);
         
         /**
@@ -239,15 +218,6 @@ class HpsEvent : public TObject {
         /** */
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
        
-        /** */ 
-        int getNumberOfGblStripData()   const  { return n_gbl_strips_data; };
-        
-        /** */
-        int getNumberOfGblTracks()      const  { return n_gbl_tracks; };
-
-        /** */
-        int getNumberOfGblTracksData()  const  { return n_gbl_tracks_data; };
-        
         /**
          * Get the number of particles ({@link HpsParticle} objects) of the 
          * given {@link HpsParticle::ParticleType} in the event.
@@ -377,12 +347,6 @@ class HpsEvent : public TObject {
         TClonesArray* ecal_hits;             //->
         /** Collection of final state particles */
         TClonesArray* fs_particles;          //->
-        /** Collection of GBLStripClusterData Generic Objects */
-        TClonesArray* gbl_strips_data;       //->
-        /** Collection of GBL tracks */
-        TClonesArray* gbl_tracks;            //->
-        /** Collection of GBLTrackData Generic Objects */
-        TClonesArray* gbl_tracks_data;       //->
         /** Collection of Monte Carlo particles */
         TClonesArray* mc_particles;          //->
         /** Collection of target constrained Moller candidates */
@@ -476,10 +440,6 @@ class HpsEvent : public TObject {
         int n_tc_v0_candidates;
         int n_tc_moller_candidates; 
         int n_mc_particles;
-        int n_gbl_tracks;
-        int n_gbl_tracks_data;
-        int n_gbl_strips_data;
-        
 };
 
 #endif

@@ -38,31 +38,6 @@ target_link_libraries(SvtTrack
     ${ROOT_CORE_LIBRARY}
 )
 
-set_source_files_properties(GblStripData.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(GblStripData GblStripData.cxx)
-target_link_libraries( GblStripData
-    ${ROOT_CORE_LIBRARY}
-    ${ROOT_PHYSICS_LIBRARY}
-)
-
-set_source_files_properties(GblTrack.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(GblTrack GblTrack.cxx)
-target_link_libraries( GblTrack
-    ${ROOT_CORE_LIBRARY}
-    ${ROOT_MATRIX_LIBRARY}
-)
-
-set_source_files_properties(GblTrackData.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(GblTrackData GblTrackData.cxx)
-target_link_libraries( GblTrackData
-    ${ROOT_CORE_LIBRARY}
-    ${ROOT_MATRIX_LIBRARY}
-    ${ROOT_MATHCORE_LIBRARY}
-    SvtTrack
-    GblStripData
-    GblTrack
-)
-
 set_source_files_properties(HpsMCParticle.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
 add_library(HpsMCParticle HpsMCParticle.cxx)
 target_link_libraries(HpsMCParticle
@@ -90,9 +65,6 @@ target_link_libraries(HpsEvent
     EcalCluster
     SvtHit
     SvtTrack
-    GblStripData
-    GblTrack
-    GblTrackData
     HpsMCParticle
     HpsParticle
     MuonCluster
