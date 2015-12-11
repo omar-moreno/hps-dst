@@ -357,7 +357,7 @@ SvtHit* HpsEvent::getSvtHit(int hit_index) {
     return (SvtHit*) svt_hits->At(hit_index);
 }
 
-EcalCluster* HpsEvent::getEcalCluster(int ecal_cluster_index) {
+EcalCluster* HpsEvent::getEcalCluster(int ecal_cluster_index) const {
     return (EcalCluster*) ecal_clusters->At(ecal_cluster_index);
 }
 
