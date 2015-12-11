@@ -1,19 +1,22 @@
 /**
- * @file GblTrack.cxx
- * @brief Class used to encapsulate GBL track information.
+ * @file LegacyGblTrack.cxx
+ * @brief Class used to encapsulate GBL track refit information.  This class
+ *        was used when the GBL refit was done at the DST level and is now 
+ *        deprecated.
  * @author Per Hansson Adrian <phansson@slac.stanford.edu>
- *          SLAC
+ *         SLAC
  * @author Omar Moreno <omoreno1@ucsc.edu>
  *         Santa Cruz Institute for Particle Physics
  *         University of California, Santa Cruz
  * @date February 3, 2014
+ *
  */
 
-#include <GblTrack.h>
+#include <LegacyGblTrack.h>
 
-ClassImp(GblTrack)
+ClassImp(LegacyGblTrack)
 
-GblTrack::GblTrack() 
+LegacyGblTrack::LegacyGblTrack() 
     : TObject(),
       seed_track(NULL), 
       cov_matrix(5, 5),
@@ -29,15 +32,15 @@ GblTrack::GblTrack()
       pz(0) {
 }
 
-GblTrack::~GblTrack() {
+LegacyGblTrack::~LegacyGblTrack() {
     Clear(); 
 }
 
-void GblTrack::Clear(Option_t *option) { 
+void LegacyGblTrack::Clear(Option_t *option) { 
     TObject::Clear(); 
 }
 
-void GblTrack::setTrackParameters(const double d0, 
+void LegacyGblTrack::setTrackParameters(const double d0, 
         const double phi0,
         const double omega,
         const double tan_lambda,
@@ -50,13 +53,13 @@ void GblTrack::setTrackParameters(const double d0,
     this->z0 = z0;  
 }
 
-void GblTrack::setMomentumVector(double x, double y, double z) {
+void LegacyGblTrack::setMomentumVector(double x, double y, double z) {
     px = x;
     py = y;
     pz = z;
 }
 
-std::vector<double> GblTrack::getMomentum() {
+std::vector<double> LegacyGblTrack::getMomentum() {
     std::vector<double> p(3, 0);
     p[0] = px; 
     p[1] = py; 
@@ -64,8 +67,8 @@ std::vector<double> GblTrack::getMomentum() {
     return p; 
 }
 
-void GblTrack::toString() {
-    std::cout << "GblTrack: " << std::endl;
+void LegacyGblTrack::toString() {
+    std::cout << "LegacyGblTrack: " << std::endl;
     std::cout << "    (omega, tan_lambda, phi0, d0, z0): " 
         << getOmega() 
         << "," << getTanLambda() 

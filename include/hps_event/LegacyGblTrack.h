@@ -1,12 +1,15 @@
 /**
- * @file GblTrack.cxx
- * @brief Class used to encapsulate GBL track information.
+ * @file LegacyGblTrack.cxx
+ * @brief Class used to encapsulate GBL track refit information.  This class
+ *        was used when the GBL refit was done at the DST level and is now 
+ *        deprecated.
  * @author Per Hansson Adrian <phansson@slac.stanford.edu>
- *          SLAC
+ *         SLAC
  * @author Omar Moreno <omoreno1@ucsc.edu>
  *         Santa Cruz Institute for Particle Physics
  *         University of California, Santa Cruz
  * @date February 3, 2014
+ *
  */
 
 #ifndef __GBL_TRACK_H__
@@ -29,7 +32,7 @@
 // Forward declarations
 class SvtTrack; 
 
-class GblTrack : public TObject {
+class LegacyGblTrack : public TObject {
 
     // TODO: Add more documentation
     // TODO: Add copy constructor
@@ -40,12 +43,12 @@ class GblTrack : public TObject {
         /**
          * Default constructor
          */
-        GblTrack();
+        LegacyGblTrack();
 
         /**
          * Destructor
          */
-        ~GblTrack();
+        ~LegacyGblTrack();
 
         /**
          *
@@ -144,7 +147,7 @@ class GblTrack : public TObject {
          */
         void toString();
 
-        ClassDef(GblTrack, 1) //Track class for use with GBL
+        ClassDef(LegacyGblTrack, 1) //Track class for use with GBL
 
     private:
 
@@ -162,6 +165,6 @@ class GblTrack : public TObject {
             double py;
             double pz;
 
-}; // GblTrack
+}; // LegacyGblTrack
 
 #endif // _GBL_TRACK_H_
