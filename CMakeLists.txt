@@ -70,19 +70,6 @@ include_directories("${DST_HDR_DIR}")
 set(UTILS_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/utils")
 include_directories("${UTILS_HDR_DIR}")
 
-# Find GBL.
-set(GBL_DIR "$ENV{GBL_DIR}")
-find_package(GBL QUIET)
-
-if(NOT GBL_FOUND)
-    message(FATAL_ERROR 
-        "\nGBL wasn't found!  Either GBL hasn't been installed or the " 
-        "variable GBL_DIR has not been set. See documentation for details.")
-endif()
-
-# include the GBL headers
-include_directories("${GBL_INCLUDE_DIR}")
-
 #--------------------------------------------#
 #--- Create the HPS Event ROOT dictionary ---#
 #--------------------------------------------#
@@ -110,7 +97,7 @@ message(STATUS "ROOT_VERSION: ${ROOT_VERSION}")
 
 if( ROOT_VERSION VERSION_GREATER "6.0" )
 message("ROOT 6 or later pre-processing ")
-execute_process(COMMAND rootcling -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -I${GBL_INCLUDE_DIR} -I${HPS_EVENT_HDR_DIR} -I${UTIL_HDR_DIR} -I${DST_HDR_DIR} -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
+execute_process(COMMAND rootcling -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -I${HPS_EVENT_HDR_DIR} -I${UTIL_HDR_DIR} -I${DST_HDR_DIR} -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 else()
 execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
 endif()
