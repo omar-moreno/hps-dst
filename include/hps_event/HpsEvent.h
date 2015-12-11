@@ -206,7 +206,7 @@ class HpsEvent : public TObject {
         //---------------//
 
         /** */
-        EcalCluster*   getEcalCluster(int);
+        EcalCluster*   getEcalCluster(int) const;
         
         /** */
         EcalHit*       getEcalHit(int);
