@@ -28,12 +28,13 @@
 //---------------//
 //   HPS Event   //
 //---------------//
-#include <SvtTrack.h>
-#include <SvtHit.h>
 #include <EcalCluster.h> 
 #include <EcalHit.h>
 #include <HpsParticle.h>
 #include <HpsMCParticle.h>
+#include <GblTrack.h>
+#include <SvtTrack.h>
+#include <SvtHit.h>
 
 class HpsEvent : public TObject { 
 
@@ -71,7 +72,14 @@ class HpsEvent : public TObject {
          * @return A pointer to the {@link SvtTrack} object that was added.
          */
         SvtTrack*       addTrack();
-        
+       
+        /** 
+         * Add a GBL track, {@link GblTrack} object, to the event.
+         *
+         * @return A pointer to the {@link GblTrack} object that was added.
+         */
+        GblTrack*       addGblTrack();
+
         /** 
          * Add an SVT hit, {@link SvtHit} object, to the event.
          *
@@ -243,6 +251,9 @@ class HpsEvent : public TObject {
 
         /** */
         int getNumberOfTracks()         const  { return n_tracks; };
+    
+        /** */
+        int getNumberOfGblTracks() const { return n_gbl_tracks; }; 
 
         /**
          * Get the particle object ({@link HpsParticle}) of the given type and
@@ -269,7 +280,10 @@ class HpsEvent : public TObject {
 
         /** */
         SvtTrack*      getTrack(int);
-        
+       
+        /** */
+        GblTrack*      getGblTrack(int); 
+
         //---//
         
         /**
@@ -365,6 +379,8 @@ class HpsEvent : public TObject {
         TClonesArray* ecal_hits;             //->
         /** Collection of final state particles */
         TClonesArray* fs_particles;          //->
+        /** Collection of GBL tracks */
+        TClonesArray* gbl_tracks; 
         /** Collection of Monte Carlo particles */
         TClonesArray* mc_particles;          //->
         /** Collection of target constrained Moller candidates */
@@ -453,6 +469,7 @@ class HpsEvent : public TObject {
         int svt_position_state;
  
         int n_tracks;
+        int n_gbl_tracks;
         int n_svt_hits;
         int n_ecal_clusters;
         int n_ecal_hits;
