@@ -9,6 +9,7 @@
 #pragma link C++ class EcalCluster+;
 #pragma link C++ class Cluster+;
 #pragma link C++ class SvtTrack+;
+#pragma link C++ class GblTrack+;
 #pragma link C++ class SvtHit+;
 #pragma link C++ class HpsParticle+;
 #pragma link C++ class CalorimeterHit+;
