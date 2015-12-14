@@ -38,6 +38,12 @@ target_link_libraries(SvtTrack
     ${ROOT_CORE_LIBRARY}
 )
 
+set_source_files_properties(GblTrack.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
+add_library(GblTrack GblTrack.cxx)
+target_link_libraries(GblTrack
+    ${ROOT_CORE_LIBRARY}
+)
+
 set_source_files_properties(HpsMCParticle.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
 add_library(HpsMCParticle HpsMCParticle.cxx)
 target_link_libraries(HpsMCParticle
@@ -63,9 +69,9 @@ target_link_libraries(HpsEvent
     ${ROOT_CORE_LIBRARY}
     EcalHit
     EcalCluster
-    SvtHit
-    SvtTrack
     HpsMCParticle
     HpsParticle
-    MuonCluster
+    GblTrack
+    SvtHit
+    SvtTrack
 )
