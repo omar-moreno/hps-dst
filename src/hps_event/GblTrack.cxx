@@ -14,9 +14,11 @@
 ClassImp(GblTrack)
 
 GblTrack::GblTrack() 
-    : SvtTrack(), 
-      lambda_kinks{}, 
-      phi_kinks{} {
+    : SvtTrack() {  
+
+          // Initialize the lamda and phi kinks to a default value
+          std::fill_n(lambda_kinks, 12, -9999); 
+          std::fill_n(phi_kinks, 12, -9999); 
 }
 
       
