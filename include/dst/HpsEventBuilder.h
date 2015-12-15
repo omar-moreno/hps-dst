@@ -24,7 +24,7 @@
 //--- LCIO ---//
 //------------//
 #include <EVENT/LCGenericObject.h>
-#include <IMPL/LCCollectionVec.h>
+#include <EVENT/LCCollection.h>
 
 class HpsEventBuilder : public EventBuilder {
 
@@ -76,6 +76,9 @@ class HpsEventBuilder : public EventBuilder {
         
         /** Recon particle data writer. */
         HpsParticleDataWriter* particle_writer; 
+
+        /** The name of the collection containing RF hits */
+        static const std::string RF_HIT_COL_NAME; 
 
         bool ecal_only;
 
