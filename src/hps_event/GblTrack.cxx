@@ -14,7 +14,9 @@
 ClassImp(GblTrack)
 
 GblTrack::GblTrack() 
-    : SvtTrack() {
+    : SvtTrack(), 
+      lambda_kinks{}, 
+      phi_kinks{} {
 }
 
       
