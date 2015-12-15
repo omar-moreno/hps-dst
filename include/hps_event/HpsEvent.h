@@ -145,6 +145,14 @@ class HpsEvent : public TObject {
         void setPulserTrigger(const int pulser_trigger) { this->pulser_trigger = pulser_trigger; };
 
         /**
+         * Set the event RF time.
+         *
+         * @param channel The channel from which the RF time was retrieved.
+         * @param rf_time The event RF time. 
+         */
+        void setRfTime(const int channel, const double rf_time) { this->rf_times[channel] = rf_time; }; 
+
+        /**
          *
          */
         void setRunNumber(int run_number){ this->run_number = run_number; };
@@ -269,7 +277,15 @@ class HpsEvent : public TObject {
          *
          */
         HpsParticle*   getParticle(HpsParticle::ParticleType type, int particle_index); 
-        
+      
+        /**
+         * Get the RF time.
+         *
+         * @param channel The channel associated with the RF time.
+         * @return The RF time. 
+         */ 
+        double getRfTime(const int channel) const { return rf_times[channel]; }; 
+
         /**
          *
          */ 
@@ -398,6 +414,9 @@ class HpsEvent : public TObject {
 
         //-- Event information --//
         //-----------------------//
+
+        /** The RF time */
+        double rf_times[2]; 
 
         /** Event number. */
         int event_number;
