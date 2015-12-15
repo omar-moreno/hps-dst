@@ -16,9 +16,6 @@ HpsEventBuilder::HpsEventBuilder()
       ecal_writer(new EcalDataWriter()),
       mc_particle_writer(new MCParticleDataWriter()),
       particle_writer(new HpsParticleDataWriter()),
-      hps_trigger_data(NULL),
-      trigger_data(NULL),
-      trigger_datum(NULL),
       ecal_only(false) {
 }
 
@@ -33,12 +30,6 @@ void HpsEventBuilder::makeHpsEvent(EVENT::LCEvent* event, HpsEvent* hps_event) {
     
     // Clear the HpsEvent from all previous information
     hps_event->Clear();
-
-    //  Check that the event contains more than just the trigger collection.
-    //  This is a temp solution to the recon not having an ECal collection
-    //  in every event.
-    //std::cout << event->getCollectionNames()->size() << std::endl;
-    if (event->getCollectionNames()->size() <= 2) return;  
 
     this->writeEventData(event, hps_event); 
 
@@ -89,19 +80,19 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
     hps_event->setSvtEventHeaderState(lc_event->getParameters().getIntVal("svt_event_header_good"));
 
     // Set the trigger data
+    EVENT::LCCollection* trigger_data = nullptr;
     try { 
-        trigger_data = (IMPL::LCCollectionVec*) lc_event->getCollection("TriggerBank"); 
-    } catch(EVENT::DataNotAvailableException e){
+        trigger_data = (EVENT::LCCollection*) lc_event->getCollection("TriggerBank"); 
+    } catch(EVENT::DataNotAvailableException e) {
+        // It's fine if the event doesn't have a trigger bank.
     }
 
-    //std::cout << "Number of trigger elements: " << trigger_data->getNumberOfElements() << std::endl;
     for (int trigger_datum_n = 0; trigger_datum_n < trigger_data->getNumberOfElements(); ++trigger_datum_n) { 
        
-        trigger_datum = (EVENT::LCGenericObject*) trigger_data->getElementAt(trigger_datum_n); 
-        //std::cout << "Bank tag: " << trigger_datum->getIntVal(0) << std::endl;
+        EVENT::LCGenericObject* trigger_datum = (EVENT::LCGenericObject*) trigger_data->getElementAt(trigger_datum_n); 
         if (trigger_datum->getIntVal(0) == 0xe10a) { 
            
-            hps_trigger_data = new TriggerData(trigger_datum); 
+            TriggerData* hps_trigger_data = new TriggerData(trigger_datum); 
             hps_event->setSingle0Trigger((int) hps_trigger_data->isSingle0Trigger());
             hps_event->setSingle1Trigger((int) hps_trigger_data->isSingle1Trigger());
             hps_event->setPair0Trigger((int) hps_trigger_data->isPair0Trigger());
@@ -113,4 +104,6 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
             break;
         }
     }
+
+     
 }
