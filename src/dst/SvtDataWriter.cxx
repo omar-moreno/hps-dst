@@ -93,8 +93,16 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             // Get a LCIO Track from the LCIO event
             EVENT::Track* track = (EVENT::Track*) tracks->getElementAt(track_n);
 
-            // Add an SvtTrack object to the HPS event
-            SvtTrack* svt_track = hps_event->addTrack(); 
+            // Check whether a track has been refit with GBL. If so, add a 
+            // Gbltrack to the HPS event.  Otherwise, just add an SvtTrack
+            SvtTrack* svt_track = nullptr; 
+            if (DstUtils::isGbl(track)) { 
+                // Add a GblTrack object to the HPS event
+                svt_track = hps_event->addGblTrack(); 
+            } else { 
+                // Add an SvtTrack object to the HPS event
+                svt_track = hps_event->addTrack(); 
+            }
             
             // Set the SvtTrack track parameters
             svt_track->setTrackParameters(track->getD0(), 
