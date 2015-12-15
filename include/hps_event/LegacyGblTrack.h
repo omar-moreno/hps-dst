@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef __GBL_TRACK_H__
-#define __GBL_TRACK_H__
+#ifndef __LEGACY_GBL_TRACK_H__
+#define __LEGACY_GBL_TRACK_H__
 
 //------------------//
 //--- C++ StdLib ---//
@@ -167,4 +167,4 @@ class LegacyGblTrack : public TObject {
 
 }; // LegacyGblTrack
 
-#endif // _GBL_TRACK_H_
+#endif // _LEGACY_GBL_TRACK_H_
