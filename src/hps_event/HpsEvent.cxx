@@ -31,6 +31,7 @@ HpsEvent::HpsEvent()
       svt_hits(new TClonesArray("SvtHit", 1000)),
       uc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
       uc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+      rf_times{}, 
       event_number(0),
       event_time(0), 
       pair0_trigger(0), 
@@ -115,6 +116,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     *svt_hits  = *hpsEventObj.svt_hits;  
     *uc_moller_candidates = *hpsEventObj.uc_moller_candidates;
     *uc_v0_candidates = *hpsEventObj.uc_v0_candidates;
+
+    memcpy(&rf_times, hpsEventObj.rf_times, 12*sizeof(double));       
 }
 
 
@@ -200,6 +203,8 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     *uc_moller_candidates = *hpsEventObj.uc_moller_candidates;
     *uc_v0_candidates = *hpsEventObj.uc_v0_candidates;
 
+    memcpy(&rf_times, hpsEventObj.rf_times, 12*sizeof(double));       
+    
     return *this;     
 }
 
@@ -234,6 +239,8 @@ void HpsEvent::Clear(Option_t * /*option*/) {
     n_tc_v0_candidates = 0;
     n_tc_moller_candidates = 0;
     n_mc_particles = 0;
+
+    memset(rf_times, 0, sizeof(rf_times)); 
 }
 
 
