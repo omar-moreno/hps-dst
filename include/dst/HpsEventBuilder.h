@@ -65,14 +65,17 @@ class HpsEventBuilder : public EventBuilder {
 
     private:
 
+        /** SVT data writer. */
         SvtDataWriter* svt_writer; 
+        
+        /** Ecal data writer. */
         EcalDataWriter* ecal_writer; 
+        
+        /** Monte Carlo data writer. */
         MCParticleDataWriter* mc_particle_writer;
+        
+        /** Recon particle data writer. */
         HpsParticleDataWriter* particle_writer; 
-        TriggerData* hps_trigger_data;
-
-        IMPL::LCCollectionVec* trigger_data;
-        EVENT::LCGenericObject* trigger_datum;  
 
         bool ecal_only;
 
