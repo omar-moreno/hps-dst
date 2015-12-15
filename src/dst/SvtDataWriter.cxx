@@ -12,6 +12,10 @@
 
 #include <SvtDataWriter.h>
 
+const std::string SvtDataWriter::GBL_KINK_DATA_COL_NAME = "GblKinkData";
+
+const std::string SvtDataWriter::GBL_KINK_DATA_REL_COL_NAME = "GBLKinkDataRelations";
+
 const std::string SvtDataWriter::PARTIAL_TRACKS_COL_NAME = "PartialTracks"; 
 
 const std::string SvtDataWriter::TRACK_DATA_COL_NAME = "TrackData"; 
@@ -79,6 +83,15 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
     // Instantiate a LCRelation navigator which will allow faster access
     // to TrackData objects  
     UTIL::LCRelationNavigator* track_data_nav = new UTIL::LCRelationNavigator(track_data);
+
+    // Get the collection of LCRelations between GBL kink data variables 
+    // (GBLKinkData) and the corresponding track.
+    EVENT::LCCollection* gbl_kink_data 
+        = (EVENT::LCCollection*) event->getCollection(GBL_KINK_DATA_REL_COL_NAME);
+
+    // Instantiate a LCRelation navigator which will allow faster access 
+    // to GBLKinkData object
+    UTIL::LCRelationNavigator* gbl_kink_data_nav = new UTIL::LCRelationNavigator(gbl_kink_data);
     
     // Loop over all the track collections and process them
     for (auto tracks : track_collections) { 
@@ -99,6 +112,33 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             if (DstUtils::isGbl(track)) { 
                 // Add a GblTrack object to the HPS event
                 svt_track = hps_event->addGblTrack(); 
+
+                // Get the list of GBLKinkData associated with the LCIO Track
+                EVENT::LCObjectVec gbl_kink_data_list = gbl_kink_data_nav->getRelatedFromObjects(track);
+
+                // The container of GBLKinkData objects should only contain a 
+                // single object. If not, throw an exception
+                if (gbl_kink_data_list.size() != 1) { 
+                    throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format."); 
+                }
+
+                // Get the list GBLKinkData GenericObject associated with the LCIO Track
+                IMPL::LCGenericObjectImpl* gbl_kink_datum = (IMPL::LCGenericObjectImpl*) gbl_kink_data_list.at(0);
+
+                // Check that the GBLKinkData structure is correct.  If it's 
+                // not, throw a runtime exception.
+                //if (gbl_kink_datum->getNFloat() >= 10 || gbl_kink_datum->getNDouble() >= 10) { 
+                //    throw std::runtime_error("[ SvtDataWriter ]: The collection " + GBL_KINK_DATA_COL_NAME 
+                //        + " has the wrong structure."); 
+                //}
+
+
+                // Set the lambda and phi kink values
+                for (int kink_index = 0; kink_index < gbl_kink_datum->getNDouble(); ++kink_index) { 
+                    ((GblTrack*) svt_track)->setLambdaKink(kink_index, gbl_kink_datum->getFloatVal(kink_index));
+                    ((GblTrack*) svt_track)->setPhiKink(kink_index, gbl_kink_datum->getDoubleVal(kink_index));
+                }
+
             } else { 
                 // Add an SvtTrack object to the HPS event
                 svt_track = hps_event->addTrack(); 
