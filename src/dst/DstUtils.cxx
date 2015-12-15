@@ -34,3 +34,7 @@ std::vector<EVENT::LCCollection*> DstUtils::getCollections(EVENT::LCEvent* event
 
     return collections;
 }
+
+bool DstUtils::isGbl(EVENT::Track* track) { 
+    return (track->getType() & (1 << 5)) != 0; 
+}

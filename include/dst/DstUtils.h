@@ -24,6 +24,7 @@
 //------------//
 #include <EVENT/LCEvent.h>
 #include <EVENT/LCCollection.h>
+#include <EVENT/Track.h>
 
 namespace DstUtils { 
 
@@ -35,6 +36,16 @@ namespace DstUtils {
      * @return A vector containing all LCIO collections of the given type
      */
     std::vector<EVENT::LCCollection*> getCollections(EVENT::LCEvent* event, std::string type); 
+
+    /**
+     * Checks the track type of an LCIO Track to determine if it was 
+     * refit using GBL.
+     *
+     * @param track LCIO Track whose track type will be checked.
+     * @return Returns <code>true</code> if an LCIO Track was refit using
+     *         GBL strategy, <code>false</code> otherwise.
+     */
+    bool isGbl(EVENT::Track* track); 
 
 } // DstUtils
 
