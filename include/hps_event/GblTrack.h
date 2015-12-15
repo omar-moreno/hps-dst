@@ -19,10 +19,12 @@
 
 class GblTrack : public SvtTrack { 
 
-    /** Constructor */
-    GblTrack();
+    public: 
+        
+        /** Constructor */
+        GblTrack();
 
-    ClassDef(GblTrack, 1) 
+        ClassDef(GblTrack, 1) 
 };
 
 #endif // __GBL_TRACK_H__

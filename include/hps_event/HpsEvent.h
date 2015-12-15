@@ -380,7 +380,7 @@ class HpsEvent : public TObject {
         /** Collection of final state particles */
         TClonesArray* fs_particles;          //->
         /** Collection of GBL tracks */
-        TClonesArray* gbl_tracks; 
+        TClonesArray* gbl_tracks;            //-> 
         /** Collection of Monte Carlo particles */
         TClonesArray* mc_particles;          //->
         /** Collection of target constrained Moller candidates */
