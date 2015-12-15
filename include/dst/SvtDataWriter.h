@@ -75,6 +75,18 @@ class SvtDataWriter : public DataWriter {
     private:
 
         /** 
+         * The name of the collection containing GBL kink data 
+         * GenericObjects
+         */
+        static const std::string GBL_KINK_DATA_COL_NAME; 
+
+        /**
+         * The name of the collection containing Track to GBLKinkData 
+         * LCRelations.
+         */
+        static const std::string GBL_KINK_DATA_REL_COL_NAME;
+
+        /** 
          * The name of the collection of 'partial tracks' i.e. tracks which are
          * a subset of other tracks in the event.
          */
