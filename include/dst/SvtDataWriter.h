@@ -101,6 +101,12 @@ class SvtDataWriter : public DataWriter {
          */
         static const std::string TRACK_DATA_REL_COL_NAME;
 
+        /**
+         * The name of the collection containing the seed track to GBL track
+         * LCRelations.
+         */
+        static const std::string SEED_TO_GBL_REL_COL_NAME; 
+
 }; // SvtDataWriter
 
 #endif // __SVT_DATA_WRITER_H__
