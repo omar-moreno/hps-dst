@@ -22,6 +22,8 @@ const std::string SvtDataWriter::TRACK_DATA_COL_NAME = "TrackData";
 
 const std::string SvtDataWriter::TRACK_DATA_REL_COL_NAME = "TrackDataRelations";
 
+const std::string SvtDataWriter::SEED_TO_GBL_REL_COL_NAME = "MatchedToGBLTrackRelations";
+
 SvtDataWriter::SvtDataWriter() { 
 }
 
@@ -77,22 +79,29 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
     // Get the collection of LCRelations between track data variables 
     // (TrackData) and the corresponding track.
-    EVENT::LCCollection* track_data 
-        = (EVENT::LCCollection*) event->getCollection(TRACK_DATA_REL_COL_NAME);
+    EVENT::LCCollection* track_data = (EVENT::LCCollection*) event->getCollection(TRACK_DATA_REL_COL_NAME);
 
-    // Instantiate a LCRelation navigator which will allow faster access
+    // Instantiate an LCRelation navigator which will allow faster access
     // to TrackData objects  
     UTIL::LCRelationNavigator* track_data_nav = new UTIL::LCRelationNavigator(track_data);
 
     // Get the collection of LCRelations between GBL kink data variables 
     // (GBLKinkData) and the corresponding track.
-    EVENT::LCCollection* gbl_kink_data 
-        = (EVENT::LCCollection*) event->getCollection(GBL_KINK_DATA_REL_COL_NAME);
+    EVENT::LCCollection* gbl_kink_data = (EVENT::LCCollection*) event->getCollection(GBL_KINK_DATA_REL_COL_NAME);
 
-    // Instantiate a LCRelation navigator which will allow faster access 
+    // Instantiate an LCRelation navigator which will allow faster access 
     // to GBLKinkData object
     UTIL::LCRelationNavigator* gbl_kink_data_nav = new UTIL::LCRelationNavigator(gbl_kink_data);
-    
+
+    // Create a map between an LCIO GBL track and the corresponding HpsEvent
+    // GBL track. This map will be used when relating an HpsEvent GBL track to 
+    // the corresponding seed track.
+    std::map<GblTrack*, EVENT::Track*> gbl_track_map; 
+
+    // Create a map between an LCIO track and the corresponding HpsEvent 
+    // track.
+    std::map<EVENT::Track*, SvtTrack*> track_map; 
+
     // Loop over all the track collections and process them
     for (auto tracks : track_collections) { 
        
@@ -110,8 +119,12 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             // Gbltrack to the HPS event.  Otherwise, just add an SvtTrack
             SvtTrack* svt_track = nullptr; 
             if (DstUtils::isGbl(track)) { 
+          
                 // Add a GblTrack object to the HPS event
                 svt_track = hps_event->addGblTrack(); 
+
+                // Map the LCIO GBL track to the HpsEvent GBL track
+                gbl_track_map[(GblTrack*) svt_track] = track;
 
                 // Get the list of GBLKinkData associated with the LCIO Track
                 EVENT::LCObjectVec gbl_kink_data_list = gbl_kink_data_nav->getRelatedFromObjects(track);
@@ -125,14 +138,6 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
                 // Get the list GBLKinkData GenericObject associated with the LCIO Track
                 IMPL::LCGenericObjectImpl* gbl_kink_datum = (IMPL::LCGenericObjectImpl*) gbl_kink_data_list.at(0);
 
-                // Check that the GBLKinkData structure is correct.  If it's 
-                // not, throw a runtime exception.
-                //if (gbl_kink_datum->getNFloat() >= 10 || gbl_kink_datum->getNDouble() >= 10) { 
-                //    throw std::runtime_error("[ SvtDataWriter ]: The collection " + GBL_KINK_DATA_COL_NAME 
-                //        + " has the wrong structure."); 
-                //}
-
-
                 // Set the lambda and phi kink values
                 for (int kink_index = 0; kink_index < gbl_kink_datum->getNDouble(); ++kink_index) { 
                     ((GblTrack*) svt_track)->setLambdaKink(kink_index, gbl_kink_datum->getFloatVal(kink_index));
@@ -141,7 +146,10 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
             } else { 
                 // Add an SvtTrack object to the HPS event
-                svt_track = hps_event->addTrack(); 
+                svt_track = hps_event->addTrack();
+
+                // Map the LCIO track to the HpsEvent track
+                track_map[track] = svt_track; 
             }
             
             // Set the SvtTrack track parameters
@@ -215,6 +223,37 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
         }
     }
 
-    // Delete the LCRelations navigator object
+    // Delete all LCRelations navigator objects
     delete track_data_nav;
+    delete gbl_kink_data_nav;
+
+    // Get the collection of LCRelations between seed tracks and a GBL tracks.
+    EVENT::LCCollection* seed_to_gbl_relations = (EVENT::LCCollection*) event->getCollection(SEED_TO_GBL_REL_COL_NAME); 
+   
+    // Instantiate an LCRelation navigator which will allow faster access
+    // to the seed to GBL LCRelations
+    UTIL::LCRelationNavigator* seed_to_gbl_relations_nav = new UTIL::LCRelationNavigator(seed_to_gbl_relations); 
+
+    for (int gbl_track_n = 0; gbl_track_n < hps_event->getNumberOfGblTracks(); ++gbl_track_n) { 
+        GblTrack* gbl_track = hps_event->getGblTrack(gbl_track_n); 
+        
+        // Get the list of LCRelations associated with the LCIO GBL track used
+        // to create this HpsEvent GBL track
+        EVENT::LCObjectVec seed_to_gbl_list 
+            = seed_to_gbl_relations_nav->getRelatedFromObjects(gbl_track_map[gbl_track]); 
+
+        // There should only be a single LCRelation between a LCIO GBL track 
+        // and a LCIO seed trak.
+        if (seed_to_gbl_list.size() != 1) { 
+            throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format.");
+        }
+
+        // Get the TrackData GenericObject associated with the LCIO Track
+        EVENT::Track* seed_track = (EVENT::Track*) seed_to_gbl_list.at(0);
+
+        // Set a reference to the HpsEvent seed track
+        gbl_track->setSeedTrack(track_map[seed_track]);
+    }
+
+    delete seed_to_gbl_relations_nav; 
 }
