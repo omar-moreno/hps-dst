@@ -12,7 +12,7 @@ project(HPS_DST)
 
 # Set the project version
 set(HPS_DST_VERSION_MAJOR 0)
-set(HPS_DST_VERSION_MINOR 8)
+set(HPS_DST_VERSION_MINOR 10)
 
 # Set additional compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
