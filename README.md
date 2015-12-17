@@ -36,13 +36,13 @@ Installation
 
 Unless you are an active developer on the project, it is best to use a tagged 
 release. A release can be downloaded from the projects 
-[release page](https://github.com/omar-moreno/hps-dst/releases).  The project
+[release page](https://github.com/JeffersonLab/hps-dst/releases).  The project
 can be downloaded as a zip file or tag.gz file.
 
 Alternatively, a release can be downloaded and untarred by issuing the 
 following commands from a terminal
 
-    wget https://github.com/omar-moreno/hps-dst/archive/v0.8.tar.gz
+    wget https://github.com/JeffersonLab/hps-dst/archive/v0.10.tar.gz
     tar zxvf v0.10.tar.gz
     cd hps-dst-0.10
 
@@ -55,7 +55,7 @@ The project is stored in a public github repository.  The code can be
 from a terminal
 
 	cd /path/to/workdir
-	git clone https://github.com/omar-moreno/hps-dst.git
+	git clone https://github.com/JeffersonLab/hps-dst.git
 
 A github account is not required to clone the source code.
 
