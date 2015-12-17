@@ -20,7 +20,6 @@ In order to build the project, the following build tools are required:
 The project has the following dependencies: 
 * [The LCIO C++ API](http://lcio.desy.de/v02-04-03/doc/manual_html/manual.html#SECTION00030000000000000000)
 * [ROOT data analysis framework](http://root.cern.ch/drupal/content/installing-root-source)
-* [Generalized Broken Lines](https://www.wiki.terascale.de/index.php/GeneralBrokenLines)
 
 ##### Recommended Packages #####
 
@@ -64,7 +63,6 @@ A github account is not required to clone the source code.
 Before building the project, the following environmental variables need to be set:
 
 	ROOTSYS=/path/to/root
-	GBL_DIR=/path/to/gbl/cpp
 	LCIO=/path/to/lcio
 
 The project can then be built as follows:
