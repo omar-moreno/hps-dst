@@ -240,7 +240,7 @@ class SvtTrack : public TObject {
          *
          * @return The {@link HpsParticle} associated with this track.
          */
-        TRef getParticle() const { return fs_particle; }; 
+        HpsParticle* getParticle() const { return (HpsParticle*) this->fs_particle.GetObject(); }; 
 
         /**
          * @returns True if the track is in the top SVT volume, false otherwise.
