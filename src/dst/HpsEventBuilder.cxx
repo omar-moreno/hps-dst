@@ -115,22 +115,26 @@ void HpsEventBuilder::writeEventData(EVENT::LCEvent* lc_event, HpsEvent* hps_eve
     EVENT::LCCollection* rf_hits = (EVENT::LCCollection*) lc_event->getCollection(RF_HIT_COL_NAME);
 
     // The collection should only have a single RFHit object per event
-    if (rf_hits->getNumberOfElements() != 1) { 
+    if (rf_hits->getNumberOfElements() > 1) { 
         throw std::runtime_error("[ HpsEventBuilder ]: The collection " + RF_HIT_COL_NAME + 
                 " doesn't have the expected number of elements."); 
     }
 
-    // Get the RF hit from the event
-    EVENT::LCGenericObject* rf_hit = (EVENT::LCGenericObject*) rf_hits->getElementAt(0);
-
-    // An RFHit GenericObject should only have two RF times
-    if (rf_hit->getNDouble() != 2) { 
-        throw std::runtime_error("[ HpsEventBuilder ]: The collection " + RF_HIT_COL_NAME + 
-                " has the wrong structure."); 
-    }
+    // Loop over all the RF hits in the event and write them to the DST
+    for (int rf_hit_n = 0; rf_hit_n < rf_hits->getNumberOfElements(); ++rf_hit_n) { 
+        
+        // Get the RF hit from the event
+        EVENT::LCGenericObject* rf_hit = (EVENT::LCGenericObject*) rf_hits->getElementAt(rf_hit_n);
     
-    // Write the RF times to the event
-    for (int rf_hit_channel = 0; rf_hit_channel < rf_hit->getNDouble(); ++rf_hit_channel) { 
-        hps_event->setRfTime(rf_hit_channel, rf_hit->getDoubleVal(rf_hit_channel));  
+        // An RFHit GenericObject should only have two RF times
+        if (rf_hit->getNDouble() != 2) { 
+            throw std::runtime_error("[ HpsEventBuilder ]: The collection " + RF_HIT_COL_NAME + 
+                    " has the wrong structure."); 
+        }
+    
+        // Write the RF times to the event
+        for (int rf_hit_channel = 0; rf_hit_channel < rf_hit->getNDouble(); ++rf_hit_channel) { 
+            hps_event->setRfTime(rf_hit_channel, rf_hit->getDoubleVal(rf_hit_channel));  
+        }
     }
 }
