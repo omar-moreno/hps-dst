@@ -170,6 +170,13 @@ void HpsParticleDataWriter::writeParticleData(HpsParticle::ParticleType collecti
                         && daughter->getMomentum()[2] == daughter_hps_particle->getMomentum()[2]) {
             
                     hps_particle->addParticle(daughter_hps_particle);
+                    
+                    if (daughter_hps_particle->getTracks()->GetEntriesFast() != 0) 
+                        hps_particle->addTrack((SvtTrack*) daughter_hps_particle->getTracks()->At(0)); 
+                    
+                    if (daughter_hps_particle->getClusters()->GetEntriesFast() != 0) 
+                        hps_particle->addCluster((EcalCluster*) daughter_hps_particle->getClusters()->At(0)); 
+
                     break; 
                 }
             }
