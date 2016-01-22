@@ -93,23 +93,27 @@ void HpsParticleDataWriter::writeParticleData(HpsParticle::ParticleType collecti
 
         // Loop through all of the tracks associated with the particle
         // and add references to the HpsParticle object.
+        SvtTrack* hps_track = nullptr;
         for (auto const &track : particle->getTracks()) { 
              
             // Loop through all of the tracks in the HpsEvent and find the one
             // that matches the track associated with the particle
             for (int track_n = 0; track_n < hps_event->getNumberOfTracks(); ++track_n) {
-                    
+               
+                if (DstUtils::isGbl(particle)) hps_track = hps_event->getGblTrack(track_n); 
+                else hps_track = hps_event->getTrack(track_n);
+
                 // Use the track chi^2 to find the match
                 // TODO: Verify that the chi^2 is unique enough to find the match
-                if (track->getChi2() == hps_event->getTrack(track_n)->getChi2()) {
+                if (track->getChi2() == hps_track->getChi2()) {
        
                     // Add a reference to the track 
-                    hps_particle->addTrack(hps_event->getTrack(track_n));
+                    hps_particle->addTrack(hps_track);
     
                     // If the particle is a final state particle, add a
                     // reference from the corresponding track to the particle
                     if (collection_type == HpsParticle::FINAL_STATE_PARTICLE) {                     
-                        hps_event->getTrack(track_n)->setParticle(hps_particle); 
+                        hps_track->setParticle(hps_particle); 
                     }
                     break;
                 }
