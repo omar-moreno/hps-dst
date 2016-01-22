@@ -35,6 +35,7 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
+#include <DstUtils.h>
 #include <HpsParticle.h>
 #include <HpsEvent.h>
 

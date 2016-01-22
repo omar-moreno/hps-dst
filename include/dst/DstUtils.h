@@ -24,6 +24,7 @@
 //------------//
 #include <EVENT/LCEvent.h>
 #include <EVENT/LCCollection.h>
+#include <EVENT/ReconstructedParticle.h>
 #include <EVENT/Track.h>
 
 namespace DstUtils { 
@@ -46,6 +47,16 @@ namespace DstUtils {
      *         GBL strategy, <code>false</code> otherwise.
      */
     bool isGbl(EVENT::Track* track); 
+
+    /**
+     * Checks the particle type of an LCIO ReconstructedParticle to determine
+     * if it is composed of GBL tracks.
+     *
+     * @param particle LCIO ReconstructedParticle whose type will be checked.
+     * @return Returns <code>true</code> if the LCIO RecontructedParticle is 
+     *         composed of GBL tracks.
+     */
+    bool isGbl(EVENT::ReconstructedParticle* particle);
 
 } // DstUtils
 
