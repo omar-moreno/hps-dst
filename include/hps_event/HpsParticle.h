@@ -216,7 +216,7 @@ class HpsParticle : public TObject {
          *
          * @return The invariant mass of the particle in GeV
          */
-        double Mass() const { return mass; }; 
+        double getMass() const { return mass; }; 
         
         /**
          * Get the momentum of the particle in GeV.
