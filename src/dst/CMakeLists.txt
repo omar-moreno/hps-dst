@@ -30,7 +30,11 @@ target_link_libraries(MCParticleDataWriter ${LCIO_LIB} HpsEvent)
 
 # Create the HpsParticleDataWriter library
 add_library(HpsParticleDataWriter HpsParticleDataWriter.cxx)
-target_link_libraries(HpsParticleDataWriter ${LCIO_LIB} HpsEvent)
+target_link_libraries(HpsParticleDataWriter 
+    ${LCIO_LIB} 
+    DstUtils
+    HpsEvent
+)
 
 # Create the HpsEventBuilder library
 add_library(HpsEventBuilder HpsEventBuilder.cxx)

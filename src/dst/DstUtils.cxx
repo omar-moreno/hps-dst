@@ -38,3 +38,7 @@ std::vector<EVENT::LCCollection*> DstUtils::getCollections(EVENT::LCEvent* event
 bool DstUtils::isGbl(EVENT::Track* track) { 
     return (track->getType() & (1 << 5)) != 0; 
 }
+
+bool DstUtils::isGbl(EVENT::ReconstructedParticle* particle) { 
+    return (particle->getType() & (1 << 5)) != 0; 
+}
