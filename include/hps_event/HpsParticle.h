@@ -29,15 +29,15 @@ class HpsParticle : public TObject {
     public:
 
         /** Enum constants used to denote the different particle types */
-		enum ParticleType { 
-			FINAL_STATE_PARTICLE = 0,
-			UC_V0_CANDIDATE	     = 1, 
-			BSC_V0_CANDIDATE	 = 2, 
-			TC_V0_CANDIDATE	     = 3,
-			UC_MOLLER_CANDIDATE	 = 4, 
-			BSC_MOLLER_CANDIDATE = 5, 
-			TC_MOLLER_CANDIDATE	 = 6,
-		};
+        enum ParticleType { 
+            FINAL_STATE_PARTICLE = 0,
+            UC_V0_CANDIDATE      = 1, 
+            BSC_V0_CANDIDATE     = 2, 
+            TC_V0_CANDIDATE      = 3,
+            UC_MOLLER_CANDIDATE  = 4, 
+            BSC_MOLLER_CANDIDATE = 5, 
+            TC_MOLLER_CANDIDATE  = 6,
+        };
 
         /** Default Constructor. */
         HpsParticle(); 
@@ -133,9 +133,17 @@ class HpsParticle : public TObject {
          * Set the momentum of the particle in GeV.
          *
          * @param momentum An array containing the three momentum components 
-         *                 of the particle
+         *                 of the particle.
          */
-        void setMomentum(const double* momentum); 
+        void setMomentum(const double* momentum);
+
+        /**
+         * Set the corrected momentum of the paritcle in GeV.
+         *
+         * @param momentum An array containing the three momentum components
+         *                 of the particle.
+         */
+        void setCorrMomentum(const double* momentum);  
 
         /**
          * Set the vertex position of the particle.
@@ -216,7 +224,7 @@ class HpsParticle : public TObject {
          *
          * @return The invariant mass of the particle in GeV
          */
-        double Mass() const { return mass; }; 
+        double getMass() const { return mass; }; 
         
         /**
          * Get the momentum of the particle in GeV.
@@ -224,7 +232,15 @@ class HpsParticle : public TObject {
          * @return The momentum of the particle
          */
         std::vector<double> getMomentum() const;  
-        
+       
+        /**
+         * Get the corrected momentum of the paritcle in GeV.
+         *
+         * @param momentum An array containing the three corrected momentum
+         *                 components of the particle.
+         */
+        std::vector<double> getCorrMomentum() const;  
+
         /**
          * Get the vertex position of the particle.
          *
@@ -276,11 +292,20 @@ class HpsParticle : public TObject {
         /** The x component of the momentum of this particle in GeV */
         double px; 
 
+        /** The x component of the corrected momentum of this particle in GeV */
+        double px_corr; 
+
         /** The y component of the momentum of this particle in GeV */
         double py; 
 
+        /** The y component of the corrected momentum of this particle in GeV */
+        double py_corr; 
+        
         /** The z component of the momentum of this particle in GeV */
         double pz;
+        
+        /** The z component of the corrected momentum of this particle in GeV */
+        double pz_corr;
 
         /** The x component of the vertex of this particle in mm*/
         double vtx_x;
