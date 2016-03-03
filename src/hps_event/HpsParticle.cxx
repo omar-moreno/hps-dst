@@ -24,8 +24,11 @@ HpsParticle::HpsParticle()
       pdg(0), 
       goodness_pid(-9999),   
       px(0),
+      px_corr(0), 
       py(0),
+      py_corr(0),
       pz(0),
+      pz_corr(0),
       vtx_x(0),
       vtx_y(0),
       vtx_z(0),
@@ -45,8 +48,11 @@ HpsParticle::HpsParticle(const HpsParticle &particle_obj)
       pdg(particle_obj.pdg), 
       goodness_pid(particle_obj.goodness_pid), 
       px(particle_obj.px),
+      px_corr(particle_obj.px_corr),
       py(particle_obj.py),
+      py_corr(particle_obj.py_corr),
       pz(particle_obj.pz), 
+      pz_corr(particle_obj.pz_corr),
       vtx_x(particle_obj.vtx_x),
       vtx_y(particle_obj.vtx_y),
       vtx_z(particle_obj.vtx_z),
@@ -80,8 +86,11 @@ HpsParticle &HpsParticle::operator=(const HpsParticle &particle_obj) {
     this->goodness_pid = particle_obj.goodness_pid; 
 
     this->px = particle_obj.px; 
+    this->px_corr = particle_obj.px_corr; 
     this->py = particle_obj.py; 
+    this->py_corr = particle_obj.py_corr; 
     this->pz = particle_obj.pz; 
+    this->pz_corr = particle_obj.pz_corr; 
     this->vtx_x = particle_obj.vtx_x;
     this->vtx_y = particle_obj.vtx_y;
     this->vtx_z = particle_obj.vtx_z;
@@ -126,6 +135,12 @@ void HpsParticle::setMomentum(const double* momentum) {
     pz = momentum[2];
 }
 
+void HpsParticle::setCorrMomentum(const double* momentum) {
+    px_corr = momentum[0];
+    py_corr = momentum[1];
+    pz_corr = momentum[2];
+}
+
 void HpsParticle::setVertexPosition(const float* vtx_pos) {
     vtx_x = (double) vtx_pos[0];
     vtx_y = (double) vtx_pos[1];
@@ -149,6 +164,11 @@ std::vector<double> HpsParticle::getMomentum() const {
     momentum[0] = px;
     momentum[1] = py;
     momentum[2] = pz;
+    return momentum;
+}
+
+std::vector<double> HpsParticle::getCorrMomentum() const {
+    std::vector<double> momentum {px, py, pz};
     return momentum;
 }
 
