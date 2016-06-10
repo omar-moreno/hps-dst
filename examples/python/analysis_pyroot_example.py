@@ -240,7 +240,7 @@ def main():
             h_vertex_z.Fill(vertex_z)
 
             # Get the invariant mass of the particle and plot it
-            mass = particle.Mass()
+            mass = particle.getMass()
             h_invariant_mass.Fill(mass)
 
             # Get the momentum of both the daughter particles and plot them
