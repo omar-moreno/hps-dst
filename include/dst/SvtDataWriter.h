@@ -23,13 +23,13 @@
 //-----------//
 //--- DST ---//
 //-----------//
-#include <DataWriter.h>
-#include <DstUtils.h>
+#include "DataWriter.h"
+#include "DstUtils.h"
 
 //-------------//
 //--- Utils ---//
 //-------------//
-#include <TrackUtils.h>
+#include "TrackUtils.h"
 
 //------------//
 //--- LCIO ---//
@@ -44,8 +44,8 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include <SvtTrack.h>
-#include <SvtHit.h>
+#include "SvtTrack.h"
+#include "SvtHit.h"
 
 class SvtDataWriter : public DataWriter { 
 

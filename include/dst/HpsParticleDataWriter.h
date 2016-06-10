@@ -30,14 +30,14 @@
 //-----------//
 //--- DST ---//
 //-----------//
-#include <DataWriter.h>
+#include "DataWriter.h"
 
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include <DstUtils.h>
-#include <HpsParticle.h>
-#include <HpsEvent.h>
+#include "DstUtils.h"
+#include "HpsParticle.h"
+#include "HpsEvent.h"
 
 class HpsParticleDataWriter : public DataWriter { 
 
