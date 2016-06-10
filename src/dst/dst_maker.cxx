@@ -33,12 +33,12 @@
 //-----------//
 //--- DST ---//
 //-----------//
-#include <HpsEventBuilder.h>
+#include "HpsEventBuilder.h"
 
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include <HpsEvent.h>
+#include "HpsEvent.h"
 
 using namespace std;
 

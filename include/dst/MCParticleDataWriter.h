@@ -16,7 +16,7 @@
 
 //--- DST ---//
 //-----------//
-#include <DataWriter.h>
+#include "DataWriter.h"
 
 //--- LCIO ---//
 //------------//
@@ -26,7 +26,7 @@
 
 //--- HPS Event ---//
 //-----------------//
-#include <HpsMCParticle.h>
+#include "HpsMCParticle.h"
 
 class MCParticleDataWriter : public DataWriter {
 

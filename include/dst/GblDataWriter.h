@@ -32,18 +32,18 @@
 //---------------//
 //--- HPS DST ---//
 //---------------//
-#include <DataWriter.h>
+#include "DataWriter.h"
 
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include <GblTrackData.h>
-#include <GblStripData.h>
+#include "GblTrackData.h"
+#include "GblStripData.h"
 
 //-------------//
 //--- Utils ---//
 //-------------//
-#include <HpsGblFitter.h>
+#include "HpsGblFitter.h"
 
 // Forward declarations
 class SvtTrack; 

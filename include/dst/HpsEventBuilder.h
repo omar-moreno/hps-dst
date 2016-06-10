@@ -13,12 +13,12 @@
 //-----------//
 //--- DST ---//
 //-----------//
-#include <EventBuilder.h>
-#include <SvtDataWriter.h>
-#include <EcalDataWriter.h>
-#include <MCParticleDataWriter.h>
-#include <HpsParticleDataWriter.h>
-#include <TriggerData.h>
+#include "EventBuilder.h"
+#include "SvtDataWriter.h"
+#include "EcalDataWriter.h"
+#include "MCParticleDataWriter.h"
+#include "HpsParticleDataWriter.h"
+#include "TriggerData.h"
 
 //------------//
 //--- LCIO ---//

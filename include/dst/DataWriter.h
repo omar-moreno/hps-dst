@@ -17,7 +17,7 @@
 
 //--- HPS Event ---//
 //-----------------//
-#include <HpsEvent.h>
+#include "HpsEvent.h"
 
 class DataWriter { 
 	

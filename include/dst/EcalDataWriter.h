@@ -13,12 +13,12 @@
 //-----------//
 //--- DST ---//
 //-----------//
-#include <DataWriter.h>
+#include "DataWriter.h"
 
 //-------------//
 //--- Utils ---//
 //-------------//
-#include <EcalUtils.h>
+#include "EcalUtils.h"
 
 //------------//
 //--- LCIO ---//
@@ -30,8 +30,8 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include <EcalCluster.h>
-#include <EcalHit.h>
+#include "EcalCluster.h"
+#include "EcalHit.h"
 
 class EcalDataWriter : public DataWriter {
 
