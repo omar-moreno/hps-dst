@@ -28,13 +28,13 @@
 //---------------//
 //   HPS Event   //
 //---------------//
-#include <EcalCluster.h> 
-#include <EcalHit.h>
-#include <HpsParticle.h>
-#include <HpsMCParticle.h>
-#include <GblTrack.h>
-#include <SvtTrack.h>
-#include <SvtHit.h>
+#include "EcalCluster.h"
+#include "EcalHit.h"
+#include "HpsParticle.h"
+#include "HpsMCParticle.h"
+#include "GblTrack.h"
+#include "SvtTrack.h"
+#include "SvtHit.h"
 
 class HpsEvent : public TObject { 
 
@@ -239,7 +239,7 @@ class HpsEvent : public TObject {
          *
          * @return The event time stamp.  
          */
-        int getEventTime() const { return event_time; };
+        long getEventTime() const { return event_time; };
 
         /** */
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };

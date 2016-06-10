@@ -28,8 +28,8 @@
 //-----------------//
 //--- HPS Event ---//
 //-----------------//
-#include <GblStripData.h>
-#include <SvtTrack.h>
+#include "GblStripData.h"
+#include "SvtTrack.h"
 
 // TODO: Add documentation
 class GblTrackData : public TObject {
