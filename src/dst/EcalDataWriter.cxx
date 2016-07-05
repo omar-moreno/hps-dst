@@ -10,14 +10,47 @@
 #include <EcalDataWriter.h>
 
 EcalDataWriter::EcalDataWriter()
-    : clusters_collection_name("EcalClustersCorr") {
+    : clusters_collection_name("EcalClustersCorr"),hits_collection_name("EcalHits"){
 }
 
 EcalDataWriter::~EcalDataWriter() {
 }
 
 void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
-    
+  
+    // Get the collection of Ecal hits from the event.
+  
+  std::map<int,int> hit_map;
+  
+    hits = (IMPL::LCCollectionVec*) event->getCollection(hits_collection_name);
+    for(int hit_n=0;hit_n<hits->getNumberOfElements();++hit_n){
+      calorimeter_hit = (IMPL::CalorimeterHitImpl*)hits->getElementAt(hit_n);
+      
+      // Get the unique cell id of this hit.
+      int id0=calorimeter_hit->getCellID0();
+
+      // Add an Ecal hit to the HPS Event
+      ecal_hit = hps_event->addEcalHit();
+      
+      int loc=hps_event->getNumberOfEcalHits() -1;
+
+      hit_map[id0] = loc;
+      
+      // Set the energy of the Ecal hit
+      ecal_hit->setEnergy(calorimeter_hit->getEnergy());
+      
+      // Set the hit time of the Ecal hit
+      ecal_hit->setTime(calorimeter_hit->getTime());
+      
+      // Set the indices of the crystal
+      int index_x = EcalUtils::getIdentifierFieldValue("ix", calorimeter_hit);
+      int index_y = EcalUtils::getIdentifierFieldValue("iy", calorimeter_hit);
+      
+      ecal_hit->setCrystalIndices(index_x, index_y);
+      
+
+    }
+  
     // Get the collection of Ecal clusters from the event
     clusters = (IMPL::LCCollectionVec*) event->getCollection(clusters_collection_name);
 
@@ -47,23 +80,15 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             // Get an Ecal hit
             calorimeter_hit = (IMPL::CalorimeterHitImpl*) calorimeter_hits[ecal_hit_n];
 
-            // Add an Ecal hit to the HPS Event
-            ecal_hit = hps_event->addEcalHit();
-
-            // Set the energy of the Ecal hit
-            ecal_hit->setEnergy(calorimeter_hit->getEnergy());
-
-            // Set the hit time of the Ecal hit
-            ecal_hit->setTime(calorimeter_hit->getTime());
-
-            // Set the indices of the crystal
-            int index_x = EcalUtils::getIdentifierFieldValue("ix", calorimeter_hit);
-            int index_y = EcalUtils::getIdentifierFieldValue("iy", calorimeter_hit);
-
-            ecal_hit->setCrystalIndices(index_x, index_y);
-
-            // Add the hit to the cluster
-            ecal_cluster->addHit(ecal_hit);
+            int id0=calorimeter_hit->getCellID0();
+            if( hit_map.find(id0) == hit_map.end() ){
+              std::cerr << "WOOPS -- Hit not found in map, but it is in the cluster. " << id0;
+            }else{
+              int loc=hit_map[id0];
+              // Add the hit to the cluster
+              ecal_hit = hps_event->getEcalHit(loc);
+              ecal_cluster->addHit(ecal_hit);
+            }
         }
     }
 }
