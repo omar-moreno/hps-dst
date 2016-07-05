@@ -8,3 +8,5 @@
 #include "HpsEventlib.xcconfig"
 PRODUCT_NAME=dst_maker
 EXECUTABLE_PREFIX=
+
+LCIOLIBDIR=${LCIO}/lib

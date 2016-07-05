@@ -242,6 +242,9 @@ class HpsEvent : public TObject {
         long getEventTime() const { return event_time; };
 
         /** */
+        int getNumberOfEcalHits() const { return n_ecal_hits; };
+  
+        /** */
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
        
         /**

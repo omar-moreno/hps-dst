@@ -61,8 +61,10 @@ class EcalDataWriter : public DataWriter {
     private:
 
         std::string clusters_collection_name;
+        std::string hits_collection_name;
 
-        IMPL::LCCollectionVec* clusters;  
+        IMPL::LCCollectionVec* clusters;
+        IMPL::LCCollectionVec* hits;
         IMPL::ClusterImpl* cluster;
         IMPL::CalorimeterHitImpl* calorimeter_hit;
 
