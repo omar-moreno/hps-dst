@@ -7,10 +7,10 @@
  *  @date: January 7, 2013
  */
 
-#include <EcalDataWriter.h>
+#include "EcalDataWriter.h"
 
 EcalDataWriter::EcalDataWriter()
-    : clusters_collection_name("EcalClustersCorr"),hits_collection_name("EcalHits"){
+    : clusters_collection_name("EcalClustersCorr"),hits_collection_name("EcalCalHits"){
 }
 
 EcalDataWriter::~EcalDataWriter() {
