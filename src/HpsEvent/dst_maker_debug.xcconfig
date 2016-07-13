@@ -1,0 +1,13 @@
+//
+//  AprimeAna.xcconfig
+//  AprimeAna
+//
+//  Created by Maurik Holtrop on 6/4/10.
+//  Copyright 2010 University of New Hampshire. All rights reserved.
+//
+#include "HpsEventlib.xcconfig"
+PRODUCT_NAME=dst_maker_debug
+EXECUTABLE_PREFIX=
+INSTALL_PATH =/bin
+
+LCIOLIBDIR=${LCIO}/lib
