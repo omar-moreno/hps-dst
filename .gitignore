@@ -1,4 +1,3 @@
-
 # Compiled Sources 
 bin/
 .obj/
@@ -7,6 +6,13 @@ bin/
 
 # Build Directory 
 build/
+
+# XCode files that change by user
+**/xcuserdata/**
+**/xcshareddata/**
+Release/**
+Debug/**
+
 
 # LCIO and ROOT files  
 *.lcio
