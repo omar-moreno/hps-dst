@@ -20,7 +20,7 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   
     // Get the collection of Ecal hits from the event.
   
-  std::map<int,int> hit_map;
+  std::map<int,EcalHit *> hit_map;
   
     hits = (IMPL::LCCollectionVec*) event->getCollection(hits_collection_name);
     for(int hit_n=0;hit_n<hits->getNumberOfElements();++hit_n){
@@ -31,10 +31,9 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
       // Add an Ecal hit to the HPS Event
       ecal_hit = hps_event->addEcalHit();
-      
-      int loc=hps_event->getNumberOfEcalHits() -1;
 
-      hit_map[id0] = loc;
+      // Put hit in the map, so we can find it easily later.
+      hit_map[id0] = ecal_hit;
       
       // Set the energy of the Ecal hit
       ecal_hit->setEnergy(calorimeter_hit->getEnergy());
@@ -84,9 +83,8 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             if( hit_map.find(id0) == hit_map.end() ){
               std::cerr << "WOOPS -- Hit not found in map, but it is in the cluster. " << id0;
             }else{
-              int loc=hit_map[id0];
+              ecal_hit =hit_map[id0];
               // Add the hit to the cluster
-              ecal_hit = hps_event->getEcalHit(loc);
               ecal_cluster->addHit(ecal_hit);
             }
         }
