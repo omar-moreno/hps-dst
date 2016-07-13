@@ -1,0 +1,599 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		40A3CCD51CB53C2B00C1A9F0 /* EcalCluster.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCC81CB53C2B00C1A9F0 /* EcalCluster.cxx */; };
+		40A3CCD61CB53C2B00C1A9F0 /* EcalHit.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCC91CB53C2B00C1A9F0 /* EcalHit.cxx */; };
+		40A3CCD81CB53C2B00C1A9F0 /* GblTrack.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCCB1CB53C2B00C1A9F0 /* GblTrack.cxx */; };
+		40A3CCDA1CB53C2B00C1A9F0 /* HpsEvent.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCCD1CB53C2B00C1A9F0 /* HpsEvent.cxx */; settings = {COMPILER_FLAGS = "-DHpsEvent_EXPORTS"; }; };
+		40A3CCDB1CB53C2B00C1A9F0 /* HpsMCParticle.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCCE1CB53C2B00C1A9F0 /* HpsMCParticle.cxx */; };
+		40A3CCDC1CB53C2B00C1A9F0 /* HpsParticle.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCCF1CB53C2B00C1A9F0 /* HpsParticle.cxx */; };
+		40A3CCDF1CB53C2B00C1A9F0 /* SvtHit.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCD21CB53C2B00C1A9F0 /* SvtHit.cxx */; };
+		40A3CCE01CB53C2B00C1A9F0 /* SvtTrack.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCD31CB53C2B00C1A9F0 /* SvtTrack.cxx */; };
+		40A3CCE11CB53C2B00C1A9F0 /* TriggerData.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCD41CB53C2B00C1A9F0 /* TriggerData.cxx */; };
+		40A3CCEA1CB53C5600C1A9F0 /* EcalUtils.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCE51CB53C5600C1A9F0 /* EcalUtils.cxx */; };
+		40A3CCEC1CB53C5600C1A9F0 /* TrackType.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCE71CB53C5600C1A9F0 /* TrackType.cxx */; };
+		40A3CCED1CB53C5600C1A9F0 /* TrackUtils.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCE81CB53C5600C1A9F0 /* TrackUtils.cxx */; };
+		40A3CCF91CB53C6600C1A9F0 /* DstUtils.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF11CB53C6600C1A9F0 /* DstUtils.cxx */; };
+		40A3CCFA1CB53C6600C1A9F0 /* EcalDataWriter.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF21CB53C6600C1A9F0 /* EcalDataWriter.cxx */; };
+		40A3CCFC1CB53C6600C1A9F0 /* HpsEventBuilder.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF41CB53C6600C1A9F0 /* HpsEventBuilder.cxx */; };
+		40A3CCFD1CB53C6600C1A9F0 /* HpsParticleDataWriter.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF51CB53C6600C1A9F0 /* HpsParticleDataWriter.cxx */; };
+		40A3CCFE1CB53C6600C1A9F0 /* MCParticleDataWriter.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF61CB53C6600C1A9F0 /* MCParticleDataWriter.cxx */; };
+		40A3CCFF1CB53C6600C1A9F0 /* SvtDataWriter.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF71CB53C6600C1A9F0 /* SvtDataWriter.cxx */; };
+		40A3CD121CB53CB800C1A9F0 /* CalorimeterHit.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD011CB53CB800C1A9F0 /* CalorimeterHit.h */; };
+		40A3CD131CB53CB800C1A9F0 /* Cluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD021CB53CB800C1A9F0 /* Cluster.h */; };
+		40A3CD141CB53CB800C1A9F0 /* EcalCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD031CB53CB800C1A9F0 /* EcalCluster.h */; };
+		40A3CD151CB53CB800C1A9F0 /* EcalHit.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD041CB53CB800C1A9F0 /* EcalHit.h */; };
+		40A3CD171CB53CB800C1A9F0 /* GblTrack.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD061CB53CB800C1A9F0 /* GblTrack.h */; };
+		40A3CD191CB53CB800C1A9F0 /* HpsEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */; };
+		40A3CD1A1CB53CB800C1A9F0 /* HpsEventLinkDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD091CB53CB800C1A9F0 /* HpsEventLinkDef.h */; };
+		40A3CD1B1CB53CB800C1A9F0 /* HpsMCParticle.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD0A1CB53CB800C1A9F0 /* HpsMCParticle.h */; };
+		40A3CD1C1CB53CB800C1A9F0 /* HpsParticle.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD0B1CB53CB800C1A9F0 /* HpsParticle.h */; };
+		40A3CD1D1CB53CB800C1A9F0 /* LegacyGblTrack.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD0C1CB53CB800C1A9F0 /* LegacyGblTrack.h */; };
+		40A3CD1E1CB53CB800C1A9F0 /* MCParticle.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */; };
+		40A3CD201CB53CB800C1A9F0 /* SvtHit.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD0F1CB53CB800C1A9F0 /* SvtHit.h */; };
+		40A3CD211CB53CB800C1A9F0 /* SvtTrack.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD101CB53CB800C1A9F0 /* SvtTrack.h */; };
+		40A3CD221CB53CB800C1A9F0 /* TriggerData.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD111CB53CB800C1A9F0 /* TriggerData.h */; };
+		40A3CD2D1CB53CD300C1A9F0 /* DataWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD241CB53CD300C1A9F0 /* DataWriter.h */; };
+		40A3CD2E1CB53CD300C1A9F0 /* DstUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD251CB53CD300C1A9F0 /* DstUtils.h */; };
+		40A3CD2F1CB53CD300C1A9F0 /* EcalDataWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD261CB53CD300C1A9F0 /* EcalDataWriter.h */; };
+		40A3CD301CB53CD300C1A9F0 /* EventBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD271CB53CD300C1A9F0 /* EventBuilder.h */; };
+		40A3CD321CB53CD300C1A9F0 /* HpsEventBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD291CB53CD300C1A9F0 /* HpsEventBuilder.h */; };
+		40A3CD331CB53CD300C1A9F0 /* HpsParticleDataWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD2A1CB53CD300C1A9F0 /* HpsParticleDataWriter.h */; };
+		40A3CD341CB53CD300C1A9F0 /* MCParticleDataWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD2B1CB53CD300C1A9F0 /* MCParticleDataWriter.h */; };
+		40A3CD351CB53CD300C1A9F0 /* SvtDataWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD2C1CB53CD300C1A9F0 /* SvtDataWriter.h */; };
+		40A3CD3E1CB53CF200C1A9F0 /* StrategyType.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD391CB53CF200C1A9F0 /* StrategyType.h */; };
+		40A3CD3F1CB53CF200C1A9F0 /* TrackType.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD3A1CB53CF200C1A9F0 /* TrackType.h */; };
+		40A3CD401CB53CF200C1A9F0 /* TrackUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD3B1CB53CF200C1A9F0 /* TrackUtils.h */; };
+		40A3CD491CB6EAF600C1A9F0 /* EcalUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD371CB53CF200C1A9F0 /* EcalUtils.h */; };
+		40BED7581CF1FDAE00A8E675 /* HpsEvent.h in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */; };
+		40D9687B1D0B0A8000B48D9F /* dst_maker.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF01CB53C6600C1A9F0 /* dst_maker.cxx */; };
+		40D9687C1D0B0A9D00B48D9F /* libHpsEvent.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A3CCB81CB53BEA00C1A9F0 /* libHpsEvent.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		40A3CD461CB6E61900C1A9F0 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.h";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			name = "Create Dictionaries from '*.h'";
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)Dict.cxx",
+			);
+			script = "OUTFILES_LOCATION=${DERIVED_FILE_DIR}\necho \"Dictionary created in: \" ${OUTFILES_LOCATION}\nROOT_DICT_HDRS_FULL=\"\"\nfor i in ${ROOT_DICT_HDRS}; do ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL} ${ROOT_DICT_HDRS_DIR}/${i}\"; done\n# echo ${ROOT_DICT_HDRS_FULL}\necho ${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\ntest -d ${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE}; echo \"Copied: \" ${OUTFILES_LOCAIONT}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi\n#\n#echo ${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}_Dict.cpp -c -p -I${HEADER_SEARCH_PATHS// / -I} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h ${INPUT_FILE_PATH}\n#${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict.cc -c -p -I${HEADER_SEARCH_PATHS// / -I}  ${INPUT_FILE_PATH} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\n#    test -d ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		40D968721D0B0A1200B48D9F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4099A2B81D16394600E935DB /* dst_maker_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = dst_maker_debug.xcconfig; sourceTree = "<group>"; };
+		40A3CCB81CB53BEA00C1A9F0 /* libHpsEvent.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libHpsEvent.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		40A3CCC71CB53C2B00C1A9F0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		40A3CCC81CB53C2B00C1A9F0 /* EcalCluster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EcalCluster.cxx; sourceTree = "<group>"; };
+		40A3CCC91CB53C2B00C1A9F0 /* EcalHit.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EcalHit.cxx; sourceTree = "<group>"; };
+		40A3CCCA1CB53C2B00C1A9F0 /* GblStripData.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GblStripData.cxx; sourceTree = "<group>"; };
+		40A3CCCB1CB53C2B00C1A9F0 /* GblTrack.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GblTrack.cxx; sourceTree = "<group>"; };
+		40A3CCCC1CB53C2B00C1A9F0 /* GblTrackData.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GblTrackData.cxx; sourceTree = "<group>"; };
+		40A3CCCD1CB53C2B00C1A9F0 /* HpsEvent.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HpsEvent.cxx; sourceTree = "<group>"; };
+		40A3CCCE1CB53C2B00C1A9F0 /* HpsMCParticle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HpsMCParticle.cxx; sourceTree = "<group>"; };
+		40A3CCCF1CB53C2B00C1A9F0 /* HpsParticle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HpsParticle.cxx; sourceTree = "<group>"; };
+		40A3CCD01CB53C2B00C1A9F0 /* LegacyGblTrack.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LegacyGblTrack.cxx; sourceTree = "<group>"; };
+		40A3CCD11CB53C2B00C1A9F0 /* MuonCluster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MuonCluster.cxx; sourceTree = "<group>"; };
+		40A3CCD21CB53C2B00C1A9F0 /* SvtHit.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SvtHit.cxx; sourceTree = "<group>"; };
+		40A3CCD31CB53C2B00C1A9F0 /* SvtTrack.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SvtTrack.cxx; sourceTree = "<group>"; };
+		40A3CCD41CB53C2B00C1A9F0 /* TriggerData.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriggerData.cxx; sourceTree = "<group>"; };
+		40A3CCE31CB53C5600C1A9F0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		40A3CCE41CB53C5600C1A9F0 /* dump_hps_event.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dump_hps_event.cxx; sourceTree = "<group>"; };
+		40A3CCE51CB53C5600C1A9F0 /* EcalUtils.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EcalUtils.cxx; sourceTree = "<group>"; };
+		40A3CCE61CB53C5600C1A9F0 /* HpsGblFitter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HpsGblFitter.cxx; sourceTree = "<group>"; };
+		40A3CCE71CB53C5600C1A9F0 /* TrackType.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TrackType.cxx; sourceTree = "<group>"; };
+		40A3CCE81CB53C5600C1A9F0 /* TrackUtils.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TrackUtils.cxx; sourceTree = "<group>"; };
+		40A3CCEF1CB53C6600C1A9F0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		40A3CCF01CB53C6600C1A9F0 /* dst_maker.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dst_maker.cxx; sourceTree = "<group>"; };
+		40A3CCF11CB53C6600C1A9F0 /* DstUtils.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DstUtils.cxx; sourceTree = "<group>"; };
+		40A3CCF21CB53C6600C1A9F0 /* EcalDataWriter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EcalDataWriter.cxx; sourceTree = "<group>"; };
+		40A3CCF31CB53C6600C1A9F0 /* GblDataWriter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GblDataWriter.cxx; sourceTree = "<group>"; };
+		40A3CCF41CB53C6600C1A9F0 /* HpsEventBuilder.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HpsEventBuilder.cxx; sourceTree = "<group>"; };
+		40A3CCF51CB53C6600C1A9F0 /* HpsParticleDataWriter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HpsParticleDataWriter.cxx; sourceTree = "<group>"; };
+		40A3CCF61CB53C6600C1A9F0 /* MCParticleDataWriter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MCParticleDataWriter.cxx; sourceTree = "<group>"; };
+		40A3CCF71CB53C6600C1A9F0 /* SvtDataWriter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SvtDataWriter.cxx; sourceTree = "<group>"; };
+		40A3CD011CB53CB800C1A9F0 /* CalorimeterHit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalorimeterHit.h; path = ../../include/hps_event/CalorimeterHit.h; sourceTree = "<group>"; };
+		40A3CD021CB53CB800C1A9F0 /* Cluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cluster.h; path = ../../include/hps_event/Cluster.h; sourceTree = "<group>"; };
+		40A3CD031CB53CB800C1A9F0 /* EcalCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EcalCluster.h; path = ../../include/hps_event/EcalCluster.h; sourceTree = "<group>"; };
+		40A3CD041CB53CB800C1A9F0 /* EcalHit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EcalHit.h; path = ../../include/hps_event/EcalHit.h; sourceTree = "<group>"; };
+		40A3CD051CB53CB800C1A9F0 /* GblStripData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GblStripData.h; path = ../../include/hps_event/GblStripData.h; sourceTree = "<group>"; };
+		40A3CD061CB53CB800C1A9F0 /* GblTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GblTrack.h; path = ../../include/hps_event/GblTrack.h; sourceTree = "<group>"; };
+		40A3CD071CB53CB800C1A9F0 /* GblTrackData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GblTrackData.h; path = ../../include/hps_event/GblTrackData.h; sourceTree = "<group>"; };
+		40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsEvent.h; path = ../../include/hps_event/HpsEvent.h; sourceTree = "<group>"; };
+		40A3CD091CB53CB800C1A9F0 /* HpsEventLinkDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsEventLinkDef.h; path = ../../include/hps_event/HpsEventLinkDef.h; sourceTree = "<group>"; };
+		40A3CD0A1CB53CB800C1A9F0 /* HpsMCParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsMCParticle.h; path = ../../include/hps_event/HpsMCParticle.h; sourceTree = "<group>"; };
+		40A3CD0B1CB53CB800C1A9F0 /* HpsParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsParticle.h; path = ../../include/hps_event/HpsParticle.h; sourceTree = "<group>"; };
+		40A3CD0C1CB53CB800C1A9F0 /* LegacyGblTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyGblTrack.h; path = ../../include/hps_event/LegacyGblTrack.h; sourceTree = "<group>"; };
+		40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCParticle.h; path = ../../include/hps_event/MCParticle.h; sourceTree = "<group>"; };
+		40A3CD0E1CB53CB800C1A9F0 /* MuonCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MuonCluster.h; path = ../../include/hps_event/MuonCluster.h; sourceTree = "<group>"; };
+		40A3CD0F1CB53CB800C1A9F0 /* SvtHit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SvtHit.h; path = ../../include/hps_event/SvtHit.h; sourceTree = "<group>"; };
+		40A3CD101CB53CB800C1A9F0 /* SvtTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SvtTrack.h; path = ../../include/hps_event/SvtTrack.h; sourceTree = "<group>"; };
+		40A3CD111CB53CB800C1A9F0 /* TriggerData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TriggerData.h; path = ../../include/hps_event/TriggerData.h; sourceTree = "<group>"; };
+		40A3CD241CB53CD300C1A9F0 /* DataWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataWriter.h; path = ../../include/dst/DataWriter.h; sourceTree = "<group>"; };
+		40A3CD251CB53CD300C1A9F0 /* DstUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DstUtils.h; path = ../../include/dst/DstUtils.h; sourceTree = "<group>"; };
+		40A3CD261CB53CD300C1A9F0 /* EcalDataWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EcalDataWriter.h; path = ../../include/dst/EcalDataWriter.h; sourceTree = "<group>"; };
+		40A3CD271CB53CD300C1A9F0 /* EventBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventBuilder.h; path = ../../include/dst/EventBuilder.h; sourceTree = "<group>"; };
+		40A3CD281CB53CD300C1A9F0 /* GblDataWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GblDataWriter.h; path = ../../include/dst/GblDataWriter.h; sourceTree = "<group>"; };
+		40A3CD291CB53CD300C1A9F0 /* HpsEventBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsEventBuilder.h; path = ../../include/dst/HpsEventBuilder.h; sourceTree = "<group>"; };
+		40A3CD2A1CB53CD300C1A9F0 /* HpsParticleDataWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsParticleDataWriter.h; path = ../../include/dst/HpsParticleDataWriter.h; sourceTree = "<group>"; };
+		40A3CD2B1CB53CD300C1A9F0 /* MCParticleDataWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCParticleDataWriter.h; path = ../../include/dst/MCParticleDataWriter.h; sourceTree = "<group>"; };
+		40A3CD2C1CB53CD300C1A9F0 /* SvtDataWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SvtDataWriter.h; path = ../../include/dst/SvtDataWriter.h; sourceTree = "<group>"; };
+		40A3CD371CB53CF200C1A9F0 /* EcalUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EcalUtils.h; path = ../../include/utils/EcalUtils.h; sourceTree = "<group>"; };
+		40A3CD381CB53CF200C1A9F0 /* HpsGblFitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HpsGblFitter.h; path = ../../include/utils/HpsGblFitter.h; sourceTree = "<group>"; };
+		40A3CD391CB53CF200C1A9F0 /* StrategyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StrategyType.h; path = ../../include/utils/StrategyType.h; sourceTree = "<group>"; };
+		40A3CD3A1CB53CF200C1A9F0 /* TrackType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackType.h; path = ../../include/utils/TrackType.h; sourceTree = "<group>"; };
+		40A3CD3B1CB53CF200C1A9F0 /* TrackUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackUtils.h; path = ../../include/utils/TrackUtils.h; sourceTree = "<group>"; };
+		40A3CD411CB6D9A100C1A9F0 /* dst_maker.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = dst_maker.xcconfig; sourceTree = "<group>"; };
+		40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEvent_release.xcconfig; sourceTree = "<group>"; };
+		40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEvent_debug.xcconfig; sourceTree = "<group>"; };
+		40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEventlib.xcconfig; sourceTree = "<group>"; };
+		40D968741D0B0A1200B48D9F /* dst_maker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dst_maker; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		40A3CCB51CB53BEA00C1A9F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40D968711D0B0A1200B48D9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40D9687C1D0B0A9D00B48D9F /* libHpsEvent.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		40A3CCAF1CB53BEA00C1A9F0 = {
+			isa = PBXGroup;
+			children = (
+				40A3CD451CB6D9A900C1A9F0 /* Config */,
+				40A3CCE21CB53C5600C1A9F0 /* utils */,
+				40A3CCEE1CB53C6600C1A9F0 /* dst */,
+				40A3CCC61CB53C2B00C1A9F0 /* hps_event */,
+				40A3CCB91CB53BEA00C1A9F0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		40A3CCB91CB53BEA00C1A9F0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				40A3CCB81CB53BEA00C1A9F0 /* libHpsEvent.dylib */,
+				40D968741D0B0A1200B48D9F /* dst_maker */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		40A3CCC61CB53C2B00C1A9F0 /* hps_event */ = {
+			isa = PBXGroup;
+			children = (
+				40A3CD011CB53CB800C1A9F0 /* CalorimeterHit.h */,
+				40A3CD021CB53CB800C1A9F0 /* Cluster.h */,
+				40A3CD031CB53CB800C1A9F0 /* EcalCluster.h */,
+				40A3CD041CB53CB800C1A9F0 /* EcalHit.h */,
+				40A3CD051CB53CB800C1A9F0 /* GblStripData.h */,
+				40A3CD061CB53CB800C1A9F0 /* GblTrack.h */,
+				40A3CD071CB53CB800C1A9F0 /* GblTrackData.h */,
+				40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */,
+				40A3CD091CB53CB800C1A9F0 /* HpsEventLinkDef.h */,
+				40A3CD0A1CB53CB800C1A9F0 /* HpsMCParticle.h */,
+				40A3CD0B1CB53CB800C1A9F0 /* HpsParticle.h */,
+				40A3CD0C1CB53CB800C1A9F0 /* LegacyGblTrack.h */,
+				40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */,
+				40A3CD0E1CB53CB800C1A9F0 /* MuonCluster.h */,
+				40A3CD0F1CB53CB800C1A9F0 /* SvtHit.h */,
+				40A3CD101CB53CB800C1A9F0 /* SvtTrack.h */,
+				40A3CD111CB53CB800C1A9F0 /* TriggerData.h */,
+				40A3CCC71CB53C2B00C1A9F0 /* CMakeLists.txt */,
+				40A3CCC81CB53C2B00C1A9F0 /* EcalCluster.cxx */,
+				40A3CCC91CB53C2B00C1A9F0 /* EcalHit.cxx */,
+				40A3CCCA1CB53C2B00C1A9F0 /* GblStripData.cxx */,
+				40A3CCCB1CB53C2B00C1A9F0 /* GblTrack.cxx */,
+				40A3CCCC1CB53C2B00C1A9F0 /* GblTrackData.cxx */,
+				40A3CCCD1CB53C2B00C1A9F0 /* HpsEvent.cxx */,
+				40A3CCCE1CB53C2B00C1A9F0 /* HpsMCParticle.cxx */,
+				40A3CCCF1CB53C2B00C1A9F0 /* HpsParticle.cxx */,
+				40A3CCD01CB53C2B00C1A9F0 /* LegacyGblTrack.cxx */,
+				40A3CCD11CB53C2B00C1A9F0 /* MuonCluster.cxx */,
+				40A3CCD21CB53C2B00C1A9F0 /* SvtHit.cxx */,
+				40A3CCD31CB53C2B00C1A9F0 /* SvtTrack.cxx */,
+				40A3CCD41CB53C2B00C1A9F0 /* TriggerData.cxx */,
+			);
+			name = hps_event;
+			path = ../hps_event;
+			sourceTree = "<group>";
+		};
+		40A3CCE21CB53C5600C1A9F0 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				40A3CD371CB53CF200C1A9F0 /* EcalUtils.h */,
+				40A3CD381CB53CF200C1A9F0 /* HpsGblFitter.h */,
+				40A3CD391CB53CF200C1A9F0 /* StrategyType.h */,
+				40A3CD3A1CB53CF200C1A9F0 /* TrackType.h */,
+				40A3CD3B1CB53CF200C1A9F0 /* TrackUtils.h */,
+				40A3CCE31CB53C5600C1A9F0 /* CMakeLists.txt */,
+				40A3CCE41CB53C5600C1A9F0 /* dump_hps_event.cxx */,
+				40A3CCE51CB53C5600C1A9F0 /* EcalUtils.cxx */,
+				40A3CCE61CB53C5600C1A9F0 /* HpsGblFitter.cxx */,
+				40A3CCE71CB53C5600C1A9F0 /* TrackType.cxx */,
+				40A3CCE81CB53C5600C1A9F0 /* TrackUtils.cxx */,
+			);
+			name = utils;
+			path = ../utils;
+			sourceTree = "<group>";
+		};
+		40A3CCEE1CB53C6600C1A9F0 /* dst */ = {
+			isa = PBXGroup;
+			children = (
+				40A3CD241CB53CD300C1A9F0 /* DataWriter.h */,
+				40A3CD251CB53CD300C1A9F0 /* DstUtils.h */,
+				40A3CD261CB53CD300C1A9F0 /* EcalDataWriter.h */,
+				40A3CD271CB53CD300C1A9F0 /* EventBuilder.h */,
+				40A3CD281CB53CD300C1A9F0 /* GblDataWriter.h */,
+				40A3CD291CB53CD300C1A9F0 /* HpsEventBuilder.h */,
+				40A3CD2A1CB53CD300C1A9F0 /* HpsParticleDataWriter.h */,
+				40A3CD2B1CB53CD300C1A9F0 /* MCParticleDataWriter.h */,
+				40A3CD2C1CB53CD300C1A9F0 /* SvtDataWriter.h */,
+				40A3CCEF1CB53C6600C1A9F0 /* CMakeLists.txt */,
+				40A3CCF01CB53C6600C1A9F0 /* dst_maker.cxx */,
+				40A3CCF11CB53C6600C1A9F0 /* DstUtils.cxx */,
+				40A3CCF21CB53C6600C1A9F0 /* EcalDataWriter.cxx */,
+				40A3CCF31CB53C6600C1A9F0 /* GblDataWriter.cxx */,
+				40A3CCF41CB53C6600C1A9F0 /* HpsEventBuilder.cxx */,
+				40A3CCF51CB53C6600C1A9F0 /* HpsParticleDataWriter.cxx */,
+				40A3CCF61CB53C6600C1A9F0 /* MCParticleDataWriter.cxx */,
+				40A3CCF71CB53C6600C1A9F0 /* SvtDataWriter.cxx */,
+			);
+			name = dst;
+			path = ../dst;
+			sourceTree = "<group>";
+		};
+		40A3CD451CB6D9A900C1A9F0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				4099A2B81D16394600E935DB /* dst_maker_debug.xcconfig */,
+				40A3CD411CB6D9A100C1A9F0 /* dst_maker.xcconfig */,
+				40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */,
+				40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */,
+				40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		40A3CCB61CB53BEA00C1A9F0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40A3CD3E1CB53CF200C1A9F0 /* StrategyType.h in Headers */,
+				40A3CD141CB53CB800C1A9F0 /* EcalCluster.h in Headers */,
+				40A3CD211CB53CB800C1A9F0 /* SvtTrack.h in Headers */,
+				40A3CD331CB53CD300C1A9F0 /* HpsParticleDataWriter.h in Headers */,
+				40A3CD1B1CB53CB800C1A9F0 /* HpsMCParticle.h in Headers */,
+				40A3CD401CB53CF200C1A9F0 /* TrackUtils.h in Headers */,
+				40A3CD221CB53CB800C1A9F0 /* TriggerData.h in Headers */,
+				40A3CD171CB53CB800C1A9F0 /* GblTrack.h in Headers */,
+				40A3CD2E1CB53CD300C1A9F0 /* DstUtils.h in Headers */,
+				40A3CD151CB53CB800C1A9F0 /* EcalHit.h in Headers */,
+				40A3CD351CB53CD300C1A9F0 /* SvtDataWriter.h in Headers */,
+				40A3CD2D1CB53CD300C1A9F0 /* DataWriter.h in Headers */,
+				40A3CD1D1CB53CB800C1A9F0 /* LegacyGblTrack.h in Headers */,
+				40A3CD1E1CB53CB800C1A9F0 /* MCParticle.h in Headers */,
+				40A3CD1A1CB53CB800C1A9F0 /* HpsEventLinkDef.h in Headers */,
+				40A3CD321CB53CD300C1A9F0 /* HpsEventBuilder.h in Headers */,
+				40A3CD121CB53CB800C1A9F0 /* CalorimeterHit.h in Headers */,
+				40A3CD3F1CB53CF200C1A9F0 /* TrackType.h in Headers */,
+				40A3CD2F1CB53CD300C1A9F0 /* EcalDataWriter.h in Headers */,
+				40A3CD341CB53CD300C1A9F0 /* MCParticleDataWriter.h in Headers */,
+				40A3CD191CB53CB800C1A9F0 /* HpsEvent.h in Headers */,
+				40A3CD301CB53CD300C1A9F0 /* EventBuilder.h in Headers */,
+				40A3CD491CB6EAF600C1A9F0 /* EcalUtils.h in Headers */,
+				40A3CD131CB53CB800C1A9F0 /* Cluster.h in Headers */,
+				40A3CD1C1CB53CB800C1A9F0 /* HpsParticle.h in Headers */,
+				40A3CD201CB53CB800C1A9F0 /* SvtHit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		40A3CCB71CB53BEA00C1A9F0 /* HpsEvent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40A3CCC31CB53BEA00C1A9F0 /* Build configuration list for PBXNativeTarget "HpsEvent" */;
+			buildPhases = (
+				40A3CCB61CB53BEA00C1A9F0 /* Headers */,
+				40A3CCB41CB53BEA00C1A9F0 /* Sources */,
+				40A3CCB51CB53BEA00C1A9F0 /* Frameworks */,
+			);
+			buildRules = (
+				40A3CD461CB6E61900C1A9F0 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = HpsEvent;
+			productName = HpsEvent;
+			productReference = 40A3CCB81CB53BEA00C1A9F0 /* libHpsEvent.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		40D968731D0B0A1200B48D9F /* dst_maker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40D968781D0B0A1200B48D9F /* Build configuration list for PBXNativeTarget "dst_maker" */;
+			buildPhases = (
+				40D968701D0B0A1200B48D9F /* Sources */,
+				40D968711D0B0A1200B48D9F /* Frameworks */,
+				40D968721D0B0A1200B48D9F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dst_maker;
+			productName = dst_maker;
+			productReference = 40D968741D0B0A1200B48D9F /* dst_maker */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		40A3CCB01CB53BEA00C1A9F0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = JLAB;
+				TargetAttributes = {
+					40A3CCB71CB53BEA00C1A9F0 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					40D968731D0B0A1200B48D9F = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 40A3CCB31CB53BEA00C1A9F0 /* Build configuration list for PBXProject "HpsEvent" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 40A3CCAF1CB53BEA00C1A9F0;
+			productRefGroup = 40A3CCB91CB53BEA00C1A9F0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				40A3CCB71CB53BEA00C1A9F0 /* HpsEvent */,
+				40D968731D0B0A1200B48D9F /* dst_maker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		40A3CCB41CB53BEA00C1A9F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BED7581CF1FDAE00A8E675 /* HpsEvent.h in Sources */,
+				40A3CCDA1CB53C2B00C1A9F0 /* HpsEvent.cxx in Sources */,
+				40A3CCFA1CB53C6600C1A9F0 /* EcalDataWriter.cxx in Sources */,
+				40A3CCD61CB53C2B00C1A9F0 /* EcalHit.cxx in Sources */,
+				40A3CCE11CB53C2B00C1A9F0 /* TriggerData.cxx in Sources */,
+				40A3CCFE1CB53C6600C1A9F0 /* MCParticleDataWriter.cxx in Sources */,
+				40A3CCDB1CB53C2B00C1A9F0 /* HpsMCParticle.cxx in Sources */,
+				40A3CCD51CB53C2B00C1A9F0 /* EcalCluster.cxx in Sources */,
+				40A3CCF91CB53C6600C1A9F0 /* DstUtils.cxx in Sources */,
+				40A3CCFF1CB53C6600C1A9F0 /* SvtDataWriter.cxx in Sources */,
+				40A3CCE01CB53C2B00C1A9F0 /* SvtTrack.cxx in Sources */,
+				40A3CCD81CB53C2B00C1A9F0 /* GblTrack.cxx in Sources */,
+				40A3CCDC1CB53C2B00C1A9F0 /* HpsParticle.cxx in Sources */,
+				40A3CCEA1CB53C5600C1A9F0 /* EcalUtils.cxx in Sources */,
+				40A3CCFD1CB53C6600C1A9F0 /* HpsParticleDataWriter.cxx in Sources */,
+				40A3CCDF1CB53C2B00C1A9F0 /* SvtHit.cxx in Sources */,
+				40A3CCEC1CB53C5600C1A9F0 /* TrackType.cxx in Sources */,
+				40A3CCED1CB53C5600C1A9F0 /* TrackUtils.cxx in Sources */,
+				40A3CCFC1CB53C6600C1A9F0 /* HpsEventBuilder.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40D968701D0B0A1200B48D9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40D9687B1D0B0A8000B48D9F /* dst_maker.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		40A3CCC11CB53BEA00C1A9F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		40A3CCC21CB53BEA00C1A9F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		40A3CCC41CB53BEA00C1A9F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		40A3CCC51CB53BEA00C1A9F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		40D968791D0B0A1200B48D9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4099A2B81D16394600E935DB /* dst_maker_debug.xcconfig */;
+			buildSettings = {
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		40D9687A1D0B0A1200B48D9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40A3CD411CB6D9A100C1A9F0 /* dst_maker.xcconfig */;
+			buildSettings = {
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		40A3CCB31CB53BEA00C1A9F0 /* Build configuration list for PBXProject "HpsEvent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40A3CCC11CB53BEA00C1A9F0 /* Debug */,
+				40A3CCC21CB53BEA00C1A9F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		40A3CCC31CB53BEA00C1A9F0 /* Build configuration list for PBXNativeTarget "HpsEvent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40A3CCC41CB53BEA00C1A9F0 /* Debug */,
+				40A3CCC51CB53BEA00C1A9F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		40D968781D0B0A1200B48D9F /* Build configuration list for PBXNativeTarget "dst_maker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40D968791D0B0A1200B48D9F /* Debug */,
+				40D9687A1D0B0A1200B48D9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 40A3CCB01CB53BEA00C1A9F0 /* Project object */;
+}
