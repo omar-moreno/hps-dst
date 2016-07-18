@@ -96,25 +96,28 @@ endif()
 message(STATUS "LCIO: ${LCIO_LIB}")
 
 # Include the HPS Event headers
-set(HPS_EVENT_HDR_DIR "${CMAKE_SOURCE_DIR}/include/hps_event")
+set(HPS_EVENT_HDR_DIR "${PROJECT_SOURCE_DIR}/include/hps_event")
 include_directories("${HPS_EVENT_HDR_DIR}")
 
 # Include DST headers
-set(DST_HDR_DIR "${CMAKE_SOURCE_DIR}/include/dst")
+set(DST_HDR_DIR "${PROJECT_SOURCE_DIR}/include/dst")
 include_directories("${DST_HDR_DIR}")
 
 # Include Utils headers
-set(UTILS_HDR_DIR "${CMAKE_SOURCE_DIR}/include/utils")
+set(UTILS_HDR_DIR "${PROJECT_SOURCE_DIR}/include/utils")
 include_directories("${UTILS_HDR_DIR}")
 
 # Add the hps_event subdirectory to the build
-add_subdirectory("${CMAKE_SOURCE_DIR}/src/hps_event")
+#add_subdirectory("${CMAKE_SOURCE_DIR}/src/hps_event")
+add_subdirectory("src/hps_event")
 
 # Add the utils directory to the build
-add_subdirectory("${CMAKE_SOURCE_DIR}/src/utils")
+#add_subdirectory("${CMAKE_SOURCE_DIR}/src/utils")
+add_subdirectory("src/utils")
 
 # Add dst directory to the build
-add_subdirectory("${CMAKE_SOURCE_DIR}/src/dst")
+#add_subdirectory("${CMAKE_SOURCE_DIR}/src/dst")
+add_subdirectory("src/dst")
 
 #------------------------------#
 #--- Generate Documentation ---#
@@ -125,8 +128,8 @@ find_package(Doxygen)
 
 # If Doxygen is found, add a target to generate the documentation
 if(DOXYGEN_FOUND)
-	configure_file(${CMAKE_SOURCE_DIR}/doc/Doxyfile ${HPS_DST_BINARY_DIR}/doc/Doxyfile @ONLY)
-	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${HPS_DST_BINARY_DIR}/doc/Doxyfile WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doc COMMENT "Generating documentation" VERBATIM)
+	configure_file(doc/Doxyfile ${HPS_DST_BINARY_DIR}/doc/Doxyfile @ONLY)
+	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${HPS_DST_BINARY_DIR}/doc/Doxyfile WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/doc COMMENT "Generating documentation" VERBATIM)
 else()
 	MESSAGE(STATUS "Doxygen was not found.  Documentation will not be generated.")
 endif(DOXYGEN_FOUND)
