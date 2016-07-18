@@ -2,10 +2,17 @@
 #	@author: Omar Moreno <omoreno1@ucsc.edu>
 #	@date: December 06, 2013
 #
-
+#       Rewrite: July 18, 2016 - Maurik <holtrop@jlab.org>
+#
 # Specify the minimum CMake version required.  If the cmake version 
 # minimum is not met, cmake will fail.
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+
+cmake_policy(SET CMP0005 NEW)
+
+if( CMAKE_VERSION VERSION_GREATER 3.0)
+    cmake_policy(SET CMP0042 NEW)
+endif()
 
 # Set the name of the project
 project(HPS_DST)
@@ -18,101 +25,96 @@ set(HPS_DST_VERSION_MINOR 10)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
 # Set the output directories of the binaries, static and shared libraries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib")
 
-# Set the path to additional CMake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) 
+        SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR} CACHE PATH "HPS DST install prefix, default is project top dir." FORCE) 
+ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) 
 
-# Find the ROOT Data Analysis Framework.  If it's not found, cmake will fail.
+
+if(NOT DEFINED HPS_DST_BINARY_DIR )  # For backward compatibility with old CMakeFiles.txt
+  SET(HPS_DST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR} CACHE PATH "Build location for lib and bin directories. " FORCE)
+endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/bin" CACHE PATH "Build location of binary executatbles.")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib" CACHE PATH "Build location of shared libraries.")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${HPS_DST_BINARY_DIR}/lib" CACHE PATH "Build location of static libraries.")
+
+set(CMAKE_INSTALL_LIBDIR           "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Location of libraries and pcm files. ")
+set(CMAKE_INSTALL_BINDIR           "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Location of binary executable files. ")
+
+option(HPS_INSTALL_ALL_LIBS   "Set to ON if you want to install all the libs" OFF)
+
+if(HPS_INSTALL_ALL_LIBS)
+  message("Will install all the libraries with 'make install' ")
+endif()
+
+# Set the location of the LCIO root directory.
+set(LCIO_ROOT_DIR "$ENV{LCIO}" CACHE PATH "Location of the LCIO installation. ")
+
+message(STATUS "Using LCIO from ${LCIO_ROOT_DIR}")
+
+# You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
+#   - ROOT built with classic configure/make use the provided $ROOTSYS/etc/cmake/FindROOT.cmake
+#   - ROOT built with CMake. Add in CMAKE_PREFIX_PATH the installation prefix for ROOT
+
+if( NOT DEFINED ENV{ROOTSYS} ) 
+    message( FATAL_ERROR  "You need to setup ROOT first. ")
+else()
+    message(STATUS "Using ROOT from $ENV{ROOTSYS} ")
+endif()
+
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS} )
+
+#---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 find_package(ROOT REQUIRED)
 
-# Add the ROOT headers to the build
-include_directories(${ROOT_INCLUDE_DIRS})
+#---Overwrite some of the ROOT_DEFINITIONS since these are way too pedantic.
+set(ROOT_DEFINITIONS "")
 
-# Fix broken linking on Apple/Darwin.
-if(APPLE)
-	find_program(ROOT_CONFIG root-config)
-	if(ROOT_CONFIG-NOTFOUND)
-		MESSAGE( FATAL_ERROR "root-config was not found.")
-	endif()
-	execute_process(COMMAND root-config --cflags OUTPUT_VARIABLE DARWIN_ROOT_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	execute_process(COMMAND root-config --libs OUTPUT_VARIABLE DARWIN_ROOT_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	message(STATUS "DARWIN_ROOT_CFLAGS: ${DARWIN_ROOT_CFLAGS}")
-	message(STATUS "DARWIN_ROOT_LIBS: ${DARWIN_ROOT_LIBS}")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_ROOT_CFLAGS}")
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${DARWIN_ROOT_LIBS}")
-endif()
+#---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
+include(${ROOT_USE_FILE})
+
+message(STATUS "ROOT_DEFINITIONS = ${ROOT_DEFINITIONS}")
+message(STATUS "ROOT_CXX_FLAGS = ${ROOT_CXX_FLAGS}")
+message(STATUS "CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
+message(STATUS "CMAKE_C_FLAGS = ${CMAKE_C_FLAGS}")
 
 # Include the LCIO headers
-include_directories("$ENV{LCIO}/include")
+include_directories(${LCIO_ROOT_DIR}/include)
 
 # Find the LCIO libraries
-find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
+find_library(LCIO_LIB lcio ${LCIO_ROOT_DIR}/lib)
 if(NOT LCIO_LIB)
 	message(FATAL_ERROR
-		"\nThe library liblcio was not found.  Either LCIO hasn't been "
-		"installed or the environmental variable LCIO has not been set. "
+		"\nThe library liblcio was not found.  "
+		"Please make sure LCIO has been installed."
+		"Then specify -DLCIO_ROOT_DIR=<path> or "
+		"set the environmental variable LCIO=<path> "
 		"See documentation for details.")
 endif()
+
 message(STATUS "LCIO: ${LCIO_LIB}")
 
 # Include the HPS Event headers
-set(HPS_EVENT_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/hps_event")
+set(HPS_EVENT_HDR_DIR "${CMAKE_SOURCE_DIR}/include/hps_event")
 include_directories("${HPS_EVENT_HDR_DIR}")
 
 # Include DST headers
-set(DST_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/dst")
+set(DST_HDR_DIR "${CMAKE_SOURCE_DIR}/include/dst")
 include_directories("${DST_HDR_DIR}")
 
 # Include Utils headers
-set(UTILS_HDR_DIR "${HPS_DST_SOURCE_DIR}/include/utils")
+set(UTILS_HDR_DIR "${CMAKE_SOURCE_DIR}/include/utils")
 include_directories("${UTILS_HDR_DIR}")
 
-#--------------------------------------------#
-#--- Create the HPS Event ROOT dictionary ---#
-#--------------------------------------------#
-
-message(STATUS "Generating the HpsEvent ROOT dictionary")
-
-# Check if rootcint exist, otherwise exit
-if(NOT ROOT_CINT_EXECUTABLE)
-	message(FATAL_ERROR 
-        "rootcint was not found, make sure ROOTSYS/bin is "
-        "include in the path")
-endif()
-
-# Set the output directory for the ROOT dictionary and make sure it exists
-set(HPS_EVENT_DIC_DIR "${HPS_DST_BINARY_DIR}/src/root_dic")
-file(MAKE_DIRECTORY ${HPS_EVENT_DIC_DIR})
-
-file(GLOB HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/*.h")
-list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
-list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/TriggerData.h")
-list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/MuonCluster.h")
-list(REMOVE_ITEM HPS_EVENT_HDR "${HPS_EVENT_HDR_DIR}/LegacyGblTrack.h")
-
-execute_process(COMMAND root-config --version  OUTPUT_VARIABLE ROOT_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE) 
-message(STATUS "ROOT_VERSION: ${ROOT_VERSION}")
-
-if( ROOT_VERSION VERSION_GREATER "6.0" )
-message("ROOT 6 or later pre-processing ")
-execute_process(COMMAND rootcling -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -I${HPS_EVENT_HDR_DIR} -I${UTIL_HDR_DIR} -I${DST_HDR_DIR} -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
-else()
-execute_process(COMMAND rootcint -f ${HPS_EVENT_DIC_DIR}/HpsEventDic.cxx -c ${HPS_EVENT_HDR}  "${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h")
-endif()
-
-message(STATUS "HpsEvent ROOT dictionary has been generated")
-
 # Add the hps_event subdirectory to the build
-add_subdirectory("${HPS_DST_SOURCE_DIR}/src/hps_event")
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/hps_event")
 
 # Add the utils directory to the build
-add_subdirectory("${HPS_DST_SOURCE_DIR}/src/utils")
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/utils")
 
 # Add dst directory to the build
-add_subdirectory("${HPS_DST_SOURCE_DIR}/src/dst")
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/dst")
 
 #------------------------------#
 #--- Generate Documentation ---#
@@ -123,8 +125,8 @@ find_package(Doxygen)
 
 # If Doxygen is found, add a target to generate the documentation
 if(DOXYGEN_FOUND)
-	configure_file(${HPS_DST_SOURCE_DIR}/doc/Doxyfile ${HPS_DST_BINARY_DIR}/doc/Doxyfile @ONLY)
-	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${HPS_DST_BINARY_DIR}/doc/Doxyfile WORKING_DIRECTORY ${HPS_DST_SOURCE_DIR}/doc COMMENT "Generating documentation" VERBATIM)
+	configure_file(${CMAKE_SOURCE_DIR}/doc/Doxyfile ${HPS_DST_BINARY_DIR}/doc/Doxyfile @ONLY)
+	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${HPS_DST_BINARY_DIR}/doc/Doxyfile WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doc COMMENT "Generating documentation" VERBATIM)
 else()
 	MESSAGE(STATUS "Doxygen was not found.  Documentation will not be generated.")
 endif(DOXYGEN_FOUND)

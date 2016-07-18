@@ -3,75 +3,65 @@
 #   @author: Omar Moreno <omoreno1@ucsc.edu>
 #   @date: December 06, 2013
 #
+project(hps_dst)
 
+SET(headers 
+  CalorimeterHit.h 
+  Cluster.h 
+  EcalCluster.h 
+  EcalHit.h 
+  GblStripData.h 
+  GblTrack.h 
+  GblTrackData.h 
+  HpsEvent.h 
+  HpsMCParticle.h 
+  HpsParticle.h 
+  MCParticle.h 
+#  MuonCluster.h 
+  SvtHit.h 
+  SvtTrack.h 
+  TriggerData.h )
 
-# Find the necessary LCIO libraries
-find_library(LCIO_LIB lcio $ENV{LCIO}/lib)
+foreach(h ${headers})
+  LIST(APPEND dir_headers ${HPS_EVENT_HDR_DIR}/${h} )
+endforeach()
 
-add_library(TriggerData TriggerData.cxx)
-target_link_libraries(TriggerData
-    ${LCIO_LIB}
+ROOT_GENERATE_DICTIONARY(HpsEventDict ${dir_headers} MODULE ${PROJECT_NAME} LINKDEF ${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h )
+
+#  LegacyGblTrack.h
+
+add_library(HpsEventLib
+  EcalCluster.cxx 
+  EcalHit.cxx 
+  GblTrack.cxx
+  HpsEvent.cxx
+  HpsEventDict.cxx
+  HpsMCParticle.cxx
+  HpsParticle.cxx
+  SvtHit.cxx 
+  SvtTrack.cxx
+  TriggerData.cxx 
+#  MuonCluster.cxx
 )
 
-set_source_files_properties(EcalHit.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(EcalHit EcalHit.cxx)
-target_link_libraries(EcalHit
-    ${ROOT_CORE_LIBRARY}
-)
+add_library(HpsEvent SHARED 
+  EcalCluster.cxx 
+  EcalHit.cxx 
+  GblTrack.cxx
+  HpsEvent.cxx
+  HpsEventDict.cxx
+  HpsMCParticle.cxx
+  HpsParticle.cxx
+  SvtHit.cxx 
+  SvtTrack.cxx
+  TriggerData.cxx 
+#  MuonCluster.cxx
+)  
 
-set_source_files_properties(EcalCluster.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(EcalCluster EcalCluster.cxx)
-target_link_libraries(EcalCluster
-    ${ROOT_CORE_LIBRARY}
-    EcalHit
-)
+target_link_libraries(HpsEvent  ${ROOT_LIBRARIES} )
 
-set_source_files_properties(SvtHit.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(SvtHit SvtHit.cxx)
-target_link_libraries(SvtHit
-    ${ROOT_CORE_LIBRARY}
-)
+if(HPS_INSTALL_ALL_LIBS)
+  install(TARGETS HpsEventLib DESTINATION ${CMAKE_INSTALL_LIBDIR} )
+endif()
+install(TARGETS HpsEvent DESTINATION ${CMAKE_INSTALL_LIBDIR} )
 
-set_source_files_properties(SvtTrack.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(SvtTrack SvtTrack.cxx)
-target_link_libraries(SvtTrack
-    ${ROOT_CORE_LIBRARY}
-)
-
-set_source_files_properties(GblTrack.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(GblTrack GblTrack.cxx)
-target_link_libraries(GblTrack
-    ${ROOT_CORE_LIBRARY}
-)
-
-set_source_files_properties(HpsMCParticle.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(HpsMCParticle HpsMCParticle.cxx)
-target_link_libraries(HpsMCParticle
-    ${ROOT_CORE_LIBRARY}
-)
-
-set_source_files_properties(HpsParticle.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(HpsParticle HpsParticle.cxx)
-target_link_libraries(HpsParticle
-    ${ROOT_CORE_LIBRARY}
-)
-
-set_source_files_properties(MuonCluster.cxx APPEND_STRING PROPERTY COMPILE_FLAGS " -fPIC ")
-add_library(MuonCluster MuonCluster.cxx)
-target_link_libraries(MuonCluster
-    ${ROOT_CORE_LIBRARY}
-)
-
-file(GLOB HPS_EVENT_DIC_SRC "${HPS_EVENT_DIC_DIR}/*.cxx")
-
-add_library(HpsEvent SHARED HpsEvent.cxx ${HPS_EVENT_DIC_SRC})
-target_link_libraries(HpsEvent
-    ${ROOT_CORE_LIBRARY}
-    EcalHit
-    EcalCluster
-    HpsMCParticle
-    HpsParticle
-    GblTrack
-    SvtHit
-    SvtTrack
-)
