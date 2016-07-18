@@ -26,7 +26,11 @@ foreach(h ${headers})
   LIST(APPEND dir_headers ${HPS_EVENT_HDR_DIR}/${h} )
 endforeach()
 
-ROOT_GENERATE_DICTIONARY(HpsEventDict ${dir_headers} MODULE ${PROJECT_NAME} LINKDEF ${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h )
+if( ROOT_VERSION VERSION_GREATER 6.0.0)
+  ROOT_GENERATE_DICTIONARY(HpsEventDict ${dir_headers} MODULE ${PROJECT_NAME} LINKDEF ${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h )
+else()
+  ROOT_GENERATE_DICTIONARY(HpsEventDict ${dir_headers} LINKDEF ${HPS_EVENT_HDR_DIR}/HpsEventLinkDef.h )
+endif()
 
 #  LegacyGblTrack.h
 
