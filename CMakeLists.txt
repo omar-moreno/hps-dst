@@ -66,7 +66,7 @@ endif()
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS} )
 
 #---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
-find_package(ROOT REQUIRED)
+find_package(ROOT REQUIRED COMPONENTS MathCore RIO Hist Tree Net)
 
 #---Overwrite some of the ROOT_DEFINITIONS since these are way too pedantic.
 set(ROOT_DEFINITIONS "")
