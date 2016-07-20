@@ -21,6 +21,22 @@ project(HPS_DST)
 set(HPS_DST_VERSION_MAJOR 0)
 set(HPS_DST_VERSION_MINOR 10)
 
+# Check that the compiler version is OK, must have C++11
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    # require at least gcc 4.8
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
+        message(FATAL_ERROR "GCC version must be at least 4.8!")
+    endif()
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    # require at least clang 3.2
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.2)
+        message(FATAL_ERROR "Clang version must be at least 3.2!")
+    endif()
+else()
+    message(WARNING "You are using an unsupported compiler! Compilation has only been tested with Clang and GCC.")
+endif()
+
+
 # Set additional compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
@@ -43,10 +59,6 @@ set(CMAKE_INSTALL_LIBDIR           "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Loc
 set(CMAKE_INSTALL_BINDIR           "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Location of binary executable files. ")
 
 option(HPS_INSTALL_ALL_LIBS   "Set to ON if you want to install all the libs" OFF)
-
-if(HPS_INSTALL_ALL_LIBS)
-  message("Will install all the libraries with 'make install' ")
-endif()
 
 # Set the location of the LCIO root directory.
 set(LCIO_ROOT_DIR "$ENV{LCIO}" CACHE PATH "Location of the LCIO installation. ")
@@ -73,11 +85,6 @@ set(ROOT_DEFINITIONS "")
 
 #---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
 include(${ROOT_USE_FILE})
-
-message(STATUS "ROOT_DEFINITIONS = ${ROOT_DEFINITIONS}")
-message(STATUS "ROOT_CXX_FLAGS = ${ROOT_CXX_FLAGS}")
-message(STATUS "CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
-message(STATUS "CMAKE_C_FLAGS = ${CMAKE_C_FLAGS}")
 
 # Include the LCIO headers
 include_directories(${LCIO_ROOT_DIR}/include)
@@ -133,3 +140,23 @@ if(DOXYGEN_FOUND)
 else()
 	MESSAGE(STATUS "Doxygen was not found.  Documentation will not be generated.")
 endif(DOXYGEN_FOUND)
+
+message("-----------------------------------------------")
+message("* Configuration Summary: ")
+message("*")
+message("* ROOT version: ${ROOT_VERSION} ")
+message("* ROOT location: ${ROOTSYS} ")
+message("* LCIO location: ${LCIO_ROOT_DIR} ")
+message("* Compiler ID:  ${CMAKE_CXX_COMPILER_ID}")
+message("* Compiler Ver: ${CMAKE_CXX_COMPILER_VERSION}")
+
+if(HPS_INSTALL_ALL_LIBS)
+  message("* Will install all the libraries with 'make install' ")
+else()
+  message("* Will install only libHpsEvent with 'make install' ")
+endif()
+
+message("*")
+message("-----------------------------------------------")
+
+

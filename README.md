@@ -15,11 +15,12 @@ Requirements
 
 In order to build the project, the following build tools are required:
 * [GCC >= 4.8](https://gcc.gnu.org/install/)
-* [CMake >= 2.8](http://www.cmake.org/cmake/help/install.html)
+* [CMake >= 2.8.12](http://www.cmake.org/cmake/help/install.html)
 
 The project has the following dependencies: 
 * [The LCIO C++ API](http://lcio.desy.de/v02-04-03/doc/manual_html/manual.html#SECTION00030000000000000000)
 * [ROOT data analysis framework](http://root.cern.ch/drupal/content/installing-root-source)
+** Compatible with both ROOT versions 5 and 6 if build with cmake.
 
 ##### Recommended Packages #####
 
@@ -69,8 +70,25 @@ The project can then be built as follows:
 
 	cd hps-dst
 	mkdir build; cd build
-	cmake ../
+	cmake ..
 	make
+
+In addition, you can specify the install directory if you which to install hps-dst
+in a different location from "build" or the hps-dst source directory. This follows
+the standard cmake convention, so:
+
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=/path/to/installation/location
+	make
+	make install
+
+If you add the switch: "-DHPS_INSTALL_ALL_LIBS=ON", cmake will install all
+the libraries and not only libHpsEvent.
+
+For more information on the cmake variables used you can use:
+
+        cd build
+        cmake -LH ..
 
 This will create the binaries (in the build/bin directory) along with the shared
 library HpsEvent.so (in the build/lib directory) which contains the ROOT 
@@ -81,6 +99,7 @@ If Doxygen is installed, the API documentation can be generated as follows:
 	make doc
 
 This will generate both LaTex and html documentation in the directory hps-dst/doc.
+
 
 Maintainers
 -----------
