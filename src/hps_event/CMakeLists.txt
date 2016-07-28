@@ -3,7 +3,7 @@
 #   @author: Omar Moreno <omoreno1@ucsc.edu>
 #   @date: December 06, 2013
 #
-project(hps_dst)
+project(HpsEvent)
 
 SET(headers 
   CalorimeterHit.h 
