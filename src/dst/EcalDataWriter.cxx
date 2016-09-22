@@ -10,7 +10,7 @@
 #include "EcalDataWriter.h"
 
 EcalDataWriter::EcalDataWriter()
-: clusters_collection_name("EcalClustersCorr"),hits_collection_name("EcalCalHits"){
+: clusters_collection_name("EcalClustersCorr"),hits_collection_name("TimeCorrEcalHits"){
 }
 
 EcalDataWriter::~EcalDataWriter() {
@@ -22,19 +22,29 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
   
   std::map<std::pair<int,int>,EcalHit *> hit_map;
   
-  hits = (IMPL::LCCollectionVec*) event->getCollection(hits_collection_name);
+  try{
+    hits = (IMPL::LCCollectionVec*) event->getCollection(hits_collection_name);
+  }catch(...){
+    hits = NULL;
+  }
+  if( hits == NULL){
+    hits_collection_name = "EcalCalHits";
+    try{
+      hits = (IMPL::LCCollectionVec*) event->getCollection(hits_collection_name);
+    }catch(...){
+      hits = NULL;
+    }
+    if( hits ==  NULL){
+      std::cerr << "Neither TimeCorrEcalHits nor EcalCalHits collections were found. Abort. \n";
+      return;
+    }
+  }
   for(int hit_n=0;hit_n<hits->getNumberOfElements();++hit_n){
     calorimeter_hit = (IMPL::CalorimeterHitImpl*)hits->getElementAt(hit_n);
     
     // Get the unique cell id of this hit. Combine it with the integer time, since a crystal can be hit more than once.
     int id0=calorimeter_hit->getCellID0();
-    int id1=(int)(10.0*calorimeter_hit->getTime());
-    
-    if(hit_map[std::make_pair(id0,id1)] != NULL ){
-      EcalHit *hit_1 = hit_map[std::make_pair(id0,id1)];
-      printf("ID: (%8d,%8d) E = (%9.3f,%9.3f)  T=(%9.3f,%9.3f)",id0,id1,hit_1->getEnergy(),calorimeter_hit->getEnergy(),hit_1->getTime(),calorimeter_hit->getTime());
-      printf(" ******************************************* \n");
-    }
+    int id1=(int)(10.0*calorimeter_hit->getTime()); // 0.1 ns resolution is sufficient to distinguish any 2 hits on the same crystal.
     
     // Add an Ecal hit to the HPS Event
     ecal_hit = hps_event->addEcalHit();
@@ -88,23 +98,11 @@ void EcalDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
       int id0=calorimeter_hit->getCellID0();
       int id1=(int)(10.0*calorimeter_hit->getTime());
       
-      float hitE= calorimeter_hit->getEnergy();
-      float hitE_err = calorimeter_hit->getEnergyError();
-      
-      float hitT = calorimeter_hit->getTime();
-      
       if( hit_map.find(std::make_pair(id0,id1)) == hit_map.end() ){
         std::cerr << "WOOPS -- Hit not found in map, but it is in the cluster. " << id0;
       }else{
         // Get the hit and add it to the cluster
         ecal_hit =hit_map[std::make_pair(id0,id1)];
-        
-        float shitE=ecal_hit->getEnergy();
-        float shitT=ecal_hit->getTime();
-        
-        //if( fabsf(shitE - hitE) > 0.001 or fabsf(shitT - hitT) > 0.1){
-        //}
-        
         ecal_cluster->addHit(ecal_hit);
       }
     }
