@@ -20,10 +20,10 @@
 //-------------//
 #include "EcalUtils.h"
 
-//------------//
-//--- LCIO ---//
-//------------//
-#include <IMPL/LCCollectionVec.h>
+//----------//
+//   LCIO   //
+//----------//
+#include <EVENT/LCCollection.h>
 #include <IMPL/ClusterImpl.h>
 #include <IMPL/CalorimeterHitImpl.h>
 
@@ -60,11 +60,12 @@ class EcalDataWriter : public DataWriter {
     
     private:
 
-        std::string clusters_collection_name;
-        std::string hits_collection_name;
+        /** Default Ecal cluster collection name. */
+        static const std::string ECAL_CLUSTER_COL_NAME;
 
-        IMPL::LCCollectionVec* clusters;
-        IMPL::LCCollectionVec* hits;
+        /** Default Ecal hits collection name. */
+        std::string hits_collection_name{"TimeCorrEcalHits"};
+
         IMPL::ClusterImpl* cluster;
         IMPL::CalorimeterHitImpl* calorimeter_hit;
 
