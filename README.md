@@ -104,5 +104,5 @@ This will generate both LaTex and html documentation in the directory hps-dst/do
 Maintainers
 -----------
 
-* Omar Moreno (Santa Cruz Institute for Particle Physics) 
+* Omar Moreno (SLAC National Accelerator Laboratory) 
 
