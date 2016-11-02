@@ -263,7 +263,7 @@ class SvtTrack : public TObject {
         /** @return The {@GblTrack} associated with this track. */
         GblTrack* getGblTrack() const { return (GblTrack*) this->gbl_track.GetObject(); };
 
-        ClassDef(SvtTrack, 1);
+        ClassDef(SvtTrack, 2);
 
     private:
 
