@@ -17,6 +17,7 @@ SvtTrack::SvtTrack()
     : TObject(), 
       svt_hits(new TRefArray()),
       fs_particle(NULL),
+      gbl_track(nullptr), 
       isolation{}, 
       n_hits(0),
       track_volume(-1),
@@ -37,6 +38,7 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
     : TObject(),
       svt_hits(new TRefArray()),
       fs_particle(NULL),
+      gbl_track(nullptr),
       n_hits(svtTrackObj.n_hits),
       track_volume(svtTrackObj.track_volume),
       type(svtTrackObj.type), 
@@ -53,6 +55,7 @@ SvtTrack::SvtTrack(const SvtTrack &svtTrackObj)
 
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
+    gbl_track = svtTrackObj.gbl_track;
     memcpy(&isolation, svtTrackObj.isolation, 12*sizeof(double));
 }
 
@@ -81,6 +84,7 @@ SvtTrack &SvtTrack::operator=(const SvtTrack &svtTrackObj) {
     svt_hits = new TRefArray();
     *svt_hits = *svtTrackObj.svt_hits;
     fs_particle = svtTrackObj.fs_particle;
+    gbl_track = svtTrackObj.gbl_track;
     memcpy(&isolation, svtTrackObj.isolation, 12*sizeof(double));
 
     return *this;
