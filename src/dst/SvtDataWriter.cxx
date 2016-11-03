@@ -253,6 +253,9 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
 
         // Set a reference to the HpsEvent seed track
         gbl_track->setSeedTrack(track_map[seed_track]);
+
+        // Set a reference from the seed track to the GBL track
+        track_map[seed_track]->setGblTrack(gbl_track);
     }
 
     delete seed_to_gbl_relations_nav; 

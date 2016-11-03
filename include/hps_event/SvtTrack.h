@@ -33,6 +33,7 @@
 
 /** Forward declarations */
 class SvtHit;
+class GblTrack;
 
 class SvtTrack : public TObject {
 
@@ -139,6 +140,13 @@ class SvtTrack : public TObject {
          * @param type The track type. 
          */
         void setType(const int type) { this->type = type; }; 
+
+        /** 
+         * Set a reference to the GblTrack associated with this seed track.
+         *
+         * @param gbl_track The GBL track associated with this seed track.
+         */
+        void setGblTrack(GblTrack* gbl_track) { this->gbl_track = (TObject*) gbl_track; };
 
         /**
          * Get the distance of closest approach to the reference point.
@@ -252,7 +260,10 @@ class SvtTrack : public TObject {
          */
         bool isBottomTrack() const { return track_volume ? true : false; };
 
-        ClassDef(SvtTrack, 1);
+        /** @return The {@GblTrack} associated with this track. */
+        GblTrack* getGblTrack() const { return (GblTrack*) this->gbl_track.GetObject(); };
+
+        ClassDef(SvtTrack, 2);
 
     private:
 
@@ -261,6 +272,9 @@ class SvtTrack : public TObject {
 
         /** Reference to the reconstructed particle associated with this track. */
         TRef fs_particle;
+
+        /** Reference to the GBL track associated with this seed track. */
+        TRef gbl_track;
 
         /** Array used to store the isolation variables for each of the sensor layers. */
         double isolation[12];
