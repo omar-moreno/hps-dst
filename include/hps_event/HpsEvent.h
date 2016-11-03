@@ -246,12 +246,7 @@ class HpsEvent : public TObject {
   
         /** */
         int getNumberOfEcalClusters()   const  { return n_ecal_clusters; };
-  
-        /**
-         * Get the number of MC particles ({@link HpsMCParticle}) objects in the event. 
-         */
-        int getNumberOfMCParticles() const { return n_mc_particles; };
-  
+       
         /**
          * Get the number of particles ({@link HpsParticle} objects) of the 
          * given {@link HpsParticle::ParticleType} in the event.
