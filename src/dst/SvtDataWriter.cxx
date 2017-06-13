@@ -107,11 +107,7 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
        
         // Don't write partial tracks to the DST.  Partial tracks are tracks
         // whose hits are a subset of another track in the event.
-    	try {
-    		if (tracks == (EVENT::LCCollection*) event->getCollection(PARTIAL_TRACKS_COL_NAME)) continue;
-    	} catch (EVENT::DataNotAvailableException e) {
-    		//if there is no partial tracks collection, forget about it.
-    	}
+        if (tracks == (EVENT::LCCollection*) event->getCollection(PARTIAL_TRACKS_COL_NAME)) continue;
 
         // Loop over all the LCIO Tracks and add them to the HPS event.
         for (int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n) {
