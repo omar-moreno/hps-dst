@@ -16,8 +16,6 @@ const std::string SvtDataWriter::GBL_KINK_DATA_COL_NAME = "GblKinkData";
 
 const std::string SvtDataWriter::GBL_KINK_DATA_REL_COL_NAME = "GBLKinkDataRelations";
 
-const std::string SvtDataWriter::PARTIAL_TRACKS_COL_NAME = "PartialTracks"; 
-
 const std::string SvtDataWriter::TRACK_DATA_COL_NAME = "TrackData"; 
 
 const std::string SvtDataWriter::TRACK_DATA_REL_COL_NAME = "TrackDataRelations";
@@ -105,10 +103,6 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
     // Loop over all the track collections and process them
     for (auto tracks : track_collections) { 
        
-        // Don't write partial tracks to the DST.  Partial tracks are tracks
-        // whose hits are a subset of another track in the event.
-        if (tracks == (EVENT::LCCollection*) event->getCollection(PARTIAL_TRACKS_COL_NAME)) continue;
-
         // Loop over all the LCIO Tracks and add them to the HPS event.
         for (int track_n = 0; track_n < tracks->getNumberOfElements(); ++track_n) {
         
