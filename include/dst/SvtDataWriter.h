@@ -86,12 +86,6 @@ class SvtDataWriter : public DataWriter {
          */
         static const std::string GBL_KINK_DATA_REL_COL_NAME;
 
-        /** 
-         * The name of the collection of 'partial tracks' i.e. tracks which are
-         * a subset of other tracks in the event.
-         */
-        static const std::string PARTIAL_TRACKS_COL_NAME;  
-
         /** The name of the collection of TrackData GenericObjects */ 
         static const std::string TRACK_DATA_COL_NAME;
 
