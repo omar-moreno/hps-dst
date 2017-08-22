@@ -31,7 +31,7 @@
 #include "EcalCluster.h"
 #include "EcalHit.h"
 #include "HpsParticle.h"
-#include "HpsMCParticle.h"
+#include "MCParticle.h"
 #include "GblTrack.h"
 #include "SvtTrack.h"
 #include "SvtHit.h"
@@ -113,7 +113,7 @@ class HpsEvent : public TObject {
         HpsParticle*    addParticle(HpsParticle::ParticleType type); 
         
         /** */
-        HpsMCParticle*  addHpsMCParticle();
+        MCParticle*  addMCParticle();
         
         //--- Setters ---//
         //---------------//
@@ -226,7 +226,7 @@ class HpsEvent : public TObject {
         EcalHit*       getEcalHit(int);
         
         /** */
-        HpsMCParticle* getMCParticle(int);
+        MCParticle* getMCParticle(int);
         
         /**
          *
@@ -249,7 +249,7 @@ class HpsEvent : public TObject {
        
   
         /**
-         * Get the number of MC particles ({@link HpsMCParticle}) objects in the event.
+         * Get the number of MC particles ({@link MCParticle}) objects in the event.
          */
         int getNumberOfMCParticles() const { return n_mc_particles; };
   
