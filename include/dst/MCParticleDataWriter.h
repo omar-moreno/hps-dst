@@ -59,9 +59,6 @@ class MCParticleDataWriter : public DataWriter {
         /** */
         IMPL::MCParticleImpl* mc_particle{nullptr};
 
-        /** */
-		//MCParticle* hps_mc_particle{nullptr};
-
 }; // MCParticleDataWriter
 
 #endif // _MC_PARTICLE_DATA_WRITER_H_
