@@ -92,7 +92,7 @@ namespace EcalUtils {
 				}
 			}
 			
-			double r; 
+			double r=0; 
 			for(int index = 0; index < 3; ++index){
 				hit_position[index] -= cluster_position[index]; 
 				r = hit_position[index]*hit_position[index]; 
