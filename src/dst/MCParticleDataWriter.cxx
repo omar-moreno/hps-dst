@@ -58,7 +58,7 @@ void MCParticleDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event)
 
         // Set the charge of the MC particle.  If the charge is equal to NaN,
 		// set the charge to 1000
-		if(isnan(mc_particle->getCharge())) hps_mc_particle->setCharge(1000);
+		if(std::isnan(mc_particle->getCharge())) hps_mc_particle->setCharge(1000);
 		else hps_mc_particle->setCharge(mc_particle->getCharge());
 
 		// Set the mass
