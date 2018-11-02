@@ -162,47 +162,44 @@ void SvtDataWriter::writeData(EVENT::LCEvent* event, HpsEvent* hps_event) {
             // Set the position of the extrapolated track at the Ecal face. The
             // extrapolation uses the full 3D field map.
             const EVENT::TrackState* track_state = track->getTrackState(EVENT::TrackState::AtCalorimeter);
-            if (track_state == NULL) {
-               throw std::runtime_error("[ SvtDataWriter ]: Track does not have a track state at the Ecal."); 
-            } 
-            double position_at_ecal[3] = { 
-               track_state->getReferencePoint()[1],  
-               track_state->getReferencePoint()[2],  
-               track_state->getReferencePoint()[0]
+            if (track_state != NULL) {
+                double position_at_ecal[3] = { 
+                    track_state->getReferencePoint()[1],  
+                    track_state->getReferencePoint()[2],  
+                    track_state->getReferencePoint()[0]
             };  
-            svt_track->setPositionAtEcal(position_at_ecal); 
+                svt_track->setPositionAtEcal(position_at_ecal); 
+            } 
         
             // Get the list of TrackData associated with the LCIO Track
             EVENT::LCObjectVec track_data_list = track_data_nav->getRelatedFromObjects(track);
             
             // The container of TrackData objects should only contain a single
             //  object.  If not, throw an exception.
-            if (track_data_list.size() != 1) { 
-                throw std::runtime_error("[ SvtDataWriter ]: The data structure has the wrong format.");
-            }
+            if (track_data_list.size() == 1) { 
+                // Get the TrackData GenericObject associated with the LCIO Track
+                IMPL::LCGenericObjectImpl* track_datum = (IMPL::LCGenericObjectImpl*) track_data_list.at(0);
 
-            // Get the TrackData GenericObject associated with the LCIO Track
-            IMPL::LCGenericObjectImpl* track_datum = (IMPL::LCGenericObjectImpl*) track_data_list.at(0);
+                // Check that the TrackData data structure is correct.  If it's
+                // not, throw a runtime exception.   
+                if (track_datum->getNDouble() != 12 || track_datum->getNFloat() != 1 
+                        || track_datum->getNInt() != 1) {
+                    throw std::runtime_error("[ SvtDataWriter ]: The collection " + TRACK_DATA_COL_NAME 
+                            + " has the wrong structure.");
+                }
 
-            // Check that the TrackData data structure is correct.  If it's
-            // not, throw a runtime exception.   
-            if (track_datum->getNDouble() != 12 || track_datum->getNFloat() != 1 
-                    || track_datum->getNInt() != 1) {
-                throw std::runtime_error("[ SvtDataWriter ]: The collection " + TRACK_DATA_COL_NAME 
-                        + " has the wrong structure.");
-            }
-
-            // Set the SvtTrack isolation values
-            for (int iso_index = 0; iso_index < track_datum->getNDouble(); ++iso_index) { 
-                svt_track->setIsolation(iso_index, track_datum->getDoubleVal(iso_index));
-            }
+                // Set the SvtTrack isolation values
+                for (int iso_index = 0; iso_index < track_datum->getNDouble(); ++iso_index) { 
+                    svt_track->setIsolation(iso_index, track_datum->getDoubleVal(iso_index));
+                }
         
-            // Set the SvtTrack time
-            svt_track->setTrackTime(track_datum->getFloatVal(0));
+                // Set the SvtTrack time
+                svt_track->setTrackTime(track_datum->getFloatVal(0));
 
-            // Set the volume (top/bottom) in which the SvtTrack resides
-            svt_track->setTrackVolume(track_datum->getIntVal(0));
-        
+                // Set the volume (top/bottom) in which the SvtTrack resides
+                svt_track->setTrackVolume(track_datum->getIntVal(0));
+            }
+
             // Get the collection of 3D hits associated with a LCIO Track
             EVENT::TrackerHitVec tracker_hits = track->getTrackerHits();
 
