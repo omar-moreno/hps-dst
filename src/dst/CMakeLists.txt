@@ -8,7 +8,7 @@ endif()
 
 # Create the dst_writer executable
 add_executable(dst_maker dst_maker.cxx)
-target_link_libraries(dst_maker ${GBL_LIB} ${LCIO_LIB} ${ROOT_LIBRARIES} HpsEventLib HpsEventBuilder TrackType TrackUtils EcalUtils)
+target_link_libraries(dst_maker ${GBL_LIB} ${LCIO_LIB} HpsEventLib HpsEventBuilder TrackType TrackUtils EcalUtils ${ROOT_LIBRARIES})
 
 
 install(TARGETS dst_maker DESTINATION ${CMAKE_INSTALL_BINDIR})
