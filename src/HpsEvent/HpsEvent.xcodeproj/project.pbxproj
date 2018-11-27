@@ -27,7 +27,6 @@
 		40A3CCFF1CB53C6600C1A9F0 /* SvtDataWriter.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF71CB53C6600C1A9F0 /* SvtDataWriter.cxx */; };
 		40A3CD121CB53CB800C1A9F0 /* CalorimeterHit.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD011CB53CB800C1A9F0 /* CalorimeterHit.h */; };
 		40A3CD131CB53CB800C1A9F0 /* Cluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD021CB53CB800C1A9F0 /* Cluster.h */; };
-		40A3CD141CB53CB800C1A9F0 /* EcalCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD031CB53CB800C1A9F0 /* EcalCluster.h */; };
 		40A3CD151CB53CB800C1A9F0 /* EcalHit.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD041CB53CB800C1A9F0 /* EcalHit.h */; };
 		40A3CD171CB53CB800C1A9F0 /* GblTrack.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD061CB53CB800C1A9F0 /* GblTrack.h */; };
 		40A3CD191CB53CB800C1A9F0 /* HpsEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */; };
@@ -67,7 +66,7 @@
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)Dict.cxx",
 			);
-			script = "OUTFILES_LOCATION=${DERIVED_FILE_DIR}\necho \"Dictionary created in: \" ${OUTFILES_LOCATION}\nROOT_DICT_HDRS_FULL=\"\"\nfor i in ${ROOT_DICT_HDRS}; do ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL} ${ROOT_DICT_HDRS_DIR}/${i}\"; done\n# echo ${ROOT_DICT_HDRS_FULL}\necho ${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\ntest -d ${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE}; echo \"Copied: \" ${OUTFILES_LOCAIONT}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi\n#\n#echo ${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}_Dict.cpp -c -p -I${HEADER_SEARCH_PATHS// / -I} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h ${INPUT_FILE_PATH}\n#${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict.cc -c -p -I${HEADER_SEARCH_PATHS// / -I}  ${INPUT_FILE_PATH} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\n#    test -d ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi";
+			script = "OUTFILES_LOCATION=${DERIVED_FILE_DIR}\necho \"Dictionary created in: \" ${OUTFILES_LOCATION}\nROOT_DICT_HDRS_FULL=\"\"\nfor i in ${ROOT_DICT_HDRS}; do ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL} ${ROOT_DICT_HDRS_DIR}/${i}\"; done\necho \"ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL}\necho ${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\ntest -d ${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE}; echo \"Copied: \" ${OUTFILES_LOCAIONT}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi\n#\n#echo ${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}_Dict.cpp -c -p -I${HEADER_SEARCH_PATHS// / -I} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h ${INPUT_FILE_PATH}\n#${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict.cc -c -p -I${HEADER_SEARCH_PATHS// / -I}  ${INPUT_FILE_PATH} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\n#    test -d ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi\n";
 		};
 /* End PBXBuildRule section */
 
@@ -296,7 +295,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				40A3CD3E1CB53CF200C1A9F0 /* StrategyType.h in Headers */,
-				40A3CD141CB53CB800C1A9F0 /* EcalCluster.h in Headers */,
 				40A3CD211CB53CB800C1A9F0 /* SvtTrack.h in Headers */,
 				40A3CD331CB53CD300C1A9F0 /* HpsParticleDataWriter.h in Headers */,
 				40A3CD1B1CB53CB800C1A9F0 /* HpsMCParticle.h in Headers */,
@@ -438,100 +436,12 @@
 		40A3CCC11CB53BEA00C1A9F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
-				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
 		40A3CCC21CB53BEA00C1A9F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -539,8 +449,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */;
 			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -553,8 +461,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */;
 			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
