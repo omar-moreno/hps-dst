@@ -1,38 +1,43 @@
 /**
- *	@author:	Omar Moreno <omoreno1@ucsc.edu>
- *	@section institution
- *				Santa Cruz Institute for Particle Physics
- *				University of California, Santa Cruz
- *	@date:		February 11, 2014
- *
+ *  @file MCParticleDataWriter.h
+ *  @brief Class used to write MC particles to the DST.
+ *	@author Omar Moreno, SLAC National Accelerator Laboratory
  */
 
 #ifndef _MC_PARTICLE_DATA_WRITER_H_
 #define _MC_PARTICLE_DATA_WRITER_H_
 
-//--- C++ ---//
-//-----------//
+//----------------//
+//   C++ StdLib   //
+//----------------//
 #include <math.h>
 
-//--- DST ---//
-//-----------//
+//---------//
+//   DST   //
+//---------//
 #include "DataWriter.h"
 
-//--- LCIO ---//
-//------------//
+//----------//
+//   LCIO   //
+//----------//
+#include <EVENT/LCIO.h>
 #include <IMPL/LCCollectionVec.h>
 #include <IMPL/MCParticleImpl.h>
 #include <Exceptions.h>
 
-//--- HPS Event ---//
-//-----------------//
-#include "HpsMCParticle.h"
+//---------------//
+//   HPS Event   //
+//---------------//
+#include "MCParticle.h"
 
 class MCParticleDataWriter : public DataWriter {
 
 	public:
 
+        /** Constructor */
 		MCParticleDataWriter();
+
+        /** Destructor */
 		~MCParticleDataWriter();
 
 		//
@@ -45,12 +50,14 @@ class MCParticleDataWriter : public DataWriter {
 
 	private:
 
-		std::string mc_particles_collection_name;
+        /** */
+		std::string mc_particles_collection_name{"MCParticle"};
 
-		IMPL::LCCollectionVec* mc_particles;
-		IMPL::MCParticleImpl* mc_particle;
-
-		HpsMCParticle* hps_mc_particle;
+        /** */
+		IMPL::LCCollectionVec* mc_particles{nullptr};
+		
+        /** */
+        IMPL::MCParticleImpl* mc_particle{nullptr};
 
 }; // MCParticleDataWriter
 

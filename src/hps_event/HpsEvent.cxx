@@ -24,7 +24,7 @@ HpsEvent::HpsEvent()
       ecal_hits(new TClonesArray("EcalHit", 1000)),
       fs_particles(new TClonesArray("HpsParticle", 1000)),
       gbl_tracks(new TClonesArray("GblTrack", 1000)), 
-      mc_particles(new TClonesArray("HpsMCParticle", 1000)),
+      mc_particles(new TClonesArray("MCParticle", 1000)),
       tc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
       tc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
       tracks(new TClonesArray("SvtTrack", 1000)),
@@ -68,7 +68,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
       ecal_hits(new TClonesArray("EcalHit", 1000)),
       fs_particles(new TClonesArray("HpsParticle", 1000)),
       gbl_tracks(new TClonesArray("GblTrack", 1000)), 
-      mc_particles(new TClonesArray("HpsMCParticle", 1000)),
+      mc_particles(new TClonesArray("MCParticle", 1000)),
       tc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
       tc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
       tracks(new TClonesArray("SvtTrack", 1000)),
@@ -181,7 +181,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     ecal_hits = new TClonesArray("EcalHit", 1000);
     fs_particles = new TClonesArray("HpsParticle", 1000);
     gbl_tracks = new TClonesArray("GblTrack", 1000); 
-    mc_particles = new TClonesArray("HpsMCParticle", 1000);
+    mc_particles = new TClonesArray("MCParticle", 1000);
     tc_moller_candidates = new TClonesArray("HpsParticle", 1000);
     tc_v0_candidates = new TClonesArray("HpsParticle", 1000);
     tracks = new TClonesArray("SvtTrack", 1000);
@@ -288,8 +288,8 @@ HpsParticle* HpsEvent::addParticle(HpsParticle::ParticleType type) {
     }
 }
 
-HpsMCParticle* HpsEvent::addHpsMCParticle() {
-    return (HpsMCParticle*) mc_particles->ConstructedAt(n_mc_particles++);
+MCParticle* HpsEvent::addMCParticle() {
+    return static_cast<MCParticle*>(mc_particles->ConstructedAt(n_mc_particles++));
 }
 
 
@@ -337,8 +337,8 @@ EcalHit* HpsEvent::getEcalHit(int ecal_hit_index) {
     return (EcalHit*) ecal_hits->At(ecal_hit_index);
 }
 
-HpsMCParticle* HpsEvent::getMCParticle(int mc_particle_index) {
-    return (HpsMCParticle*) mc_particles->At(mc_particle_index);
+MCParticle* HpsEvent::getMCParticle(int mc_particle_index) {
+    return static_cast<MCParticle*>(mc_particles->At(mc_particle_index));
 }
 
 HpsParticle* HpsEvent::getParticle(HpsParticle::ParticleType type, int particle_index) {
