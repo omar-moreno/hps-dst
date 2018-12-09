@@ -7,7 +7,7 @@
 //
 PRODUCT_NAME=HpsEvent
 //INSTALLING
-DSTROOT=/Users/maurik/Documents/Analysis/HPS_Analysis
+DSTROOT=/data/HPS/HPS_Analysis
 
 // Deployment location, if YES place products in DSTROOT, else in SYMROOT
 DEPLOYMENT_LOCATION=YES

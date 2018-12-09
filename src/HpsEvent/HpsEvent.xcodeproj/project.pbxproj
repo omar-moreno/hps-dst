@@ -50,6 +50,7 @@
 		40A3CD3F1CB53CF200C1A9F0 /* TrackType.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD3A1CB53CF200C1A9F0 /* TrackType.h */; };
 		40A3CD401CB53CF200C1A9F0 /* TrackUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD3B1CB53CF200C1A9F0 /* TrackUtils.h */; };
 		40A3CD491CB6EAF600C1A9F0 /* EcalUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A3CD371CB53CF200C1A9F0 /* EcalUtils.h */; };
+		40B2205721BD8348007DA4BC /* MCParticle.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40B2205621BD8347007DA4BC /* MCParticle.cxx */; };
 		40BED7581CF1FDAE00A8E675 /* HpsEvent.h in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */; };
 		40D9687B1D0B0A8000B48D9F /* dst_maker.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40A3CCF01CB53C6600C1A9F0 /* dst_maker.cxx */; };
 		40D9687C1D0B0A9D00B48D9F /* libHpsEvent.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A3CCB81CB53BEA00C1A9F0 /* libHpsEvent.dylib */; };
@@ -149,6 +150,7 @@
 		40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEvent_release.xcconfig; sourceTree = "<group>"; };
 		40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEvent_debug.xcconfig; sourceTree = "<group>"; };
 		40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEventlib.xcconfig; sourceTree = "<group>"; };
+		40B2205621BD8347007DA4BC /* MCParticle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MCParticle.cxx; sourceTree = "<group>"; };
 		40D968741D0B0A1200B48D9F /* dst_maker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dst_maker; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -196,35 +198,36 @@
 			children = (
 				40A3CD011CB53CB800C1A9F0 /* CalorimeterHit.h */,
 				40A3CD021CB53CB800C1A9F0 /* Cluster.h */,
-				40A3CD031CB53CB800C1A9F0 /* EcalCluster.h */,
-				40A3CCC81CB53C2B00C1A9F0 /* EcalCluster.cxx */,
-				40A3CD041CB53CB800C1A9F0 /* EcalHit.h */,
-				40A3CCC91CB53C2B00C1A9F0 /* EcalHit.cxx */,
-				40A3CD051CB53CB800C1A9F0 /* GblStripData.h */,
-				40A3CCCA1CB53C2B00C1A9F0 /* GblStripData.cxx */,
-				40A3CD061CB53CB800C1A9F0 /* GblTrack.h */,
-				40A3CCCB1CB53C2B00C1A9F0 /* GblTrack.cxx */,
-				40A3CD071CB53CB800C1A9F0 /* GblTrackData.h */,
-				40A3CCCC1CB53C2B00C1A9F0 /* GblTrackData.cxx */,
-				40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */,
-				40A3CCCD1CB53C2B00C1A9F0 /* HpsEvent.cxx */,
-				40A3CD091CB53CB800C1A9F0 /* HpsEventLinkDef.h */,
-				40A3CD0A1CB53CB800C1A9F0 /* HpsMCParticle.h */,
-				40A3CCCE1CB53C2B00C1A9F0 /* HpsMCParticle.cxx */,
-				40A3CD0B1CB53CB800C1A9F0 /* HpsParticle.h */,
-				40A3CCCF1CB53C2B00C1A9F0 /* HpsParticle.cxx */,
-				40A3CD0C1CB53CB800C1A9F0 /* LegacyGblTrack.h */,
-				40A3CCD01CB53C2B00C1A9F0 /* LegacyGblTrack.cxx */,
-				40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */,
-				40A3CD0E1CB53CB800C1A9F0 /* MuonCluster.h */,
-				40A3CCD11CB53C2B00C1A9F0 /* MuonCluster.cxx */,
-				40A3CD0F1CB53CB800C1A9F0 /* SvtHit.h */,
-				40A3CCD21CB53C2B00C1A9F0 /* SvtHit.cxx */,
-				40A3CD101CB53CB800C1A9F0 /* SvtTrack.h */,
-				40A3CCD31CB53C2B00C1A9F0 /* SvtTrack.cxx */,
-				40A3CD111CB53CB800C1A9F0 /* TriggerData.h */,
-				40A3CCD41CB53C2B00C1A9F0 /* TriggerData.cxx */,
 				40A3CCC71CB53C2B00C1A9F0 /* CMakeLists.txt */,
+				40A3CCC81CB53C2B00C1A9F0 /* EcalCluster.cxx */,
+				40A3CD031CB53CB800C1A9F0 /* EcalCluster.h */,
+				40A3CCC91CB53C2B00C1A9F0 /* EcalHit.cxx */,
+				40A3CD041CB53CB800C1A9F0 /* EcalHit.h */,
+				40A3CCCA1CB53C2B00C1A9F0 /* GblStripData.cxx */,
+				40A3CD051CB53CB800C1A9F0 /* GblStripData.h */,
+				40A3CCCB1CB53C2B00C1A9F0 /* GblTrack.cxx */,
+				40A3CD061CB53CB800C1A9F0 /* GblTrack.h */,
+				40A3CCCC1CB53C2B00C1A9F0 /* GblTrackData.cxx */,
+				40A3CD071CB53CB800C1A9F0 /* GblTrackData.h */,
+				40A3CCCD1CB53C2B00C1A9F0 /* HpsEvent.cxx */,
+				40A3CD081CB53CB800C1A9F0 /* HpsEvent.h */,
+				40A3CD091CB53CB800C1A9F0 /* HpsEventLinkDef.h */,
+				40A3CCCE1CB53C2B00C1A9F0 /* HpsMCParticle.cxx */,
+				40A3CD0A1CB53CB800C1A9F0 /* HpsMCParticle.h */,
+				40A3CCCF1CB53C2B00C1A9F0 /* HpsParticle.cxx */,
+				40A3CD0B1CB53CB800C1A9F0 /* HpsParticle.h */,
+				40A3CCD01CB53C2B00C1A9F0 /* LegacyGblTrack.cxx */,
+				40A3CD0C1CB53CB800C1A9F0 /* LegacyGblTrack.h */,
+				40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */,
+				40B2205621BD8347007DA4BC /* MCParticle.cxx */,
+				40A3CCD11CB53C2B00C1A9F0 /* MuonCluster.cxx */,
+				40A3CD0E1CB53CB800C1A9F0 /* MuonCluster.h */,
+				40A3CCD21CB53C2B00C1A9F0 /* SvtHit.cxx */,
+				40A3CD0F1CB53CB800C1A9F0 /* SvtHit.h */,
+				40A3CCD31CB53C2B00C1A9F0 /* SvtTrack.cxx */,
+				40A3CD101CB53CB800C1A9F0 /* SvtTrack.h */,
+				40A3CCD41CB53C2B00C1A9F0 /* TriggerData.cxx */,
+				40A3CD111CB53CB800C1A9F0 /* TriggerData.h */,
 			);
 			name = hps_event;
 			path = ../hps_event;
@@ -407,6 +410,7 @@
 				40A3CCE11CB53C2B00C1A9F0 /* TriggerData.cxx in Sources */,
 				40A3CCFE1CB53C6600C1A9F0 /* MCParticleDataWriter.cxx in Sources */,
 				40A3CCDB1CB53C2B00C1A9F0 /* HpsMCParticle.cxx in Sources */,
+				40B2205721BD8348007DA4BC /* MCParticle.cxx in Sources */,
 				40A3CCD51CB53C2B00C1A9F0 /* EcalCluster.cxx in Sources */,
 				40A3CCF91CB53C6600C1A9F0 /* DstUtils.cxx in Sources */,
 				40A3CCFF1CB53C6600C1A9F0 /* SvtDataWriter.cxx in Sources */,
