@@ -15,6 +15,6 @@
 #pragma link C++ class CalorimeterHit+;
 #pragma link C++ class EcalHit+;
 #pragma link C++ class MCParticle+;
-#pragma link C++ class HpsMCParticle;
+#pragma link C++ class HpsMCParticle+;
 
 #endif

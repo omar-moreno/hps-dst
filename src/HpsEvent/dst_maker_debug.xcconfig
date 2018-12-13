@@ -9,5 +9,3 @@
 PRODUCT_NAME=dst_maker_debug
 EXECUTABLE_PREFIX=
 INSTALL_PATH =/bin
-
-LCIOLIBDIR=${LCIO}/lib

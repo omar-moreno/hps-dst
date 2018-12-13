@@ -14,7 +14,8 @@ SET(headers
   GblTrack.h 
   GblTrackData.h 
   HpsEvent.h 
-  HpsMCParticle.h 
+  HpsMCParticle.h
+  MCParticle.h 
   HpsParticle.h 
   MCParticle.h 
 #  MuonCluster.h 
@@ -42,6 +43,7 @@ add_library(HpsEventLib
   HpsEventDict.cxx
   HpsMCParticle.cxx
   HpsParticle.cxx
+  MCParticle.cxx
   SvtHit.cxx 
   SvtTrack.cxx
   TriggerData.cxx 
@@ -55,6 +57,7 @@ add_library(HpsEvent SHARED
   HpsEvent.cxx
   HpsEventDict.cxx
   HpsMCParticle.cxx
+  MCParticle.cxx
   HpsParticle.cxx
   SvtHit.cxx 
   SvtTrack.cxx
