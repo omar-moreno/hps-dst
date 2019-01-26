@@ -94,7 +94,10 @@ class HpsParticleDataWriter : public DataWriter {
         std::string tc_v0_candidates_collection_name; 
 
         /** LCIO Collection name of target constrained V0 candidates */
-        std::string tc_moller_candidates_collection_name; 
+        std::string tc_moller_candidates_collection_name;
+  
+        /** LCIO Collection name of Other Electrons */
+        std::string other_electrons_collection_name;
 
         /** 
          * Map from an {@link HpsParticle::ParticleType} to the LCIO collection
