@@ -19,7 +19,8 @@ HpsParticleDataWriter::HpsParticleDataWriter()
       bsc_v0_candidates_collection_name("BeamspotConstrainedV0Candidates"),
       bsc_moller_candidates_collection_name("BeamspotConstrainedMollerCandidates"),
       tc_v0_candidates_collection_name("TargetConstrainedV0Candidates"),
-      tc_moller_candidates_collection_name("TargetConstrainedMollerCandidates") { 
+      tc_moller_candidates_collection_name("TargetConstrainedMollerCandidates"),
+      other_electrons_collection_name("OtherElectrons"){
     
 
     // Create a mapping between a HpsParticle::ParticleType and the LCIO 
@@ -39,7 +40,11 @@ HpsParticleDataWriter::HpsParticleDataWriter()
     particle_collections.insert(
             std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::TC_V0_CANDIDATE, tc_v0_candidates_collection_name)); 
     particle_collections.insert(
-            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::TC_MOLLER_CANDIDATE, tc_moller_candidates_collection_name)); 
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::TC_MOLLER_CANDIDATE, tc_moller_candidates_collection_name));
+    particle_collections.insert(
+            std::pair<HpsParticle::ParticleType, std::string>(HpsParticle::OTHER_ELECTRONS,
+                other_electrons_collection_name));
+
 }
 
 HpsParticleDataWriter::~HpsParticleDataWriter() {
@@ -136,7 +141,7 @@ void HpsParticleDataWriter::writeParticleData(HpsParticle::ParticleType collecti
         }
 
         // Only add vertex information if the particle is not a final state particle
-        if (collection_type == HpsParticle::FINAL_STATE_PARTICLE) {
+      if (collection_type == HpsParticle::FINAL_STATE_PARTICLE || collection_type == HpsParticle::OTHER_ELECTRONS) {
             
             // Set the PDG ID of the particle
             hps_particle->setPDG(particle->getParticleIDUsed()->getPDG());    

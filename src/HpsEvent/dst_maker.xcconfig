@@ -5,7 +5,12 @@
 //  Created by Maurik Holtrop on 6/4/10.
 //  Copyright 2010 University of New Hampshire. All rights reserved.
 //
-#include "HpsEventlib.xcconfig"
+#include "master.xcconfig"
 PRODUCT_NAME=dst_maker
 EXECUTABLE_PREFIX=
-INSTALL_PATH=/bin
+EXECUTABLE_EXTENSION=
+
+// == Activate LCIO 
+HEADER_SEARCH_PATHS=$(inherited) ${LCIO}/include
+LIBRARY_SEARCH_PATHS=$(inherited) ${LCIOLIBDIR}
+OTHER_LDFLAGS=$(inherited) ${LCIOLIBS}

@@ -31,6 +31,7 @@ HpsEvent::HpsEvent()
       svt_hits(new TClonesArray("SvtHit", 1000)),
       uc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
       uc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+      other_electrons_candidates(new TClonesArray("HpsParticle", 1000)),
       rf_times{}, 
       event_number(0),
       event_time(0), 
@@ -74,7 +75,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
       tracks(new TClonesArray("SvtTrack", 1000)),
       svt_hits(new TClonesArray("SvtHit", 1000)),
       uc_moller_candidates(new TClonesArray("HpsParticle", 1000)), 
-      uc_v0_candidates(new TClonesArray("HpsParticle", 1000)) {
+      uc_v0_candidates(new TClonesArray("HpsParticle", 1000)),
+      other_electrons_candidates(new TClonesArray("HpsParticle", 1000)){
 
     this->event_number = hpsEventObj.event_number;
     this->event_time = hpsEventObj.event_time; 
@@ -101,6 +103,7 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     this->n_bsc_moller_candidates = hpsEventObj.n_bsc_moller_candidates;
     this->n_tc_v0_candidates = hpsEventObj.n_tc_v0_candidates;
     this->n_tc_moller_candidates = hpsEventObj.n_tc_moller_candidates;
+    this->n_other_electrons_candidates = hpsEventObj.n_other_electrons_candidates;
     this->n_mc_particles = hpsEventObj.n_mc_particles;
     
     *bsc_moller_candidates = *hpsEventObj.bsc_moller_candidates;
@@ -116,7 +119,8 @@ HpsEvent::HpsEvent(const HpsEvent &hpsEventObj)
     *svt_hits  = *hpsEventObj.svt_hits;  
     *uc_moller_candidates = *hpsEventObj.uc_moller_candidates;
     *uc_v0_candidates = *hpsEventObj.uc_v0_candidates;
-
+    *other_electrons_candidates = *hpsEventObj.other_electrons_candidates;
+        
     memcpy(&rf_times, hpsEventObj.rf_times, 12*sizeof(double));       
 }
 
@@ -140,6 +144,7 @@ HpsEvent::~HpsEvent() {
     delete svt_hits;
     delete uc_moller_candidates;
     delete uc_v0_candidates;
+    delete other_electrons_candidates;
 }
 
 HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
@@ -174,6 +179,7 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     this->n_tc_v0_candidates = hpsEventObj.n_tc_v0_candidates;
     this->n_tc_moller_candidates = hpsEventObj.n_tc_moller_candidates;
     this->n_mc_particles = hpsEventObj.n_mc_particles;
+    this->n_other_electrons_candidates = hpsEventObj.n_other_electrons_candidates;
 
     bsc_moller_candidates = new TClonesArray("HpsParticle", 1000);
     bsc_v0_candidates = new TClonesArray("HpsParticle", 1000);
@@ -188,7 +194,8 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     svt_hits = new TClonesArray("SvtHit", 1000);
     uc_moller_candidates = new TClonesArray("HpsParticle", 1000);
     uc_v0_candidates = new TClonesArray("HpsParticle", 1000);
-
+    other_electrons_candidates = new TClonesArray("HpsParticle", 1000);
+  
     *bsc_moller_candidates = *hpsEventObj.bsc_moller_candidates;
     *bsc_v0_candidates = *hpsEventObj.bsc_v0_candidates;
     *ecal_clusters = *hpsEventObj.ecal_clusters;
@@ -202,7 +209,8 @@ HpsEvent &HpsEvent::operator=(const HpsEvent &hpsEventObj) {
     *svt_hits  = *hpsEventObj.svt_hits;  
     *uc_moller_candidates = *hpsEventObj.uc_moller_candidates;
     *uc_v0_candidates = *hpsEventObj.uc_v0_candidates;
-
+    *other_electrons_candidates = *hpsEventObj.other_electrons_candidates;
+  
     memcpy(&rf_times, hpsEventObj.rf_times, 12*sizeof(double));       
     
     return *this;     
@@ -225,6 +233,7 @@ void HpsEvent::Clear(Option_t * /*option*/) {
     svt_hits->Clear("C");
     uc_moller_candidates->Clear("C");
     uc_v0_candidates->Clear("C");
+    other_electrons_candidates->Clear("C");
     
     n_ecal_clusters = 0;
     n_ecal_hits = 0;
@@ -238,6 +247,7 @@ void HpsEvent::Clear(Option_t * /*option*/) {
     n_bsc_moller_candidates = 0;
     n_tc_v0_candidates = 0;
     n_tc_moller_candidates = 0;
+    n_other_electrons_candidates=0;
     n_mc_particles = 0;
 
     memset(rf_times, 0, sizeof(rf_times)); 
@@ -283,6 +293,8 @@ HpsParticle* HpsEvent::addParticle(HpsParticle::ParticleType type) {
             return (HpsParticle*) bsc_moller_candidates->ConstructedAt(n_bsc_moller_candidates++);
         case HpsParticle::TC_MOLLER_CANDIDATE:
             return (HpsParticle*) tc_moller_candidates->ConstructedAt(n_tc_moller_candidates++);
+      case HpsParticle::OTHER_ELECTRONS:
+        return (HpsParticle*) other_electrons_candidates->ConstructedAt(n_other_electrons_candidates++);
         default: 
             throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
     }
@@ -311,7 +323,9 @@ int HpsEvent::getNumberOfParticles(HpsParticle::ParticleType type) const {
         case HpsParticle::BSC_MOLLER_CANDIDATE:
             return n_bsc_moller_candidates;
         case HpsParticle::TC_MOLLER_CANDIDATE:
-            return n_tc_moller_candidates; 
+            return n_tc_moller_candidates;
+        case HpsParticle::OTHER_ELECTRONS:
+            return n_tc_moller_candidates;
         default: 
             throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
     }
@@ -360,6 +374,8 @@ HpsParticle* HpsEvent::getParticle(HpsParticle::ParticleType type, int particle_
             return (HpsParticle*) bsc_moller_candidates->At(particle_index);
         case HpsParticle::TC_MOLLER_CANDIDATE: 
             return (HpsParticle*) tc_moller_candidates->ConstructedAt(particle_index);
+        case HpsParticle::OTHER_ELECTRONS:
+            return (HpsParticle*) other_electrons_candidates->ConstructedAt(particle_index);
         default:
             throw std::runtime_error("[ HpsEvent ]: Particle type is invalid."); 
     }

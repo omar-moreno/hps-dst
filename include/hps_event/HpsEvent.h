@@ -412,6 +412,9 @@ class HpsEvent : public TObject {
         TClonesArray* tc_moller_candidates;  //->
         /** Collection of target constrained v0 candidates */
         TClonesArray* tc_v0_candidates;      //->
+        /** Collection of other electrons candidates */
+        TClonesArray* other_electrons_candidates;   //->
+
         /** Collection of SVT tracks */ 
         TClonesArray* tracks;                //->
         /** Collection of SVT 3D hits */
@@ -507,7 +510,8 @@ class HpsEvent : public TObject {
         int n_bsc_v0_candidates;
         int n_bsc_moller_candidates;
         int n_tc_v0_candidates;
-        int n_tc_moller_candidates; 
+        int n_tc_moller_candidates;
+        int n_other_electrons_candidates;
         int n_mc_particles;
 };
 

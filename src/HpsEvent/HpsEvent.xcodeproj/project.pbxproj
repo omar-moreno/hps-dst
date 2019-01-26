@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -67,24 +67,11 @@
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)Dict.cxx",
 			);
-			script = "OUTFILES_LOCATION=${DERIVED_FILE_DIR}\necho \"Dictionary created in: \" ${OUTFILES_LOCATION}\nROOT_DICT_HDRS_FULL=\"\"\nfor i in ${ROOT_DICT_HDRS}; do ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL} ${ROOT_DICT_HDRS_DIR}/${i}\"; done\necho \"ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL}\necho ${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\ntest -d ${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE}; echo \"Copied: \" ${OUTFILES_LOCAIONT}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi\n#\n#echo ${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}_Dict.cpp -c -p -I${HEADER_SEARCH_PATHS// / -I} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h ${INPUT_FILE_PATH}\n#${ROOTSYS}/bin/rootcint -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict.cc -c -p -I${HEADER_SEARCH_PATHS// / -I}  ${INPUT_FILE_PATH} ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}_Linkdef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\n#    test -d ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DSTROOT}/${DYLIB_INSTALL_NAME_BASE} ; fi\n# This send the pcm files to to build product dir\n# if test -r ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR} ; fi\n";
+			script = "OUTFILES_LOCATION=${DERIVED_FILE_DIR}\necho \"Dictionary created in: \" ${OUTFILES_LOCATION}\nROOT_DICT_HDRS_FULL=\"\"\nfor i in ${ROOT_DICT_HDRS}; do ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL} ${ROOT_DICT_HDRS_DIR}/${i}\"; done\necho \"ROOT_DICT_HDRS_FULL=\"${ROOT_DICT_HDRS_FULL}\necho ${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n${ROOTSYS}/bin/rootcint -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict.cxx -c -p -I${HEADER_SEARCH_PATHS// / -I} ${ROOT_DICT_HDRS_FULL}  ${INPUT_FILE_DIR}/${INPUT_FILE_BASE}LinkDef.h\n# For ROOT 6 copy the pcm file to the LIB install path.\ntest -d ${DYLIB_INSTALL_NAME_BASE} || mkdir -p ${DYLIB_INSTALL_NAME_BASE}\ntest -d ${BUILT_PRODUCTS_DIR} || mkdir -p ${BUILT_PRODUCTS_DIR}\n# ls ${DERIVED_FILE_DIR}\n# This puts the pcm files in the ${DSTROOT}/${INSTALL_PATH} directory.\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE}/${INPUT_FILE_BASE}Dict_rdict.pcm; echo \"Copied: \" ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${DYLIB_INSTALL_NAME_BASE}/${INPUT_FILE_BASE}Dict_rdict.pcm ; fi\n# This send the pcm files to to build product dir\nif test -r ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm; then cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm ${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; echo \"Copied:\" cp -f ${OUTFILES_LOCATION}/${INPUT_FILE_BASE}Dict_rdict.pcm             ${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}Dict_rdict.pcm; fi\n";
 		};
 /* End PBXBuildRule section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		40D968721D0B0A1200B48D9F /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		4099A2B81D16394600E935DB /* dst_maker_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = dst_maker_debug.xcconfig; sourceTree = "<group>"; };
 		40A3CCB81CB53BEA00C1A9F0 /* libHpsEvent.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libHpsEvent.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		40A3CCC71CB53C2B00C1A9F0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		40A3CCC81CB53C2B00C1A9F0 /* EcalCluster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EcalCluster.cxx; sourceTree = "<group>"; };
@@ -147,8 +134,6 @@
 		40A3CD3A1CB53CF200C1A9F0 /* TrackType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackType.h; path = ../../include/utils/TrackType.h; sourceTree = "<group>"; };
 		40A3CD3B1CB53CF200C1A9F0 /* TrackUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackUtils.h; path = ../../include/utils/TrackUtils.h; sourceTree = "<group>"; };
 		40A3CD411CB6D9A100C1A9F0 /* dst_maker.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = dst_maker.xcconfig; sourceTree = "<group>"; };
-		40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEvent_release.xcconfig; sourceTree = "<group>"; };
-		40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEvent_debug.xcconfig; sourceTree = "<group>"; };
 		40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = HpsEventlib.xcconfig; sourceTree = "<group>"; };
 		40B2205621BD8347007DA4BC /* MCParticle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MCParticle.cxx; sourceTree = "<group>"; };
 		40D968741D0B0A1200B48D9F /* dst_maker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dst_maker; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,8 +203,8 @@
 				40A3CD0B1CB53CB800C1A9F0 /* HpsParticle.h */,
 				40A3CCD01CB53C2B00C1A9F0 /* LegacyGblTrack.cxx */,
 				40A3CD0C1CB53CB800C1A9F0 /* LegacyGblTrack.h */,
-				40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */,
 				40B2205621BD8347007DA4BC /* MCParticle.cxx */,
+				40A3CD0D1CB53CB800C1A9F0 /* MCParticle.h */,
 				40A3CCD11CB53C2B00C1A9F0 /* MuonCluster.cxx */,
 				40A3CD0E1CB53CB800C1A9F0 /* MuonCluster.h */,
 				40A3CCD21CB53C2B00C1A9F0 /* SvtHit.cxx */,
@@ -281,11 +266,8 @@
 		40A3CD451CB6D9A900C1A9F0 /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				4099A2B81D16394600E935DB /* dst_maker_debug.xcconfig */,
 				40A3CD411CB6D9A100C1A9F0 /* dst_maker.xcconfig */,
 				40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */,
-				40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */,
-				40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */,
 			);
 			name = Config;
 			sourceTree = "<group>";
@@ -335,6 +317,7 @@
 				40A3CCB61CB53BEA00C1A9F0 /* Headers */,
 				40A3CCB41CB53BEA00C1A9F0 /* Sources */,
 				40A3CCB51CB53BEA00C1A9F0 /* Frameworks */,
+				406BF21B21C2F01600DED040 /* ShellScript */,
 			);
 			buildRules = (
 				40A3CD461CB6E61900C1A9F0 /* PBXBuildRule */,
@@ -352,7 +335,7 @@
 			buildPhases = (
 				40D968701D0B0A1200B48D9F /* Sources */,
 				40D968711D0B0A1200B48D9F /* Frameworks */,
-				40D968721D0B0A1200B48D9F /* CopyFiles */,
+				40D3FFE921C2F95700381AF5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -381,7 +364,7 @@
 				};
 			};
 			buildConfigurationList = 40A3CCB31CB53BEA00C1A9F0 /* Build configuration list for PBXProject "HpsEvent" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -397,6 +380,45 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		406BF21B21C2F01600DED040 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"Copy to final destination.\"\ncp -v ${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME} ${INSTALL_DIR}\ncp -v ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}Dict_rdict.pcm ${INSTALL_DIR}\n";
+			showEnvVarsInLog = 0;
+		};
+		40D3FFE921C2F95700381AF5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\necho \"Copy to final destination.\"\ncp -v ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME} ${INSTALL_DIR}\necho ${PRODUCT_NAME}\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		40A3CCB41CB53BEA00C1A9F0 /* Sources */ = {
@@ -451,7 +473,7 @@
 		};
 		40A3CCC41CB53BEA00C1A9F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40A3CD431CB6D9A100C1A9F0 /* HpsEvent_debug.xcconfig */;
+			baseConfigurationReference = 40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
@@ -463,7 +485,7 @@
 		};
 		40A3CCC51CB53BEA00C1A9F0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40A3CD421CB6D9A100C1A9F0 /* HpsEvent_release.xcconfig */;
+			baseConfigurationReference = 40A3CD441CB6D9A100C1A9F0 /* HpsEventlib.xcconfig */;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
@@ -475,7 +497,7 @@
 		};
 		40D968791D0B0A1200B48D9F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4099A2B81D16394600E935DB /* dst_maker_debug.xcconfig */;
+			baseConfigurationReference = 40A3CD411CB6D9A100C1A9F0 /* dst_maker.xcconfig */;
 			buildSettings = {
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     clock_t initial_time = clock();
 
     string dst_file_name = "";  
-    int total_events = -1;  
+    int total_events = kMaxInt;  
     bool ecal_only = false;
     // Parse any command line arguments.  If there are no valid command line 
     // arguments passed, print the usage and exit.  
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     };
     int option_index = 0; 
     int option_char = 0; 
-    while ((option_char = getopt_long(argc, argv, "o:n:b:geh", long_options, &option_index)) != -1) {
+    while ((option_char = getopt_long(argc, argv, "o:n:eh", long_options, &option_index)) != -1) {
         switch (option_char) {
             case 'o': 
                 dst_file_name = optarg;
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
     // Instantiate the LCIO file reader
     IO::LCReader* lc_reader = IOIMPL::LCFactory::getInstance()->createLCReader(); 
 
-    // Instntiate the event builder which will be used to create HpsEvent 
+    // Instantiate the event builder which will be used to create HpsEvent
     // objects
     HpsEventBuilder* event_builder = new HpsEventBuilder(); 
     // Set whether the event builder should only write Ecal data
@@ -125,12 +125,11 @@ int main(int argc, char **argv) {
         lc_reader->open(argv[optind]);
 
         // Loop over all events in the LCIO file
-        while ((event = lc_reader->readNextEvent()) != 0) {
+        while ((event = lc_reader->readNextEvent()) != 0 && event_number < total_events ) {
 
             Int_t ObjectNumber = TProcessID::GetObjectCount();
-            
-            ++event_number; 
-            if ((event_number - 1) == total_events) break; 
+          
+            ++event_number;
 
             // Print the event number every 1000 events
             if (event_number%1000 == 0 ) {
@@ -138,8 +137,8 @@ int main(int argc, char **argv) {
             }
 
             // Create an HPS Event object 
-            event_builder->makeHpsEvent(event, hps_event); 
-
+            event_builder->makeHpsEvent(event, hps_event);
+          
             // Write the HPS Event object to the ROOT tree
             tree->Fill();
 
